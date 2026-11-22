@@ -552,6 +552,9 @@ ul, ol { padding: 0; list-style: none; }
 .home__meta { margin-top: clamp(18px, 2.4vw, 32px); color: var(--mut); font: 500 13px/1 var(--fb); letter-spacing: .28em; text-transform: uppercase; }
 
 .menu { display: grid; gap: 10px; }
+/* кнопки-рядки під першим екраном головної: одна колонка по центру */
+.menu--home { max-width: calc(780px + var(--g) * 2); }
+.menu--home + .how { padding-top: clamp(64px, 9vw, 120px); }
 .mb {
   position: relative; display: grid; grid-template-columns: 52px minmax(0, 1fr) 44px; align-items: center; gap: 16px;
   padding: 12px 12px 12px 12px; border: 1px solid var(--line2); border-radius: var(--r);
