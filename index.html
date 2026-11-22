@@ -60,7 +60,7 @@
       <a href="kontakty.html">Контакти</a>
     </nav>
     <div class="hd__act">
-      <a class="tile" href="https://www.instagram.com/alexdancestudio/" target="_blank" rel="noopener" aria-label="Instagram"><svg><use href="#i-ig"/></svg></a>
+      <a class="tile" href="https://www.instagram.com/alexdancestudio/" target="_blank" rel="noopener" aria-label="Instagram" data-link="instagram"><svg><use href="#i-ig"/></svg></a>
       <a class="tile" href="kontakty.html" aria-label="Telegram"><svg><use href="#i-tg"/></svg></a>
       <button class="tile tile--menu" id="menuBtn" aria-label="Меню" aria-expanded="false" aria-controls="mnav"><svg><use href="#i-menu"/></svg></button>
     </div>
@@ -75,7 +75,7 @@
       <a href="tantseterapiya.html">Танцетерапія</a>
       <a href="kontakty.html">Контакти</a>
     </nav>
-    <a class="mnav__tel" href="tel:+380503430531">050 343 05 31</a>
+    <a class="mnav__tel" href="tel:+380503430531" data-txt="phone">050 343 05 31</a>
   </div>
 </header>
 
@@ -99,7 +99,7 @@
         </div>
       </div>
     </div>
-    <p class="hero__side" aria-hidden="true">16 років студії · Полтава</p>
+    <p class="hero__side" aria-hidden="true" data-txt="hero_side">16 років студії · Полтава</p>
   </section>
 
   <nav class="wrap menu menu--home" aria-label="Розділи сайту">
@@ -128,7 +128,7 @@
           <span class="mb__txt"><b>Танцетерапія</b><small>Тренінг для жінок у Полтаві</small></span>
           <span class="mb__go"><svg><use href="#i-arrow"/></svg></span>
         </a>
-        <a class="mb" href="#" data-tg>
+        <a class="mb" href="#" data-tg data-link="telegram_free">
           <span class="mb__ic"><svg><use href="#i-gift"/></svg></span>
           <span class="mb__txt"><b>Безкоштовно в Telegram</b><small>Анонси й корисні матеріали</small></span>
           <span class="mb__go"><svg><use href="#i-arrow"/></svg></span>
@@ -202,8 +202,8 @@
     <nav class="ft__nav" aria-label="Документи й соцмережі">
       <a href="#">Публічна оферта</a>
       <a href="#">Політика конфіденційності</a>
-      <a href="https://www.instagram.com/alexdancestudio/" target="_blank" rel="noopener">Instagram</a>
-      <a href="#" data-tg>Telegram</a>
+      <a href="https://www.instagram.com/alexdancestudio/" target="_blank" rel="noopener" data-link="instagram">Instagram</a>
+      <a href="#" data-tg data-link="telegram">Telegram</a>
     </nav>
   </div>
 </footer>
@@ -237,6 +237,7 @@
   </div>
 </dialog>
 
-<script src="script.js?v=11"></script>
+<script src="platform.js?v=12"></script>
+<script src="script.js?v=12"></script>
 </body>
 </html>

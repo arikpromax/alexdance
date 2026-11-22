@@ -48,15 +48,15 @@
     }
   }
 
-  /* світло на картках і кнопках */
+  /* світло на картках і кнопках (делегуванням — працює й для карток, перебудованих з адмінки) */
   if (canHover) {
-    $$('[data-spot]').forEach(el => {
-      el.addEventListener('pointermove', (e) => {
-        const r = el.getBoundingClientRect();
-        el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-        el.style.setProperty('--my', (e.clientY - r.top) + 'px');
-      });
-    });
+    document.addEventListener('pointermove', (e) => {
+      const el = e.target.closest && e.target.closest('[data-spot]');
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    }, { passive: true });
   }
 
   /* поява при гортанні */
@@ -81,8 +81,8 @@
 
   /* абонементи на телефоні: смужки під картками показують, яка відкрита */
   const plans = $('.plans');
+  let buildDots = () => {};
   if (plans) {
-    const cards = $$('.plan', plans);
     const dots = document.createElement('div');
     dots.className = 'plans__dots';
     dots.setAttribute('aria-hidden', 'true');
@@ -99,7 +99,7 @@
       $$('button', dots).forEach((d, i) => d.classList.toggle('is-on', i === best));
     };
     const build = () => {
-      list = cards.slice().sort((x, y) => x.getBoundingClientRect().left - y.getBoundingClientRect().left);
+      list = $$('.plan', plans).sort((x, y) => x.getBoundingClientRect().left - y.getBoundingClientRect().left);
       dots.innerHTML = list.map(() => '<button type="button" tabindex="-1"></button>').join('');
       $$('button', dots).forEach((d, i) => d.addEventListener('click', () => {
         const shift = list[i].getBoundingClientRect().left - plans.getBoundingClientRect().left - padL();
@@ -111,19 +111,32 @@
     plans.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; mark(); }); }, { passive: true });
     addEventListener('resize', build);
     build();
+    buildDots = build;
   }
 
   /* розклад: вкладки днів тижня, відкривається сьогоднішній */
-  const days = $$('.day'), panels = $$('.rows[data-day]');
-  if (days.length) {
-    const showDay = (d) => {
-      days.forEach(b => b.setAttribute('aria-selected', String(b.dataset.day === String(d))));
-      panels.forEach(p => { p.hidden = p.dataset.day !== String(d); });
-    };
-    days.forEach(b => b.addEventListener('click', () => showDay(b.dataset.day)));
+  const showDay = (d) => {
+    $$('.day').forEach(b => b.setAttribute('aria-selected', String(b.dataset.day === String(d))));
+    $$('.rows[data-day]').forEach(p => { p.hidden = p.dataset.day !== String(d); });
+  };
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest && e.target.closest('.day');
+    if (b) showDay(b.dataset.day);
+  });
+  // Сьогоднішній день, а якщо сьогодні занять немає — найближчий наступний
+  const openToday = () => {
+    const have = $$('.day').map(b => Number(b.dataset.day));
+    if (!have.length) return;
     const today = new Date().getDay();
-    showDay(today === 0 ? 1 : today);
-  }
+    for (let i = 0; i < 7; i++) {
+      const d = (today + i) % 7;
+      if (have.includes(d)) { showDay(d); return; }
+    }
+  };
+  openToday();
+
+  // platform.js перебудував картки з адмінки — оновлюємо смужки й відкриваємо сьогоднішній день
+  window.ADS = Object.assign(window.ADS || {}, { refresh: () => { buildDots(); openToday(); } });
 
   /* кнопка «Написати» в кутку: після першого екрана, ховається біля розкладу, контактів і підвалу */
   const fab = $('#fab');
@@ -153,7 +166,9 @@
   };
   const pay = $('#pay'), p1 = $('#pay1'), p2 = $('#pay2');
   let current = null;
-  $$('[data-pay]').forEach(b => b.addEventListener('click', () => {
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest && e.target.closest('[data-pay]');
+    if (!b) return;
     current = b;
     errBox($('#payForm')).hidden = true;
     $('#payKind').textContent = b.dataset.kind;
@@ -173,7 +188,7 @@
     $('#paySubPrice').textContent = price;
     p1.hidden = false; p2.hidden = true;
     pay.showModal();
-  }));
+  });
   $$('[data-close]', pay).forEach(b => b.addEventListener('click', () => pay.close()));
   pay.addEventListener('click', (e) => { if (e.target === pay) pay.close(); });
 

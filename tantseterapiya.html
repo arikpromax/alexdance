@@ -60,7 +60,7 @@
       <a href="kontakty.html">Контакти</a>
     </nav>
     <div class="hd__act">
-      <a class="tile" href="https://www.instagram.com/alexdancestudio/" target="_blank" rel="noopener" aria-label="Instagram"><svg><use href="#i-ig"/></svg></a>
+      <a class="tile" href="https://www.instagram.com/alexdancestudio/" target="_blank" rel="noopener" aria-label="Instagram" data-link="instagram"><svg><use href="#i-ig"/></svg></a>
       <a class="tile" href="kontakty.html" aria-label="Telegram"><svg><use href="#i-tg"/></svg></a>
       <button class="tile tile--menu" id="menuBtn" aria-label="Меню" aria-expanded="false" aria-controls="mnav"><svg><use href="#i-menu"/></svg></button>
     </div>
@@ -75,7 +75,7 @@
       <a href="tantseterapiya.html" aria-current="page">Танцетерапія</a>
       <a href="kontakty.html">Контакти</a>
     </nav>
-    <a class="mnav__tel" href="tel:+380503430531">050 343 05 31</a>
+    <a class="mnav__tel" href="tel:+380503430531" data-txt="phone">050 343 05 31</a>
   </div>
 </header>
 
@@ -90,17 +90,17 @@
     <div class="wrap phead__in">
       <a class="back" href="index.html"><svg><use href="#i-back"/></svg>Головна</a>
       <h1 class="phead__t">Танцетерапія</h1>
-      <p class="phead__note">Авторський тренінг для жінок у Полтаві</p>
+      <p class="phead__note" data-txt="therapy_note">Авторський тренінг для жінок у Полтаві</p>
     </div>
   </section>
   <section class="sec sec--page therapy">
     <div class="wrap therapy__in">
       <p class="therapy__words" aria-hidden="true"><span>Тіло</span><span>Емоції</span><span>Підсвідоме</span></p>
       <div class="therapy__txt">
-        <p class="therapy__lead rv">Робота з тілом, емоціями та підсвідомим жінки — через рух і танець.</p>
+        <p class="therapy__lead rv" data-txt="therapy_lead">Робота з тілом, емоціями та підсвідомим жінки — через рух і танець.</p>
         <div class="therapy__cta rv">
           <a class="btn btn--ac" href="kontakty.html">Записатися на тренінг <svg><use href="#i-arrow"/></svg></a>
-          <a class="btn btn--ghost" href="#" data-tg><svg><use href="#i-tg"/></svg>Канал тренінгу</a>
+          <a class="btn btn--ghost" href="#" data-tg data-link="therapy_channel"><svg><use href="#i-tg"/></svg>Канал тренінгу</a>
         </div>
       </div>
     </div>
@@ -124,8 +124,8 @@
     <nav class="ft__nav" aria-label="Документи й соцмережі">
       <a href="#">Публічна оферта</a>
       <a href="#">Політика конфіденційності</a>
-      <a href="https://www.instagram.com/alexdancestudio/" target="_blank" rel="noopener">Instagram</a>
-      <a href="#" data-tg>Telegram</a>
+      <a href="https://www.instagram.com/alexdancestudio/" target="_blank" rel="noopener" data-link="instagram">Instagram</a>
+      <a href="#" data-tg data-link="telegram">Telegram</a>
     </nav>
   </div>
 </footer>
@@ -159,6 +159,7 @@
   </div>
 </dialog>
 
-<script src="script.js?v=11"></script>
+<script src="platform.js?v=12"></script>
+<script src="script.js?v=12"></script>
 </body>
 </html>

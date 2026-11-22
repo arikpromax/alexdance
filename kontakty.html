@@ -60,7 +60,7 @@
       <a href="kontakty.html" aria-current="page">Контакти</a>
     </nav>
     <div class="hd__act">
-      <a class="tile" href="https://www.instagram.com/alexdancestudio/" target="_blank" rel="noopener" aria-label="Instagram"><svg><use href="#i-ig"/></svg></a>
+      <a class="tile" href="https://www.instagram.com/alexdancestudio/" target="_blank" rel="noopener" aria-label="Instagram" data-link="instagram"><svg><use href="#i-ig"/></svg></a>
       <a class="tile" href="kontakty.html" aria-label="Telegram"><svg><use href="#i-tg"/></svg></a>
       <button class="tile tile--menu" id="menuBtn" aria-label="Меню" aria-expanded="false" aria-controls="mnav"><svg><use href="#i-menu"/></svg></button>
     </div>
@@ -75,7 +75,7 @@
       <a href="tantseterapiya.html">Танцетерапія</a>
       <a href="kontakty.html" aria-current="page">Контакти</a>
     </nav>
-    <a class="mnav__tel" href="tel:+380503430531">050 343 05 31</a>
+    <a class="mnav__tel" href="tel:+380503430531" data-txt="phone">050 343 05 31</a>
   </div>
 </header>
 
@@ -96,9 +96,9 @@
   <section class="sec sec--page contact" id="contact">
     <div class="wrap contact__in">
       <div class="contact__l">
-        <a class="tg rv" href="#" data-tg><svg><use href="#i-tg"/></svg>Написати в Telegram</a>
-        <a class="tel rv" href="tel:+380503430531"><svg><use href="#i-phone"/></svg>050 343 05 31</a>
-        <a class="tel rv" href="https://www.instagram.com/alexdancestudio/" target="_blank" rel="noopener"><svg><use href="#i-ig"/></svg>@alexdancestudio</a>
+        <a class="tg rv" href="#" data-tg data-link="telegram"><svg><use href="#i-tg"/></svg>Написати в Telegram</a>
+        <a class="tel rv" href="tel:+380503430531"><svg><use href="#i-phone"/></svg><span data-txt="phone">050 343 05 31</span></a>
+        <a class="tel rv" href="https://www.instagram.com/alexdancestudio/" target="_blank" rel="noopener" data-link="instagram"><svg><use href="#i-ig"/></svg>@alexdancestudio</a>
         <p class="contact__addr rv"><svg><use href="#i-pin"/></svg>Студія в Полтаві</p>
       </div>
       <form class="form rv" id="form" novalidate>
@@ -116,7 +116,7 @@
       <div class="free__in">
         <span class="free__ic"><svg><use href="#i-tg"/></svg></span>
         <div class="free__txt"><h3>Безкоштовно в Telegram</h3><p>Анонси, корисні матеріали й новини студії</p></div>
-        <a class="btn btn--line" href="#" data-tg>Увійти <svg><use href="#i-arrow"/></svg></a>
+        <a class="btn btn--line" href="#" data-tg data-link="telegram_free">Увійти <svg><use href="#i-arrow"/></svg></a>
       </div>
     </div>
   </section>
@@ -132,8 +132,8 @@
     <nav class="ft__nav" aria-label="Документи й соцмережі">
       <a href="#">Публічна оферта</a>
       <a href="#">Політика конфіденційності</a>
-      <a href="https://www.instagram.com/alexdancestudio/" target="_blank" rel="noopener">Instagram</a>
-      <a href="#" data-tg>Telegram</a>
+      <a href="https://www.instagram.com/alexdancestudio/" target="_blank" rel="noopener" data-link="instagram">Instagram</a>
+      <a href="#" data-tg data-link="telegram">Telegram</a>
     </nav>
   </div>
 </footer>
@@ -167,6 +167,7 @@
   </div>
 </dialog>
 
-<script src="script.js?v=11"></script>
+<script src="platform.js?v=12"></script>
+<script src="script.js?v=12"></script>
 </body>
 </html>
