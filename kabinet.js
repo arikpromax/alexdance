@@ -239,11 +239,11 @@
     }
   });
 
-  /* ---------- Ще: написати групі, чати й канали, сайт ---------- */
+  /* ---------- Ще: написати групі, записи, чати груп, сайт ---------- */
   // Можна вибрати кілька груп; «Усім» — окремо (знімає інші)
   let sendGroups = new Set();
   async function showMore() {
-    const [subs, chats] = await Promise.all([api('subs'), api('chats')]);
+    const [subs, recs, chats] = await Promise.all([api('subs'), api('records'), api('chats')]);
     // Скільки різних людей отримає: людина з кількох вибраних груп — один раз
     const people = (set) => new Set(subs.list
       .filter((s) => set.has('all') || set.has(s.group))
@@ -261,33 +261,45 @@
         <button class="btn btn--ac" id="sgSend" style="margin-top:12px">Надіслати</button>
       </div>
       <div class="sec">
-        <h1 class="h">Чати й канали</h1>
-        <p class="sub">Бот сам видає особисте одноразове запрошення: з абонементом — у чат групи (а коли абонемент закінчився, прибирає), з оплаченим записом — у закритий канал запису.</p>
+        <h1 class="h">Записи</h1>
+        <p class="sub">Щоб додати відео, надішліть його боту в чат і виберіть запис. Хто оплатив, отримає його одразу й лише для себе — переслати чи зберегти не вийде.</p>
+        <button class="btn btn--ac" id="addVideo" style="margin-top:12px">${icon('cam')} Додати відео</button>
+        ${recs.list.map((r) => `
+          <div class="card" style="margin-top:12px">
+            <b>${esc(r.title)}</b> ${r.files.length ? `<span class="tag">${r.files.length} ${r.files.length === 1 ? 'файл' : r.files.length < 5 ? 'файли' : 'файлів'}</span>` : '<span class="tag tag--warn">немає відео</span>'}
+            ${r.files.map((f, i) => `
+              <div class="recfile" style="display:flex;align-items:center;gap:10px;margin-top:10px">
+                <span class="sub" style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${i + 1}. ${esc(f.name)}</span>
+                <button class="btn btn--sm" data-delfile="${r.id}|${esc(f.uid)}">Прибрати</button>
+              </div>`).join('')}
+            ${r.files.length ? `<button class="btn btn--sm" data-preview="${r.id}" style="margin-top:10px">Переглянути, як у клієнтки</button>` : ''}
+          </div>`).join('')}
+      </div>
+      <div class="sec">
+        <h1 class="h">Чати груп</h1>
+        <p class="sub">Бот видає кожній з абонементом особисте одноразове запрошення в чат її групи, а коли абонемент закінчується — сам прибирає з чату.</p>
         ${chats.chats.map((c) => {
-          const ok = c.admin && c.invite;
+          const ok = c.admin && c.invite && c.restrict;
           const tag = !ok ? '<span class="tag tag--warn">немає прав</span>'
-            : c.to ? `<span class="tag">${c.to.startsWith('r:') ? 'канал запису' : 'чат групи'}</span>` : '<span class="tag tag--warn">виберіть, що це</span>';
-          const opt = (x) => `<option value="${x.id}" ${x.id === c.to ? 'selected' : ''}>${esc(x.title)}</option>`;
+            : c.group ? '<span class="tag">бот керує чатом</span>' : '<span class="tag tag--warn">виберіть групу</span>';
+          const need = !c.admin ? 'зробіть бота адміністратором'
+            : 'увімкніть боту ' + [!c.invite && '«Запрошувати за посиланням»', !c.restrict && '«Блокувати учасників»'].filter(Boolean).join(' і ');
           return `
           <div class="card" style="margin-top:12px">
             <b>${esc(c.title)}</b> ${tag}
             ${ok ? `
-              <label class="field"><span>Що це</span>
-                <select class="select" data-chatto="${c.id}">
-                  <option value="">— виберіть —</option>
-                  ${chats.groups.length ? `<optgroup label="Чат групи">${chats.groups.map(opt).join('')}</optgroup>` : ''}
-                  ${chats.records.length ? `<optgroup label="Канал запису">${chats.records.map(opt).join('')}</optgroup>` : ''}
+              <label class="field"><span>Група</span>
+                <select class="select" data-chatgroup="${c.id}">
+                  <option value="">— виберіть групу —</option>
+                  ${chats.groups.map((g) => `<option value="${g.id}" ${g.id === c.group ? 'selected' : ''}>${esc(g.title)}</option>`).join('')}
                 </select></label>
-              ${!c.channel && !c.restrict ? '<p class="sub" style="margin-top:6px">Для чату групи боту потрібен ще дозвіл «Блокувати учасників».</p>' : ''}
               <button class="btn btn--sm" data-savechat="${c.id}" style="margin-top:10px">Зберегти</button>`
-            : `<p class="sub" style="margin-top:6px">Щоб вибрати, ${!c.admin ? 'зробіть бота адміністратором' : 'увімкніть боту дозвіл «Запрошувати за посиланням»'}.</p>`}
+            : `<p class="sub" style="margin-top:6px">Щоб вибрати групу, ${need}.</p>`}
           </div>`;
         }).join('')}
         <div class="card" style="margin-top:12px">
-          <b>${chats.chats.length ? 'Підключити ще' : 'Як підключити'}</b>
-          <p class="sub" style="margin-top:6px"><b>Чат групи</b> — додайте @Alex_Dance_Bot адміністратором з дозволами «Запрошувати за посиланням» і «Блокувати учасників».</p>
-          <p class="sub" style="margin-top:6px"><b>Запис</b> — створіть закритий канал із відео й додайте бота адміністратором з дозволом «Запрошувати за посиланням».</p>
-          <p class="sub" style="margin-top:6px">Чат чи канал з'явиться тут — виберіть, що це.</p>
+          <b>${chats.chats.length ? 'Підключити ще чат' : 'Як підключити чат'}</b>
+          <p class="sub" style="margin-top:6px">Додайте @Alex_Dance_Bot у чат групи <b>адміністратором</b> з дозволами «Запрошувати за посиланням» і «Блокувати учасників». Чат з'явиться тут — виберіть, до якої групи він належить.</p>
         </div>
       </div>
       <div class="sec">
@@ -329,17 +341,37 @@
       if (TG?.showConfirm) TG.showConfirm(q, go); else go(confirm(q));
     });
     $$('[data-savechat]', view).forEach((b) => b.addEventListener('click', async () => {
-      const to = $(`[data-chatto="${b.dataset.savechat}"]`, view).value;
+      const group = $(`[data-chatgroup="${b.dataset.savechat}"]`, view).value;
       b.disabled = true;
       try {
-        const r = await api('bindChat', { chatId: Number(b.dataset.savechat), to });
+        const r = await api('bindChat', { chatId: Number(b.dataset.savechat), group });
         haptic();
-        toast(!to ? 'Відв’язано' : r.sent ? `Збережено. Особисті запрошення надіслано: ${r.sent}` : 'Збережено');
+        toast(!group ? 'Чат відв’язано від групи' : r.sent ? `Збережено. Особисті запрошення надіслано: ${r.sent}` : 'Збережено');
         load(showMore);
       } catch (e) {
-        toast(e.code === 'restrict' ? 'Для чату групи боту потрібен ще дозвіл «Блокувати учасників»'
-          : e.code === 'rights' ? 'Боту бракує прав адміністратора' : 'Не вдалося зберегти');
+        toast(e.code === 'rights' ? 'Боту бракує прав адміністратора в цьому чаті' : 'Не вдалося зберегти');
       } finally { b.disabled = false; }
+    }));
+    // Відео великі, тож завантажують їх у чат з ботом, а не сюди: закриваємо кабінет і підказуємо
+    $('#addVideo', view)?.addEventListener('click', () => {
+      const go = () => { if (TG?.close) TG.close(); };
+      const q = 'Надішліть відео в чат з ботом (скріпка → відео), і бот спитає, до якого запису. Перейти в чат?';
+      if (TG?.showConfirm) TG.showConfirm(q, (yes) => yes && go()); else toast('Надішліть відео в чат з ботом — бот спитає, до якого запису');
+    });
+    $$('[data-preview]', view).forEach((b) => b.addEventListener('click', async () => {
+      b.disabled = true;
+      try { await api('previewRecord', { id: b.dataset.preview }); haptic(); toast('Надіслано вам у чат з ботом'); }
+      catch { toast('Не вдалося надіслати'); } finally { b.disabled = false; }
+    }));
+    $$('[data-delfile]', view).forEach((b) => b.addEventListener('click', () => {
+      const [id, uid] = b.dataset.delfile.split('|');
+      const go = async (yes) => {
+        if (!yes) return;
+        try { await api('delRecFile', { id, uid }); haptic(); toast('Прибрано'); load(showMore); }
+        catch { toast('Не вдалося прибрати'); }
+      };
+      const q = 'Прибрати цей файл із запису? Нові покупниці його не отримають, у тих, хто вже отримав, лишиться.';
+      if (TG?.showConfirm) TG.showConfirm(q, go); else go(confirm(q));
     }));
     $('#openAdmin', view)?.addEventListener('click', () => {
       const url = 'https://platform-one-bay.vercel.app';
