@@ -96,7 +96,8 @@ ul, ol { padding: 0; list-style: none; }
 .tile--menu { display: none; }
 
 .mnav {
-  position: fixed; inset: var(--hd) 0 0; z-index: 49; background: var(--bg);
+  /* від низу шапки до низу екрана; absolute, бо шапка з розмиттям тла стає «рамкою» для fixed і обрізала фон меню */
+  position: absolute; top: 100%; left: 0; right: 0; height: calc(var(--vh1, 1svh) * 100 - var(--hd)); overflow-y: auto; z-index: 49; background: var(--bg);
   display: flex; flex-direction: column; justify-content: space-between; padding: 24px var(--g) 40px;
   border-top: 1px solid var(--line);
 }
