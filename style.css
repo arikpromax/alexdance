@@ -657,3 +657,12 @@ ul, ol { padding: 0; list-style: none; }
   .author { min-height: 0; aspect-ratio: 4 / 3; }
   .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 42vw; gap: 8px; }
 }
+
+/* місце під відео: квадратна кнопка «play»; відео вставляється як <video autoplay muted loop playsinline poster="…"> */
+.ph__play {
+  display: grid; place-items: center; width: 72px; height: 72px; border-radius: 20px; color: #fff;
+  background: linear-gradient(140deg, #b67dff, #7b3fe4); box-shadow: 0 14px 44px -12px var(--glow);
+}
+.ph__play svg { font-size: 30px; margin-left: 3px; }
+.ph:has(> video) > .ph__play { display: none; }
+@media (max-width: 600px) { .ph__play { width: 60px; height: 60px; border-radius: 16px; } .ph__play svg { font-size: 26px; } }
