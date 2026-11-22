@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b0a10">
+<title>Кабінет студії — Alex Dance Studio</title>
+<style>html{background:#0b0a10}</style>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@500;600&display=swap">
+<link rel="stylesheet" href="kabinet.css?v=1">
+</head>
+<body data-api="https://ortiatyxntdikaldepbp.supabase.co/functions/v1/tg-alexdance">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 10h17M8 3v4M16 3v4" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M4 11V9.5A3.5 3.5 0 0 1 7.5 6H19m-3-3 3 3-3 3M20 13v1.5a3.5 3.5 0 0 1-3.5 3.5H5m3 3-3-3 3-3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M2.5 9.5h19M6 15h4" stroke="currentColor" stroke-width="1.7"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><rect x="2.5" y="6" width="13" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m15.5 10.5 6-3.5v10l-6-3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><path d="M4 12h16M12 4v16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.6 3.5h2.6l1.5 4.2-2 1.4a12 12 0 0 0 6.2 6.2l1.4-2 4.2 1.5v2.6c0 1.2-1 2.1-2.2 2C10.4 18.8 5.2 13.6 4.6 5.7c-.1-1.2.8-2.2 2-2.2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+  <symbol id="i-tg" viewBox="0 0 24 24"><path d="M21.5 4.2 2.9 11.4c-.9.4-.9 1.4 0 1.7l4.6 1.5 1.8 5.5c.2.7 1 .9 1.6.4l2.6-2.1 4.8 3.5c.7.5 1.6.1 1.8-.7L22.9 5.6c.2-1-.6-1.8-1.4-1.4ZM9.7 14.3l-.6 4-1.4-4.6 10.6-6.8-8.6 7.4Z" fill="currentColor"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M8 5.5h10.5V16M18.5 5.5 5.5 18.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+</svg>
+
+<header class="top">
+  <img src="img/logo-ig.jpg" alt="" width="40" height="40">
+  <div class="top__t"><b>Кабінет студії</b><span id="who">Alex Dance Studio</span></div>
+</header>
+
+<main class="view" id="view" aria-live="polite"></main>
+
+<nav class="tabs" aria-label="Розділи кабінету">
+  <button class="tab is-on" data-tab="day"><svg><use href="#i-cal"/></svg><span>Розклад</span></button>
+  <button class="tab" data-tab="subs"><svg><use href="#i-repeat"/></svg><span>Абонементи</span></button>
+  <button class="tab" data-tab="orders"><svg><use href="#i-card"/></svg><span>Оплати</span></button>
+  <button class="tab" data-tab="consults"><svg><use href="#i-cam"/></svg><span>Консультації</span></button>
+  <button class="tab" data-tab="more"><svg><use href="#i-more"/></svg><span>Ще</span></button>
+</nav>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet__bg" data-close></div>
+  <form class="sheet__in" id="sheetForm" novalidate>
+    <button class="icon sheet__x" type="button" data-close aria-label="Закрити"><svg><use href="#i-close"/></svg></button>
+    <p class="sheet__kind">Консультація</p>
+    <h2 class="sheet__t" id="sheetTitle">Призначити час</h2>
+    <p class="sheet__sub" id="sheetSub"></p>
+    <div class="row2">
+      <label class="field"><span>Дата</span><input type="date" name="date" required></label>
+      <label class="field"><span>Час</span><input type="time" name="time" step="900" required></label>
+    </div>
+    <label class="field"><span>Посилання на Zoom (можна пізніше)</span><input type="url" name="zoom" inputmode="url" placeholder="https://zoom.us/j/…"></label>
+    <button class="btn btn--ac" type="submit">Зберегти й надіслати клієнтці</button>
+    <p class="sheet__note">Клієнтка одразу отримає в боті час і кнопку Zoom, а за годину до початку — нагадування.</p>
+  </form>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="kabinet.js?v=1"></script>
+</body>
+</html>
