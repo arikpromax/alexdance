@@ -264,19 +264,14 @@
         </div>
         ${chats.list.map((g) => `
           <div class="card" style="margin-top:12px">
-            <b>${esc(g.title)}</b> ${g.chatId ? '<span class="tag">бот керує чатом</span>' : g.url ? '<span class="tag tag--mute">звичайне посилання</span>' : '<span class="tag tag--warn">немає чату</span>'}
+            <b>${esc(g.title)}</b> ${g.chatId ? '<span class="tag">бот керує чатом</span>' : '<span class="tag tag--warn">немає чату</span>'}
             ${chats.available.length ? `
               <label class="field"><span>Чат групи</span>
                 <select class="select" data-chatfor="${g.id}">
                   <option value="">— не вибрано —</option>
                   ${chats.available.map((c) => `<option value="${c.id}" ${c.id === g.chatId ? 'selected' : ''} ${c.ready ? '' : 'disabled'}>${esc(c.title)}${c.ready ? '' : ' — немає прав'}</option>`).join('')}
                 </select></label>
-              <button class="btn btn--sm" data-savechatfor="${g.id}" style="margin-top:10px">Зберегти</button>` : ''}
-            <details class="more" ${chats.available.length ? '' : 'open'}>
-              <summary>${chats.available.length ? 'Або звичайне посилання' : 'Поки без бота — звичайне посилання'}</summary>
-              <label class="field"><span>Посилання на чат</span><input type="url" inputmode="url" value="${esc(g.url)}" placeholder="https://t.me/+…" data-chat="${g.id}"></label>
-              <button class="btn btn--sm" data-savechat="${g.id}" style="margin-top:10px">Зберегти посилання</button>
-            </details>
+              <button class="btn btn--sm" data-savechatfor="${g.id}" style="margin-top:10px">Зберегти</button>` : '<p class="sub" style="margin-top:6px">Щойно бот стане адміністратором чату цієї групи, чат з\'явиться тут.</p>'}
           </div>`).join('')}
       </div>
       <div class="sec">
@@ -333,17 +328,6 @@
       } catch (e) {
         toast(e.code === 'rights' ? 'Боту бракує прав адміністратора в цьому чаті' : 'Не вдалося зберегти');
       } finally { b.disabled = false; }
-    }));
-    $$('[data-savechat]', view).forEach((b) => b.addEventListener('click', async () => {
-      const url = $(`[data-chat="${b.dataset.savechat}"]`, view).value.trim();
-      if (!/^https?:\/\/\S+$/.test(url)) { toast('Посилання має починатися з https://'); return; }
-      b.disabled = true;
-      try {
-        const r = await api('setChat', { id: b.dataset.savechat, url });
-        haptic();
-        toast(r.sent ? `Збережено. Надіслано тим, у кого діє абонемент: ${r.sent}` : 'Збережено');
-        load(showMore);
-      } catch { toast('Не вдалося зберегти'); } finally { b.disabled = false; }
     }));
     $$('[data-save]', view).forEach((b) => b.addEventListener('click', async () => {
       const url = $(`[data-rec="${b.dataset.save}"]`, view).value.trim();
