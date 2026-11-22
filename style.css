@@ -546,7 +546,6 @@ ul, ol { padding: 0; list-style: none; }
 [data-spot]::before { border-radius: inherit; }
 
 /* ---------- головна-візитка ---------- */
-.page-home .nav { display: none; }
 .hero--home { align-items: center; }
 .home__in { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(32px, 5vw, 88px); align-items: center; }
 .hero--home .hero__t { font-size: clamp(56px, 8.4vw, 150px); }

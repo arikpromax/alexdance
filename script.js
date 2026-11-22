@@ -124,7 +124,7 @@
   /* кнопка «Написати» в кутку: після першого екрана, ховається біля розкладу, контактів і підвалу */
   const fab = $('#fab');
   const top = hero || $('.phead');
-  if (fab && top && !document.body.classList.contains('page-home')) {
+  if (fab && top) {
     let topOn = true;
     const near = new Map();
     const upd = () => fab.classList.toggle('is-on', !topOn && ![...near.values()].some(Boolean));
