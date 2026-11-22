@@ -235,18 +235,23 @@
   });
 
   /* ---------- Ще: написати групі, записи ---------- */
-  let sendGroup = '';
+  // Можна вибрати кілька груп; «Усім» — окремо (знімає інші)
+  let sendGroups = new Set();
   async function showMore() {
     const [subs, recs] = await Promise.all([api('subs'), api('records')]);
-    const people = (g) => g === 'all' ? new Set(subs.list.map((s) => s.name + s.phone)).size : (subs.groups.find((x) => x.id === g)?.count ?? 0);
+    // Скільки різних людей отримає: людина з кількох вибраних груп — один раз
+    const people = (set) => new Set(subs.list
+      .filter((s) => set.has('all') || set.has(s.group))
+      .map((s) => `${s.name}|${s.phone}|${s.username}`)).size;
     view.innerHTML = `
       <h1 class="h">Написати групі</h1>
       <p class="sub">Повідомлення прийде в бот усім, у кого діє абонемент.</p>
       <div class="sec">
         <div class="chips">
-          ${subs.groups.map((g) => `<button class="chip ${sendGroup === g.id ? 'is-on' : ''}" data-sg="${g.id}">${esc(g.title)} · ${g.count}</button>`).join('')}
-          <button class="chip ${sendGroup === 'all' ? 'is-on' : ''}" data-sg="all">Усім · ${people('all')}</button>
+          ${subs.groups.map((g) => `<button class="chip ${sendGroups.has(g.id) ? 'is-on' : ''}" data-sg="${g.id}">${esc(g.title)} · ${g.count}</button>`).join('')}
+          <button class="chip ${sendGroups.has('all') ? 'is-on' : ''}" data-sg="all">Усім · ${people(new Set(['all']))}</button>
         </div>
+        <p class="sub" id="sgWho">Можна вибрати кілька груп</p>
         <label class="field"><span>Текст</span><textarea id="sgText" placeholder="Наприклад: сьогодні заняття о 19:30"></textarea></label>
         <button class="btn btn--ac" id="sgSend" style="margin-top:12px">Надіслати</button>
       </div>
@@ -260,20 +265,31 @@
             <button class="btn btn--sm" data-save="${r.id}" style="margin-top:10px">Зберегти</button>
           </div>`).join('')}
       </div>`;
+    const mark = () => {
+      $$('[data-sg]', view).forEach((x) => x.classList.toggle('is-on', sendGroups.has(x.dataset.sg)));
+      const n = people(sendGroups);
+      $('#sgWho').textContent = sendGroups.size ? `Отримають: ${n} ${n === 1 ? 'людина' : n > 1 && n < 5 ? 'людини' : 'людей'}` : 'Можна вибрати кілька груп';
+    };
     $$('[data-sg]', view).forEach((b) => b.addEventListener('click', () => {
-      sendGroup = b.dataset.sg;
-      $$('[data-sg]', view).forEach((x) => x.classList.toggle('is-on', x === b));
+      const g = b.dataset.sg;
+      if (g === 'all') sendGroups = sendGroups.has('all') ? new Set() : new Set(['all']);
+      else {
+        sendGroups.delete('all');
+        if (sendGroups.has(g)) sendGroups.delete(g); else sendGroups.add(g);
+      }
+      mark();
     }));
+    mark();
     $('#sgSend').addEventListener('click', () => {
       const text = $('#sgText').value.trim();
-      if (!sendGroup) { toast('Оберіть групу'); return; }
+      if (!sendGroups.size) { toast('Оберіть групу'); return; }
       if (!text) { toast('Напишіть текст'); return; }
-      const n = people(sendGroup);
+      const n = people(sendGroups);
       if (!n) { toast('У цій групі поки немає нікого з абонементом'); return; }
       const go = async (yes) => {
         if (!yes) return;
         try {
-          const r = await api('send', { group: sendGroup, text });
+          const r = await api('send', { groups: [...sendGroups], text });
           haptic();
           $('#sgText').value = '';
           toast(`Надіслано: ${r.sent}`);
