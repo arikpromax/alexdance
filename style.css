@@ -252,8 +252,9 @@ ul, ol { padding: 0; list-style: none; }
 }
 .plan--hot { border-color: rgba(164, 92, 255, .55); }
 .plan--hot::after { background: radial-gradient(ellipse 50% 70% at 50% 0%, rgba(164, 92, 255, .38), transparent 70%); }
-.plan__tag { align-self: flex-start; margin-bottom: 20px; padding: 7px 12px; background: var(--ac); font: 600 12px/1 var(--fb); letter-spacing: .04em; }
-.plan__t { font: 500 clamp(26px, 2.6vw, 36px)/1.05 var(--fd); letter-spacing: -.02em; }
+.plan__tag { align-self: flex-start; margin-bottom: 20px; padding: 7px 12px; border: 1px solid rgba(196, 149, 255, .45); color: var(--ac-hi); font: 600 12px/1 var(--fb); letter-spacing: .04em; }
+.plan__t { font: 500 clamp(24px, 2.3vw, 32px)/1.08 var(--fd); letter-spacing: -.02em; }
+.plan__lvl { margin-top: 10px; color: var(--mut); font-size: 15px; }
 .plan__list { display: grid; gap: 12px; margin: 28px 0 36px; color: var(--mut); font-size: 16px; }
 .plan__list li { display: flex; gap: 12px; align-items: flex-start; }
 .plan__list svg { font-size: 18px; color: var(--ac-hi); margin-top: 3px; }
@@ -267,14 +268,35 @@ ul, ol { padding: 0; list-style: none; }
 
 .plan__note { margin-top: 12px; text-align: center; color: var(--dim); font-size: 13px; }
 
+/* ---------- плитки розділів ---------- */
+.tiles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.tl {
+  position: relative; display: flex; flex-direction: column; min-height: 156px; padding: 20px;
+  border: 1px solid var(--line); background: var(--bg2); transition: border-color .3s, background .3s;
+}
+.tl__ic { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--line2); color: var(--ac-hi); }
+.tl__ic svg { font-size: 22px; }
+.tl b { margin-top: auto; padding-top: 18px; font: 500 17px/1.2 var(--fd); letter-spacing: -.01em; }
+.tl small { margin-top: 4px; color: var(--mut); font-size: 14px; }
+.tl__go { position: absolute; top: 22px; right: 20px; font-size: 20px; color: var(--dim); transition: transform .3s var(--ease), color .3s; }
+.tl:hover { border-color: rgba(164, 92, 255, .5); background: var(--bg3); }
+.tl:hover .tl__go { color: var(--ac-hi); transform: translateX(4px); }
+
 /* ---------- розклад ---------- */
+.days { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; max-width: 620px; margin-bottom: 20px; }
+.day {
+  height: 62px; padding: 0; border: 1px solid var(--line2); background: var(--bg2); color: var(--mut);
+  font: 500 17px/1 var(--fd); transition: background .3s, border-color .3s, color .3s, box-shadow .3s;
+}
+.day:hover { border-color: var(--ac); color: var(--ink); }
+.day[aria-selected="true"] { background: var(--ac); border-color: var(--ac); color: #fff; box-shadow: 0 10px 34px -12px var(--glow); }
 .rows { border-top: 1px solid var(--line); }
 .row {
-  display: grid; grid-template-columns: 76px minmax(0, 1fr) 140px 110px 150px; align-items: center; gap: 24px;
+  display: grid; grid-template-columns: 84px minmax(0, 1fr) 110px 150px; align-items: center; gap: 24px;
   padding: 22px 0; border-bottom: 1px solid var(--line);
 }
-.row__d { display: grid; place-items: center; align-content: center; width: 64px; height: 64px; border: 1px solid var(--line2); color: var(--mut); font-size: 13px; line-height: 1; gap: 4px; }
-.row__d b { font: 500 24px/1 var(--fd); color: var(--ink); }
+.row__d { display: grid; place-items: center; align-content: center; width: 84px; height: 60px; border: 1px solid var(--line2); color: var(--mut); font-size: 13px; line-height: 1; gap: 4px; }
+.row__d b { font: 500 19px/1 var(--fd); color: var(--ink); letter-spacing: -.02em; }
 .row__m h3 { font: 500 clamp(19px, 2vw, 26px)/1.15 var(--fd); letter-spacing: -.015em; }
 .row__m p { color: var(--mut); font-size: 15px; margin-top: 6px; }
 .row__s { color: var(--mut); font-size: 15px; }
@@ -287,15 +309,66 @@ ul, ol { padding: 0; list-style: none; }
 /* ---------- консультації ---------- */
 .cons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .con {
-  display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "t t" "d d" "m p" "b b";
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "t t" "d d" "m p" "b b"; grid-template-rows: auto 1fr auto auto;
   gap: 0 16px; padding: clamp(28px, 3.4vw, 48px); border: 1px solid var(--line); background: var(--bg2);
 }
-.con__t { grid-area: t; font: 500 clamp(26px, 3vw, 40px)/1.05 var(--fd); letter-spacing: -.02em; }
+.con__t { grid-area: t; font: 500 clamp(24px, 2.6vw, 34px)/1.1 var(--fd); letter-spacing: -.02em; }
 .con__d { grid-area: d; color: var(--mut); margin: 16px 0 40px; max-width: 36ch; }
 .con__m { grid-area: m; display: flex; align-items: center; gap: 8px; color: var(--mut); align-self: end; }
 .con__m svg { font-size: 18px; color: var(--ac-hi); }
-.con__p { grid-area: p; font: 500 clamp(30px, 3vw, 40px)/1 var(--fd); letter-spacing: -.03em; }
+.con__p { grid-area: p; align-self: end; font: 500 clamp(30px, 3vw, 40px)/1 var(--fd); letter-spacing: -.03em; }
 .con .btn { grid-area: b; margin-top: 28px; }
+
+/* ---------- записи ---------- */
+.recs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.rec { display: flex; flex-direction: column; min-height: 270px; padding: clamp(24px, 2.6vw, 34px); border: 1px solid var(--line); background: var(--bg2); }
+.rec__tag { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; padding: 6px 10px; border: 1px solid var(--line2); color: var(--ac-hi); font-size: 13px; font-weight: 600; }
+.rec__tag svg { font-size: 16px; }
+.rec__t { margin-top: 24px; font: 500 clamp(22px, 2.1vw, 28px)/1.12 var(--fd); letter-spacing: -.02em; }
+.rec__d { margin-top: 10px; color: var(--mut); font-size: 15px; }
+.rec__foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 28px; }
+.rec__p { font: 500 26px/1 var(--fd); letter-spacing: -.02em; }
+
+/* ---------- танцетерапія: слова підсвічуються по черзі ---------- */
+.therapy__in { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
+.therapy__words { display: flex; flex-direction: column; gap: .08em; font: 600 clamp(44px, 7vw, 108px)/1 var(--fd); letter-spacing: -.04em; overflow-wrap: anywhere; }
+.therapy__words span { color: transparent; -webkit-text-stroke: 1px rgba(196, 149, 255, .45); animation: lightup 6s ease-in-out infinite; }
+.therapy__words span:nth-child(2) { animation-delay: 2s; }
+.therapy__words span:nth-child(3) { animation-delay: 4s; }
+@keyframes lightup {
+  0%, 40%, 100% { color: transparent; -webkit-text-stroke-color: rgba(196, 149, 255, .45); text-shadow: none; }
+  12%, 26% { color: #fff; -webkit-text-stroke-color: transparent; text-shadow: 0 0 30px rgba(196, 149, 255, .7), 0 0 90px rgba(164, 92, 255, .5); }
+}
+/* розмір слів від ширини колонки, щоб «Підсвідоме» й «Танцетерапія» не ламались посередині */
+.therapy__words { container-type: inline-size; }
+.therapy__words span { font-size: min(14cqi, 112px); }
+.therapy__txt { container-type: inline-size; }
+.therapy__txt .h2 { font-size: min(11.6cqi, 76px); }
+.therapy__txt .sec__note { margin-top: 20px; max-width: 40ch; }
+.therapy__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+
+/* ---------- безкоштовно в Telegram ---------- */
+.free { padding-top: clamp(64px, 8vw, 120px); }
+.free__in {
+  display: flex; align-items: center; gap: 24px; padding: clamp(22px, 3vw, 36px);
+  border: 1px solid rgba(164, 92, 255, .35); background: linear-gradient(100deg, rgba(164, 92, 255, .16), transparent 60%), var(--bg2);
+}
+.free__ic { display: grid; place-items: center; flex: none; width: 64px; height: 64px; background: var(--ac); }
+.free__ic svg { font-size: 30px; }
+.free__txt { flex: 1; min-width: 0; }
+.free__txt h3 { font: 500 clamp(20px, 2.2vw, 28px)/1.15 var(--fd); letter-spacing: -.015em; }
+.free__txt p { margin-top: 6px; color: var(--mut); }
+
+/* ---------- кнопка «Написати» в кутку ---------- */
+.fab {
+  position: fixed; right: 20px; bottom: calc(20px + env(safe-area-inset-bottom)); z-index: 40;
+  display: grid; place-items: center; width: 56px; height: 56px; background: var(--ac); color: #fff;
+  box-shadow: 0 12px 40px -10px var(--glow); opacity: 0; transform: translateY(16px); pointer-events: none;
+  transition: opacity .35s, transform .35s var(--ease), background .3s;
+}
+.fab svg { font-size: 26px; }
+.fab.is-on { opacity: 1; transform: none; pointer-events: auto; }
+.fab:hover { background: #b274ff; }
 
 /* ---------- контакт ---------- */
 .contact { padding-bottom: clamp(80px, 10vw, 140px); }
@@ -389,8 +462,8 @@ ul, ol { padding: 0; list-style: none; }
 @media (max-width: 1100px) {
   .nav { display: none; }
   .tile--menu { display: grid; }
-  .row { grid-template-columns: 64px minmax(0, 1fr) auto auto; }
-  .row__s { display: none; }
+  .row { grid-template-columns: 84px minmax(0, 1fr) auto auto; }
+  .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 900px) {
   .how__in, .contact__in { grid-template-columns: minmax(0, 1fr); }
@@ -408,6 +481,16 @@ ul, ol { padding: 0; list-style: none; }
   .plans__dots { display: flex; }
   .cons { grid-template-columns: minmax(0, 1fr); }
   .hero__side { display: none; }
+  /* плитки розділів на телефоні — смужка, що гортається вбік */
+  .tiles { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--g); scrollbar-width: none; padding-block: 4px; }
+  .tiles::-webkit-scrollbar { display: none; }
+  .tl { flex: 0 0 152px; min-height: 136px; padding: 16px; scroll-snap-align: start; }
+  .tl b { font-size: 15px; padding-top: 14px; }
+  .tl small { font-size: 13px; }
+  .tl__go { top: 18px; right: 16px; font-size: 18px; }
+  .recs { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .rec { min-height: 0; }
+  .therapy__in { grid-template-columns: minmax(0, 1fr); gap: 28px; }
 }
 @media (max-width: 600px) {
   :root { --hd: 64px; }
@@ -418,9 +501,17 @@ ul, ol { padding: 0; list-style: none; }
   .hero__t { font-size: clamp(56px, 17.5vw, 96px); }
   .hero__cta { width: 100%; flex-direction: column; }
   .hero__cta .btn { width: 100%; }
-  .row { grid-template-columns: 56px minmax(0, 1fr) auto; grid-template-areas: "d m m" "d p b"; gap: 12px 16px; padding: 20px 0; }
-  .row__d { grid-area: d; align-self: start; width: 56px; height: 56px; }
-  .row__d b { font-size: 21px; }
+  .row { grid-template-columns: 68px minmax(0, 1fr) auto; grid-template-areas: "d m m" "d p b"; gap: 12px 14px; padding: 20px 0; }
+  .row__d { grid-area: d; align-self: start; width: 68px; height: 52px; }
+  .row__d b { font-size: 16px; }
+  .days { gap: 6px; }
+  .day { height: 50px; font-size: 14px; }
+  .therapy__words { font-size: clamp(36px, 10.5vw, 72px); }
+  .therapy__cta { flex-direction: column; }
+  .therapy__cta .btn { width: 100%; }
+  .free__in { flex-wrap: wrap; gap: 16px; }
+  .free__in .btn { width: 100%; }
+  .fab { right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); width: 52px; height: 52px; }
   .row__m { grid-area: m; }
   .row__p { grid-area: p; font-size: 20px; }
   .row .btn { grid-area: b; }
@@ -431,6 +522,6 @@ ul, ol { padding: 0; list-style: none; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .beam, .hero__t.is-auto { animation: none; }
+  .beam, .hero__t.is-auto, .therapy__words span { animation: none; }
   .js .rv { opacity: 1; transform: none; }
 }

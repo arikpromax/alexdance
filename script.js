@@ -106,6 +106,28 @@
     build();
   }
 
+  /* розклад: вкладки днів тижня, відкривається сьогоднішній */
+  const days = $$('.day'), panels = $$('#schedule .rows');
+  const showDay = (d) => {
+    days.forEach(b => b.setAttribute('aria-selected', String(b.dataset.day === String(d))));
+    panels.forEach(p => { p.hidden = p.dataset.day !== String(d); });
+  };
+  days.forEach(b => b.addEventListener('click', () => showDay(b.dataset.day)));
+  const today = new Date().getDay();
+  showDay(today === 0 ? 1 : today);
+
+  /* кнопка «Написати» в кутку: з'являється після першого екрана, ховається біля контактів і підвалу */
+  const fab = $('#fab');
+  if (fab) {
+    let heroOn = true;
+    const near = new Map();
+    const upd = () => fab.classList.toggle('is-on', !heroOn && ![...near.values()].some(Boolean));
+    new IntersectionObserver(([e]) => { heroOn = e.isIntersecting; upd(); }).observe(hero);
+    const endIo = new IntersectionObserver((ents) => { ents.forEach(e => near.set(e.target, e.isIntersecting)); upd(); });
+    /* також біля розкладу й блоку Telegram, щоб не закривала кнопки «Оплатити» та «Увійти» */
+    [$('#schedule .rows:not([hidden])') && $('#schedule'), $('.free'), $('#contact'), $('.ft')].forEach(el => el && endIo.observe(el));
+  }
+
   /* оплата (демо): та сама форма для абонемента, заняття й консультації */
   const pay = $('#pay'), p1 = $('#pay1'), p2 = $('#pay2');
   $$('[data-pay]').forEach(b => b.addEventListener('click', () => {

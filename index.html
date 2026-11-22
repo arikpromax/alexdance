@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Alex Dance Studio — танці онлайн у Zoom</title>
-<meta name="description" content="Живі заняття в Zoom, абонементи й консультації від Alex Dance Studio. Heels, Lady Choreo, розтяжка. 16 років студії в Полтаві.">
+<title>Alex Dance Studio — студія танцю в Полтаві</title>
+<meta name="description" content="Групи для жінок і дітей у Полтаві, абонементи з онлайн-оплатою, особисті консультації Олександри Шпіки в Zoom, записи й тренінг «Танцетерапія». 16 років студії.">
 <meta name="theme-color" content="#07060a">
 <style>html{background:#07060a}</style>
 <script>!function(){var w=0,d=document.documentElement;function s(){if(innerWidth!==w||matchMedia('(hover:hover)').matches){w=innerWidth;d.style.setProperty('--vh1',innerHeight/100+'px')}}s();addEventListener('resize',s);d.classList.add('js')}()</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="style.css?v=10">
+<link rel="stylesheet" href="style.css?v=12">
 </head>
 <body>
 
@@ -29,6 +29,10 @@
   <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8"/></symbol>
   <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16" stroke="currentColor" stroke-width="1.8"/></symbol>
   <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2.5c.6 5.2 4.3 8.9 9.5 9.5-5.2.6-8.9 4.3-9.5 9.5-.6-5.2-4.3-8.9-9.5-9.5 5.2-.6 8.9-4.3 9.5-9.5Z" fill="currentColor"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M4 11V9.5A3.5 3.5 0 0 1 7.5 6H19m-3-3 3 3-3 3M20 13v1.5a3.5 3.5 0 0 1-3.5 3.5H5m3 3-3-3 3-3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 10h17M8 3v4M16 3v4M7.5 14h3v3h-3z" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M10 9v6l5-3-5-3Z" fill="currentColor"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
   <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 4.5 7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="i-dcheck" viewBox="0 0 24 24"><path d="m1.5 12.5 4.5 4.5 8.5-9M10.5 16.2l.8.8 8.5-9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="i-out" viewBox="0 0 24 24"><path d="M8 5.5h10.5V16M18.5 5.5 5.5 18.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -47,7 +51,9 @@
     <nav class="nav" aria-label="Розділи">
       <a href="#plans">Абонементи</a>
       <a href="#schedule">Розклад</a>
-      <a href="#consult">Консультації</a>
+      <a href="#consult">Консультація</a>
+      <a href="#records">Записи</a>
+      <a href="#therapy">Танцетерапія</a>
       <a href="#contact">Контакти</a>
     </nav>
     <div class="hd__act">
@@ -60,7 +66,9 @@
     <nav class="mnav__links" aria-label="Меню">
       <a href="#plans">Абонементи</a>
       <a href="#schedule">Розклад</a>
-      <a href="#consult">Консультації</a>
+      <a href="#consult">Консультація</a>
+      <a href="#records">Записи</a>
+      <a href="#therapy">Танцетерапія</a>
       <a href="#contact">Контакти</a>
     </nav>
     <a class="mnav__tel" href="tel:+380503430531">050 343 05 31</a>
@@ -92,6 +100,15 @@
     <p class="hero__side" aria-hidden="true">16 років студії · Полтава</p>
   </section>
 
+  <!-- Плитки розділів -->
+  <nav class="wrap tiles" aria-label="Що є в студії">
+    <a class="tl rv" href="#plans"><span class="tl__ic"><svg><use href="#i-repeat"/></svg></span><b>Абонементи</b><small>Групи в студії</small><svg class="tl__go"><use href="#i-arrow"/></svg></a>
+    <a class="tl rv" href="#schedule"><span class="tl__ic"><svg><use href="#i-cal"/></svg></span><b>Розклад</b><small>Разові заняття</small><svg class="tl__go"><use href="#i-arrow"/></svg></a>
+    <a class="tl rv" href="#consult"><span class="tl__ic"><svg><use href="#i-cam"/></svg></span><b>Консультація</b><small>Онлайн у Zoom</small><svg class="tl__go"><use href="#i-arrow"/></svg></a>
+    <a class="tl rv" href="#records"><span class="tl__ic"><svg><use href="#i-play"/></svg></span><b>Записи</b><small>Доступ у Telegram</small><svg class="tl__go"><use href="#i-arrow"/></svg></a>
+    <a class="tl rv" href="#therapy"><span class="tl__ic"><svg><use href="#i-spark"/></svg></span><b>Танцетерапія</b><small>Тренінг для жінок</small><svg class="tl__go"><use href="#i-arrow"/></svg></a>
+  </nav>
+
   <!-- Як це працює -->
   <section class="sec how" id="how">
     <div class="wrap how__in">
@@ -104,16 +121,16 @@
           </li>
           <li class="step rv">
             <span class="step__ic"><svg><use href="#i-tg"/></svg></span>
-            <div><h3>Доступ у Telegram</h3><p>Бот одразу додає в закриту групу</p></div>
+            <div><h3>Бот у Telegram</h3><p>Підтвердження, нагадування й доступ до записів</p></div>
           </li>
           <li class="step rv">
-            <span class="step__ic"><svg><use href="#i-cam"/></svg></span>
-            <div><h3>Заняття в Zoom</h3><p>Посилання й нагадування — від бота</p></div>
+            <span class="step__ic"><svg><use href="#i-spark"/></svg></span>
+            <div><h3>Займаєшся</h3><p>У залі, в Zoom або в записі</p></div>
           </li>
         </ol>
       </div>
 
-      <div class="tgp rv" id="phone" role="img" aria-label="Чат з ботом студії в Telegram: оплату отримано, кнопка «Увійти в групу», нагадування про заняття з кнопкою «Відкрити Zoom»">
+      <div class="tgp rv" id="phone" role="img" aria-label="Чат з ботом студії в Telegram: підписку оформлено, нагадування про консультацію з кнопкою «Відкрити Zoom»">
         <div class="tgp__screen" aria-hidden="true">
           <div class="tgp__status">
             <b>18:00</b><i class="tgp__island"></i>
@@ -125,15 +142,15 @@
             <span class="tgp__ava">A</span>
           </div>
           <div class="tgp__chat">
-            <div class="tgp__about"><b>Що вміє цей бот?</b>Після оплати на сайті видає доступ до занять Alex Dance Studio й нагадує про них.</div>
+            <div class="tgp__about"><b>Що вміє цей бот?</b>Підтверджує оплату на сайті, нагадує про заняття й консультації, відкриває доступ до записів.</div>
             <span class="tgp__date">Сьогодні</span>
             <div class="bub bub--out">/start<span class="tm">12:40<svg><use href="#i-dcheck"/></svg></span></div>
             <div class="bmsg">
-              <div class="bub bub--in"><b>Оплату отримано</b><br>Абонемент Heels · 8 занять<br>Діє до 21 грудня<span class="tm">12:40</span></div>
-              <span class="kb">Увійти в групу<svg><use href="#i-out"/></svg></span>
+              <div class="bub bub--in"><b>Підписку оформлено</b><br>High Heels Class · Пн, Чт 19:00<br>Наступне списання 22 грудня<span class="tm">12:40</span></div>
+              <span class="kb">Керувати підпискою</span>
             </div>
             <div class="bmsg">
-              <div class="bub bub--in"><b>Нагадування</b><br>Сьогодні о 19:00 — Heels у Zoom<span class="tm">18:00</span></div>
+              <div class="bub bub--in"><b>Нагадування</b><br>Завтра о 12:00 — консультація з Олександрою<span class="tm">18:00</span></div>
               <span class="kb">Відкрити Zoom<svg><use href="#i-out"/></svg></span>
             </div>
           </div>
@@ -147,120 +164,218 @@
     </div>
   </section>
 
-  <!-- Абонементи -->
+  <!-- Абонементи на групи студії -->
   <section class="sec" id="plans">
     <div class="wrap">
       <div class="sec__hd">
         <h2 class="h2 rv">Абонементи</h2>
-        <p class="sec__note rv">Щомісячна підписка: живі заняття в Zoom і закрита група в Telegram</p>
+        <p class="sec__note rv">Групи студії в Полтаві. Щомісячна підписка, скасувати можна будь-коли</p>
       </div>
       <div class="plans">
         <article class="plan rv" data-spot>
-          <h3 class="plan__t">Heels</h3>
+          <span class="plan__tag">18+ · 35+</span>
+          <h3 class="plan__t">Women’s Dance Class</h3>
+          <p class="plan__lvl">Для жінок з нуля</p>
           <ul class="plan__list">
+            <li><svg><use href="#i-clock"/></svg>Пн, Чт · 17:45</li>
             <li><svg><use href="#i-check"/></svg>8 занять на місяць</li>
-            <li><svg><use href="#i-check"/></svg>Закрита група в Telegram</li>
-            <li><svg><use href="#i-check"/></svg>Нагадування перед заняттям</li>
+            <li><svg><use href="#i-pin"/></svg>Студія в Полтаві</li>
           </ul>
-          <p class="plan__price"><b>1 500</b> ₴ / місяць</p>
-          <button class="btn btn--line btn--full" data-pay data-sub data-kind="Підписка" data-title="Heels" data-meta="8 занять у Zoom щомісяця" data-price="1 500 ₴/міс" data-after="Бот додасть тебе в закриту групу Heels. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
-          <p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>
-        </article>
-        <article class="plan plan--hot rv" data-spot>
-          <span class="plan__tag">Найвигідніше</span>
-          <h3 class="plan__t">Усі напрями</h3>
-          <ul class="plan__list">
-            <li><svg><use href="#i-check"/></svg>16 занять на місяць</li>
-            <li><svg><use href="#i-check"/></svg>Heels, Lady Choreo, розтяжка</li>
-            <li><svg><use href="#i-check"/></svg>Усі закриті групи студії</li>
-          </ul>
-          <p class="plan__price"><b>2 600</b> ₴ / місяць</p>
-          <button class="btn btn--ac btn--full" data-pay data-sub data-kind="Підписка" data-title="Усі напрями" data-meta="16 занять у Zoom щомісяця" data-price="2 600 ₴/міс" data-after="Бот додасть тебе в усі закриті групи студії. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
+          <p class="plan__price"><b>1 200</b> ₴ / місяць</p>
+          <button class="btn btn--line btn--full" data-pay data-sub data-kind="Підписка" data-title="Women’s Dance Class" data-meta="Пн, Чт 17:45 · 8 занять щомісяця" data-price="1 200 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
           <p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>
         </article>
         <article class="plan rv" data-spot>
-          <h3 class="plan__t">Розтяжка</h3>
+          <span class="plan__tag">18+</span>
+          <h3 class="plan__t">High Heels Class</h3>
+          <p class="plan__lvl">Новачки й середній рівень</p>
           <ul class="plan__list">
+            <li><svg><use href="#i-clock"/></svg>Пн, Чт · 19:00</li>
             <li><svg><use href="#i-check"/></svg>8 занять на місяць</li>
-            <li><svg><use href="#i-check"/></svg>Закрита група в Telegram</li>
-            <li><svg><use href="#i-check"/></svg>Нагадування перед заняттям</li>
+            <li><svg><use href="#i-pin"/></svg>Студія в Полтаві</li>
           </ul>
           <p class="plan__price"><b>1 200</b> ₴ / місяць</p>
-          <button class="btn btn--line btn--full" data-pay data-sub data-kind="Підписка" data-title="Розтяжка" data-meta="8 занять у Zoom щомісяця" data-price="1 200 ₴/міс" data-after="Бот додасть тебе в закриту групу розтяжки. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
+          <button class="btn btn--line btn--full" data-pay data-sub data-kind="Підписка" data-title="High Heels Class" data-meta="Пн, Чт 19:00 · 8 занять щомісяця" data-price="1 200 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
+          <p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>
+        </article>
+        <article class="plan rv" data-spot>
+          <span class="plan__tag">18+ · 35+</span>
+          <h3 class="plan__t">Lady Choreo Class</h3>
+          <p class="plan__lvl">Новачки й середній рівень</p>
+          <ul class="plan__list">
+            <li><svg><use href="#i-clock"/></svg>Ср 18:00 · Сб 12:30</li>
+            <li><svg><use href="#i-check"/></svg>8 занять на місяць</li>
+            <li><svg><use href="#i-pin"/></svg>Студія в Полтаві</li>
+          </ul>
+          <p class="plan__price"><b>1 200</b> ₴ / місяць</p>
+          <button class="btn btn--line btn--full" data-pay data-sub data-kind="Підписка" data-title="Lady Choreo Class" data-meta="Ср 18:00, Сб 12:30 · 8 занять щомісяця" data-price="1 200 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
+          <p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>
+        </article>
+        <article class="plan rv" data-spot>
+          <span class="plan__tag">16+ · pro</span>
+          <h3 class="plan__t">Body Secret Class</h3>
+          <p class="plan__lvl">Середній і високий рівень</p>
+          <ul class="plan__list">
+            <li><svg><use href="#i-clock"/></svg>Вт 20:00 · Сб 14:00</li>
+            <li><svg><use href="#i-check"/></svg>8 занять на місяць</li>
+            <li><svg><use href="#i-pin"/></svg>Студія в Полтаві</li>
+          </ul>
+          <p class="plan__price"><b>1 300</b> ₴ / місяць</p>
+          <button class="btn btn--line btn--full" data-pay data-sub data-kind="Підписка" data-title="Body Secret Class pro" data-meta="Вт 20:00, Сб 14:00 · 8 занять щомісяця" data-price="1 300 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
+          <p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>
+        </article>
+        <article class="plan rv" data-spot>
+          <span class="plan__tag">16+</span>
+          <h3 class="plan__t">Functional + Stretching</h3>
+          <p class="plan__lvl">Сила, гнучкість, витривалість</p>
+          <ul class="plan__list">
+            <li><svg><use href="#i-clock"/></svg>Вт 19:00 · Пт 18:00</li>
+            <li><svg><use href="#i-check"/></svg>8 занять на місяць</li>
+            <li><svg><use href="#i-pin"/></svg>Студія в Полтаві</li>
+          </ul>
+          <p class="plan__price"><b>1 100</b> ₴ / місяць</p>
+          <button class="btn btn--line btn--full" data-pay data-sub data-kind="Підписка" data-title="Functional + Stretching" data-meta="Вт 19:00, Пт 18:00 · 8 занять щомісяця" data-price="1 100 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
+          <p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>
+        </article>
+        <article class="plan rv" data-spot>
+          <span class="plan__tag">Діти 11+</span>
+          <h3 class="plan__t">Teens Class</h3>
+          <p class="plan__lvl">Професійна дитяча група</p>
+          <ul class="plan__list">
+            <li><svg><use href="#i-clock"/></svg>Пн, Ср, Пт · 16:00–17:30</li>
+            <li><svg><use href="#i-check"/></svg>12 занять на місяць</li>
+            <li><svg><use href="#i-pin"/></svg>Студія в Полтаві</li>
+          </ul>
+          <p class="plan__price"><b>1 500</b> ₴ / місяць</p>
+          <button class="btn btn--line btn--full" data-pay data-sub data-kind="Підписка" data-title="Teens Class" data-meta="Пн, Ср, Пт 16:00–17:30 · 12 занять щомісяця" data-price="1 500 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
           <p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- Разові заняття -->
+  <!-- Розклад тижня й разові заняття -->
   <section class="sec" id="schedule">
     <div class="wrap">
       <div class="sec__hd">
-        <h2 class="h2 rv">Разові заняття</h2>
-        <p class="sec__note rv">Спробуй без абонемента. Посилання на Zoom бот надішле за годину до початку</p>
+        <h2 class="h2 rv">Розклад</h2>
+        <p class="sec__note rv">Прийди на одне заняття без абонемента — оплата одразу на сайті</p>
       </div>
-      <ul class="rows">
-        <li class="row rv" data-spot>
-          <span class="row__d"><b>23</b>пн</span>
-          <div class="row__m"><h3>Heels</h3><p>19:00 · 60 хв · Zoom</p></div>
-          <span class="row__s">6 місць</span>
-          <b class="row__p">300 ₴</b>
-          <button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="Heels" data-meta="Пн, 23 листопада · 19:00 · 60 хв" data-price="300 ₴" data-after="Посилання на Zoom бот надішле за годину до заняття.">Оплатити</button>
-        </li>
-        <li class="row rv" data-spot>
-          <span class="row__d"><b>24</b>вт</span>
-          <div class="row__m"><h3>Розтяжка</h3><p>18:30 · 50 хв · Zoom</p></div>
-          <span class="row__s">4 місця</span>
-          <b class="row__p">250 ₴</b>
-          <button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="Розтяжка" data-meta="Вт, 24 листопада · 18:30 · 50 хв" data-price="250 ₴" data-after="Посилання на Zoom бот надішле за годину до заняття.">Оплатити</button>
-        </li>
-        <li class="row rv" data-spot>
-          <span class="row__d"><b>25</b>ср</span>
-          <div class="row__m"><h3>Lady Choreo</h3><p>19:00 · 60 хв · Zoom</p></div>
-          <span class="row__s row__s--hot">2 місця</span>
-          <b class="row__p">300 ₴</b>
-          <button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="Lady Choreo" data-meta="Ср, 25 листопада · 19:00 · 60 хв" data-price="300 ₴" data-after="Посилання на Zoom бот надішле за годину до заняття.">Оплатити</button>
-        </li>
-        <li class="row row--full rv">
-          <span class="row__d"><b>26</b>чт</span>
-          <div class="row__m"><h3>Heels</h3><p>19:00 · 60 хв · Zoom</p></div>
-          <span class="row__s">Місць немає</span>
-          <b class="row__p">300 ₴</b>
-          <button class="btn btn--sm" disabled>Заповнено</button>
-        </li>
-        <li class="row rv" data-spot>
-          <span class="row__d"><b>27</b>пт</span>
-          <div class="row__m"><h3>Функціонал</h3><p>18:30 · 45 хв · Zoom</p></div>
-          <span class="row__s">8 місць</span>
-          <b class="row__p">250 ₴</b>
-          <button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="Функціонал" data-meta="Пт, 27 листопада · 18:30 · 45 хв" data-price="250 ₴" data-after="Посилання на Zoom бот надішле за годину до заняття.">Оплатити</button>
-        </li>
+      <div class="days rv" role="tablist" aria-label="День тижня">
+        <button class="day" role="tab" data-day="1" aria-selected="true">Пн</button>
+        <button class="day" role="tab" data-day="2" aria-selected="false">Вт</button>
+        <button class="day" role="tab" data-day="3" aria-selected="false">Ср</button>
+        <button class="day" role="tab" data-day="4" aria-selected="false">Чт</button>
+        <button class="day" role="tab" data-day="5" aria-selected="false">Пт</button>
+        <button class="day" role="tab" data-day="6" aria-selected="false">Сб</button>
+      </div>
+
+      <ul class="rows" role="tabpanel" data-day="1" aria-label="Понеділок">
+        <li class="row" data-spot><span class="row__d"><b>16:00</b></span><div class="row__m"><h3>Teens Class</h3><p>Діти 11+ · 1,5 години</p></div><b class="row__p">300 ₴</b><button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="Teens Class" data-meta="Понеділок · 16:00–17:30 · студія в Полтаві" data-price="300 ₴" data-after="Чекаємо в студії. Бот нагадає за годину до заняття.">Оплатити</button></li>
+        <li class="row" data-spot><span class="row__d"><b>17:45</b></span><div class="row__m"><h3>Women’s Dance Class</h3><p>18+ · 35+ · з нуля</p></div><b class="row__p">250 ₴</b><button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="Women’s Dance Class" data-meta="Понеділок · 17:45 · студія в Полтаві" data-price="250 ₴" data-after="Чекаємо в студії. Бот нагадає за годину до заняття.">Оплатити</button></li>
+        <li class="row" data-spot><span class="row__d"><b>19:00</b></span><div class="row__m"><h3>High Heels Class</h3><p>18+ · новачки й середній рівень</p></div><b class="row__p">250 ₴</b><button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="High Heels Class" data-meta="Понеділок · 19:00 · студія в Полтаві" data-price="250 ₴" data-after="Чекаємо в студії. Бот нагадає за годину до заняття.">Оплатити</button></li>
+      </ul>
+      <ul class="rows" role="tabpanel" data-day="2" aria-label="Вівторок" hidden>
+        <li class="row" data-spot><span class="row__d"><b>19:00</b></span><div class="row__m"><h3>Functional + Stretching</h3><p>16+</p></div><b class="row__p">250 ₴</b><button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="Functional + Stretching" data-meta="Вівторок · 19:00 · студія в Полтаві" data-price="250 ₴" data-after="Чекаємо в студії. Бот нагадає за годину до заняття.">Оплатити</button></li>
+        <li class="row" data-spot><span class="row__d"><b>20:00</b></span><div class="row__m"><h3>Body Secret Class pro</h3><p>16+ · середній і високий рівень</p></div><b class="row__p">250 ₴</b><button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="Body Secret Class pro" data-meta="Вівторок · 20:00 · студія в Полтаві" data-price="250 ₴" data-after="Чекаємо в студії. Бот нагадає за годину до заняття.">Оплатити</button></li>
+      </ul>
+      <ul class="rows" role="tabpanel" data-day="3" aria-label="Середа" hidden>
+        <li class="row" data-spot><span class="row__d"><b>16:00</b></span><div class="row__m"><h3>Teens Class</h3><p>Діти 11+ · 1,5 години</p></div><b class="row__p">300 ₴</b><button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="Teens Class" data-meta="Середа · 16:00–17:30 · студія в Полтаві" data-price="300 ₴" data-after="Чекаємо в студії. Бот нагадає за годину до заняття.">Оплатити</button></li>
+        <li class="row" data-spot><span class="row__d"><b>18:00</b></span><div class="row__m"><h3>Lady Choreo Class</h3><p>18+ · 35+ · новачки й середній рівень</p></div><b class="row__p">250 ₴</b><button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="Lady Choreo Class" data-meta="Середа · 18:00 · студія в Полтаві" data-price="250 ₴" data-after="Чекаємо в студії. Бот нагадає за годину до заняття.">Оплатити</button></li>
+      </ul>
+      <ul class="rows" role="tabpanel" data-day="4" aria-label="Четвер" hidden>
+        <li class="row" data-spot><span class="row__d"><b>17:45</b></span><div class="row__m"><h3>Women’s Dance Class</h3><p>18+ · 35+ · з нуля</p></div><b class="row__p">250 ₴</b><button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="Women’s Dance Class" data-meta="Четвер · 17:45 · студія в Полтаві" data-price="250 ₴" data-after="Чекаємо в студії. Бот нагадає за годину до заняття.">Оплатити</button></li>
+        <li class="row" data-spot><span class="row__d"><b>19:00</b></span><div class="row__m"><h3>High Heels Class</h3><p>18+ · новачки й середній рівень</p></div><b class="row__p">250 ₴</b><button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="High Heels Class" data-meta="Четвер · 19:00 · студія в Полтаві" data-price="250 ₴" data-after="Чекаємо в студії. Бот нагадає за годину до заняття.">Оплатити</button></li>
+      </ul>
+      <ul class="rows" role="tabpanel" data-day="5" aria-label="Пʼятниця" hidden>
+        <li class="row" data-spot><span class="row__d"><b>16:00</b></span><div class="row__m"><h3>Teens Class</h3><p>Діти 11+ · 1,5 години</p></div><b class="row__p">300 ₴</b><button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="Teens Class" data-meta="Пʼятниця · 16:00–17:30 · студія в Полтаві" data-price="300 ₴" data-after="Чекаємо в студії. Бот нагадає за годину до заняття.">Оплатити</button></li>
+        <li class="row" data-spot><span class="row__d"><b>18:00</b></span><div class="row__m"><h3>Functional + Stretching</h3><p>16+</p></div><b class="row__p">250 ₴</b><button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="Functional + Stretching" data-meta="Пʼятниця · 18:00 · студія в Полтаві" data-price="250 ₴" data-after="Чекаємо в студії. Бот нагадає за годину до заняття.">Оплатити</button></li>
+      </ul>
+      <ul class="rows" role="tabpanel" data-day="6" aria-label="Субота" hidden>
+        <li class="row" data-spot><span class="row__d"><b>12:30</b></span><div class="row__m"><h3>Lady Choreo Class</h3><p>18+ · 35+ · новачки й середній рівень</p></div><b class="row__p">250 ₴</b><button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="Lady Choreo Class" data-meta="Субота · 12:30 · студія в Полтаві" data-price="250 ₴" data-after="Чекаємо в студії. Бот нагадає за годину до заняття.">Оплатити</button></li>
+        <li class="row" data-spot><span class="row__d"><b>14:00</b></span><div class="row__m"><h3>Body Secret Class pro</h3><p>16+ · середній і високий рівень</p></div><b class="row__p">250 ₴</b><button class="btn btn--ac btn--sm" data-pay data-kind="Разове заняття" data-title="Body Secret Class pro" data-meta="Субота · 14:00 · студія в Полтаві" data-price="250 ₴" data-after="Чекаємо в студії. Бот нагадає за годину до заняття.">Оплатити</button></li>
       </ul>
     </div>
   </section>
 
-  <!-- Консультації -->
+  <!-- Особиста консультація -->
   <section class="sec" id="consult">
     <div class="wrap">
       <div class="sec__hd">
-        <h2 class="h2 rv">Консультація<br>в Zoom</h2>
+        <h2 class="h2 rv">Особиста<br>консультація</h2>
+        <p class="sec__note rv">Олександра Шпіка · онлайн у Zoom за авторськими методиками</p>
       </div>
       <div class="cons">
         <article class="con rv" data-spot>
-          <h3 class="con__t">Особистий розбір</h3>
-          <p class="con__d">Дивимось твоє відео, виправляємо техніку, складаємо план тренувань</p>
-          <span class="con__m"><svg><use href="#i-clock"/></svg>60 хв</span>
+          <h3 class="con__t">Філософія оптимальної ваги і&nbsp;не&nbsp;тільки</h3>
+          <p class="con__d">Авторська методика Олександри Шпіки</p>
+          <span class="con__m"><svg><use href="#i-cam"/></svg>Zoom · час узгоджуємо</span>
           <b class="con__p">1 500 ₴</b>
-          <button class="btn btn--ac" data-pay data-kind="Консультація в Zoom" data-title="Особистий розбір" data-meta="60 хвилин · Zoom" data-price="1 500 ₴" data-after="Бот напише тобі, щоб узгодити зручний час.">Записатися</button>
+          <button class="btn btn--ac" data-pay data-kind="Особиста консультація" data-title="Філософія оптимальної ваги і не тільки" data-meta="Олександра Шпіка · онлайн у Zoom" data-price="1 500 ₴" data-after="Бот напише тобі, щоб узгодити час, і надішле посилання на Zoom.">Записатися й оплатити</button>
         </article>
         <article class="con rv" data-spot>
-          <h3 class="con__t">Для хореографів</h3>
-          <p class="con__d">Набір груп, розклад, утримання учнів — з досвіду 16 років студії</p>
-          <span class="con__m"><svg><use href="#i-clock"/></svg>90 хв</span>
-          <b class="con__p">3 000 ₴</b>
-          <button class="btn btn--ac" data-pay data-kind="Консультація в Zoom" data-title="Для хореографів" data-meta="90 хвилин · Zoom" data-price="3 000 ₴" data-after="Бот напише тобі, щоб узгодити зручний час.">Записатися</button>
+          <h3 class="con__t">Метод «4&nbsp;пазли»</h3>
+          <p class="con__d">Авторський метод Олександри Шпіки</p>
+          <span class="con__m"><svg><use href="#i-cam"/></svg>Zoom · час узгоджуємо</span>
+          <b class="con__p">1 500 ₴</b>
+          <button class="btn btn--ac" data-pay data-kind="Особиста консультація" data-title="Метод «4 пазли»" data-meta="Олександра Шпіка · онлайн у Zoom" data-price="1 500 ₴" data-after="Бот напише тобі, щоб узгодити час, і надішле посилання на Zoom.">Записатися й оплатити</button>
         </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Записи -->
+  <section class="sec" id="records">
+    <div class="wrap">
+      <div class="sec__hd">
+        <h2 class="h2 rv">У записі</h2>
+        <p class="sec__note rv">Оплачуєш — і бот одразу відкриває доступ у Telegram</p>
+      </div>
+      <div class="recs">
+        <article class="rec rv" data-spot>
+          <span class="rec__tag"><svg><use href="#i-play"/></svg>Запис</span>
+          <h3 class="rec__t">Філософія оптимальної ваги</h3>
+          <p class="rec__d">Лекція за авторською методикою</p>
+          <div class="rec__foot"><b class="rec__p">690 ₴</b><button class="btn btn--line btn--sm" data-pay data-kind="Запис" data-title="Філософія оптимальної ваги" data-meta="Доступ у Telegram одразу після оплати" data-price="690 ₴" data-after="Бот надішле доступ до запису в Telegram.">Купити</button></div>
+        </article>
+        <article class="rec rv" data-spot>
+          <span class="rec__tag"><svg><use href="#i-play"/></svg>Запис</span>
+          <h3 class="rec__t">Метод «4&nbsp;пазли»</h3>
+          <p class="rec__d">Розбір методу з поясненнями</p>
+          <div class="rec__foot"><b class="rec__p">690 ₴</b><button class="btn btn--line btn--sm" data-pay data-kind="Запис" data-title="Метод «4 пазли»" data-meta="Доступ у Telegram одразу після оплати" data-price="690 ₴" data-after="Бот надішле доступ до запису в Telegram.">Купити</button></div>
+        </article>
+        <article class="rec rv" data-spot>
+          <span class="rec__tag"><svg><use href="#i-play"/></svg>Запис</span>
+          <h3 class="rec__t">Танцетерапія вдома</h3>
+          <p class="rec__d">Практика для самостійних занять</p>
+          <div class="rec__foot"><b class="rec__p">490 ₴</b><button class="btn btn--line btn--sm" data-pay data-kind="Запис" data-title="Танцетерапія вдома" data-meta="Доступ у Telegram одразу після оплати" data-price="490 ₴" data-after="Бот надішле доступ до запису в Telegram.">Купити</button></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Танцетерапія -->
+  <section class="sec therapy" id="therapy">
+    <div class="wrap therapy__in">
+      <p class="therapy__words" aria-hidden="true"><span>Тіло</span><span>Емоції</span><span>Підсвідоме</span></p>
+      <div class="therapy__txt">
+        <h2 class="h2 rv">Танцетерапія</h2>
+        <p class="sec__note rv">Авторський тренінг для жінок у Полтаві: робота з тілом, емоціями та підсвідомим</p>
+        <div class="therapy__cta rv">
+          <a class="btn btn--ac" href="#contact">Записатися на тренінг <svg><use href="#i-arrow"/></svg></a>
+          <a class="btn btn--ghost" href="#" data-tg><svg><use href="#i-tg"/></svg>Канал тренінгу</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Безкоштовно в Telegram -->
+  <section class="free">
+    <div class="wrap">
+      <div class="free__in rv">
+        <span class="free__ic"><svg><use href="#i-tg"/></svg></span>
+        <div class="free__txt"><h3>Безкоштовно в Telegram</h3><p>Анонси, корисні матеріали й новини студії</p></div>
+        <a class="btn btn--line" href="#" data-tg>Увійти <svg><use href="#i-arrow"/></svg></a>
       </div>
     </div>
   </section>
@@ -301,32 +416,35 @@
   </div>
 </footer>
 
+<a class="fab" id="fab" href="#contact" aria-label="Написати нам"><svg><use href="#i-tg"/></svg></a>
+
 <!-- Оплата (демо) -->
 <dialog class="pay" id="pay" aria-labelledby="payTitle">
   <div class="pay__in">
     <button class="tile pay__x" data-close aria-label="Закрити"><svg><use href="#i-close"/></svg></button>
     <div class="pay__step" id="pay1">
-      <p class="pay__kind" id="payKind">Абонемент</p>
-      <h3 class="pay__t" id="payTitle">Heels</h3>
-      <p class="pay__meta" id="payMeta">8 занять у Zoom на місяць</p>
+      <p class="pay__kind" id="payKind">Підписка</p>
+      <h3 class="pay__t" id="payTitle">High Heels Class</h3>
+      <p class="pay__meta" id="payMeta">Пн, Чт 19:00 · 8 занять щомісяця</p>
       <form id="payForm" novalidate>
         <label class="fld"><input name="name" required autocomplete="name" placeholder=" "><span>Ім’я</span></label>
         <label class="fld"><input name="phone" required type="tel" autocomplete="tel" placeholder=" "><span>Телефон</span></label>
-        <label class="chk" id="paySub" hidden><input type="checkbox" name="agree"><span>Погоджуюсь на щомісячне списання <b id="paySubPrice">1 500 ₴</b>. Скасувати можна будь-коли в боті.</span></label>
-        <button class="btn btn--ac btn--full" type="submit"><span id="payBtn">Оплатити</span> <span id="payPrice">1 500 ₴</span></button>
+        <label class="fld"><input name="tg" autocomplete="off" placeholder=" "><span>Telegram @нік (необовʼязково)</span></label>
+        <label class="chk" id="paySub" hidden><input type="checkbox" name="agree"><span>Погоджуюсь на щомісячне списання <b id="paySubPrice">1 200 ₴</b>. Скасувати можна будь-коли в боті.</span></label>
+        <button class="btn btn--ac btn--full" type="submit"><span id="payBtn">Оплатити</span> <span id="payPrice">1 200 ₴</span></button>
       </form>
       <p class="pay__safe"><svg><use href="#i-lock"/></svg>Картка, Apple Pay або Google Pay</p>
     </div>
     <div class="pay__step" id="pay2" hidden>
       <span class="pay__ok"><svg><use href="#i-check"/></svg></span>
       <h3 class="pay__t" id="payDone">Оплачено</h3>
-      <p class="pay__meta" id="payAfter">Бот додасть тебе в закриту групу.</p>
-      <a class="btn btn--ac btn--full" href="#" data-tg><svg><use href="#i-tg"/></svg>Отримати доступ у Telegram</a>
+      <p class="pay__meta" id="payAfter">Бот підтвердить оплату в Telegram.</p>
+      <a class="btn btn--ac btn--full" href="#" data-tg><svg><use href="#i-tg"/></svg>Відкрити бота в Telegram</a>
       <p class="pay__demo">Демо: справжня оплата підключається на останньому етапі</p>
     </div>
   </div>
 </dialog>
 
-<script src="script.js?v=5"></script>
+<script src="script.js?v=7"></script>
 </body>
 </html>
