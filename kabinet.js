@@ -238,7 +238,7 @@
   // Можна вибрати кілька груп; «Усім» — окремо (знімає інші)
   let sendGroups = new Set();
   async function showMore() {
-    const [subs, recs] = await Promise.all([api('subs'), api('records')]);
+    const [subs, recs, chats] = await Promise.all([api('subs'), api('records'), api('chats')]);
     // Скільки різних людей отримає: людина з кількох вибраних груп — один раз
     const people = (set) => new Set(subs.list
       .filter((s) => set.has('all') || set.has(s.group))
@@ -254,6 +254,16 @@
         <p class="sub" id="sgWho">Можна вибрати кілька груп</p>
         <label class="field"><span>Текст</span><textarea id="sgText" placeholder="Наприклад: сьогодні заняття о 19:30"></textarea></label>
         <button class="btn btn--ac" id="sgSend" style="margin-top:12px">Надіслати</button>
+      </div>
+      <div class="sec">
+        <h1 class="h">Чати груп</h1>
+        <p class="sub">Посилання на чат групи в Telegram. Бот надішле його після оформлення абонемента, а тим, у кого абонемент уже діє, — одразу.</p>
+        ${chats.list.map((g) => `
+          <div class="card" style="margin-top:12px">
+            <b>${esc(g.title)}</b> ${g.url ? '<span class="tag">є посилання</span>' : '<span class="tag tag--warn">немає посилання</span>'}
+            <label class="field"><span>Посилання на чат</span><input type="url" inputmode="url" value="${esc(g.url)}" placeholder="https://t.me/+…" data-chat="${g.id}"></label>
+            <button class="btn btn--sm" data-savechat="${g.id}" style="margin-top:10px">Зберегти</button>
+          </div>`).join('')}
       </div>
       <div class="sec">
         <h1 class="h">Записи</h1>
@@ -298,6 +308,17 @@
       const q = `Надіслати повідомлення ${n} ${n === 1 ? 'людині' : 'людям'}?`;
       if (TG?.showConfirm) TG.showConfirm(q, go); else go(confirm(q));
     });
+    $$('[data-savechat]', view).forEach((b) => b.addEventListener('click', async () => {
+      const url = $(`[data-chat="${b.dataset.savechat}"]`, view).value.trim();
+      if (!/^https?:\/\/\S+$/.test(url)) { toast('Посилання має починатися з https://'); return; }
+      b.disabled = true;
+      try {
+        const r = await api('setChat', { id: b.dataset.savechat, url });
+        haptic();
+        toast(r.sent ? `Збережено. Надіслано тим, у кого діє абонемент: ${r.sent}` : 'Збережено');
+        load(showMore);
+      } catch { toast('Не вдалося зберегти'); } finally { b.disabled = false; }
+    }));
     $$('[data-save]', view).forEach((b) => b.addEventListener('click', async () => {
       const url = $(`[data-rec="${b.dataset.save}"]`, view).value.trim();
       if (!/^https?:\/\/\S+$/.test(url)) { toast('Посилання має починатися з https://'); return; }
