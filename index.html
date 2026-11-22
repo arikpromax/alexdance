@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="style.css?v=9">
+<link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
 
@@ -152,7 +152,7 @@
     <div class="wrap">
       <div class="sec__hd">
         <h2 class="h2 rv">Абонементи</h2>
-        <p class="sec__note rv">Місяць живих занять у Zoom і закрита група в Telegram</p>
+        <p class="sec__note rv">Щомісячна підписка: живі заняття в Zoom і закрита група в Telegram</p>
       </div>
       <div class="plans">
         <article class="plan rv" data-spot>
@@ -163,7 +163,8 @@
             <li><svg><use href="#i-check"/></svg>Нагадування перед заняттям</li>
           </ul>
           <p class="plan__price"><b>1 500</b> ₴ / місяць</p>
-          <button class="btn btn--line btn--full" data-pay data-kind="Абонемент" data-title="Heels" data-meta="8 занять у Zoom на місяць" data-price="1 500 ₴" data-after="Бот додасть тебе в закриту групу Heels.">Оплатити</button>
+          <button class="btn btn--line btn--full" data-pay data-sub data-kind="Підписка" data-title="Heels" data-meta="8 занять у Zoom щомісяця" data-price="1 500 ₴/міс" data-after="Бот додасть тебе в закриту групу Heels. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
+          <p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>
         </article>
         <article class="plan plan--hot rv" data-spot>
           <span class="plan__tag">Найвигідніше</span>
@@ -174,7 +175,8 @@
             <li><svg><use href="#i-check"/></svg>Усі закриті групи студії</li>
           </ul>
           <p class="plan__price"><b>2 600</b> ₴ / місяць</p>
-          <button class="btn btn--ac btn--full" data-pay data-kind="Абонемент" data-title="Усі напрями" data-meta="16 занять у Zoom на місяць" data-price="2 600 ₴" data-after="Бот додасть тебе в усі закриті групи студії.">Оплатити</button>
+          <button class="btn btn--ac btn--full" data-pay data-sub data-kind="Підписка" data-title="Усі напрями" data-meta="16 занять у Zoom щомісяця" data-price="2 600 ₴/міс" data-after="Бот додасть тебе в усі закриті групи студії. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
+          <p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>
         </article>
         <article class="plan rv" data-spot>
           <h3 class="plan__t">Розтяжка</h3>
@@ -184,7 +186,8 @@
             <li><svg><use href="#i-check"/></svg>Нагадування перед заняттям</li>
           </ul>
           <p class="plan__price"><b>1 200</b> ₴ / місяць</p>
-          <button class="btn btn--line btn--full" data-pay data-kind="Абонемент" data-title="Розтяжка" data-meta="8 занять у Zoom на місяць" data-price="1 200 ₴" data-after="Бот додасть тебе в закриту групу розтяжки.">Оплатити</button>
+          <button class="btn btn--line btn--full" data-pay data-sub data-kind="Підписка" data-title="Розтяжка" data-meta="8 занять у Zoom щомісяця" data-price="1 200 ₴/міс" data-after="Бот додасть тебе в закриту групу розтяжки. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
+          <p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>
         </article>
       </div>
     </div>
@@ -309,13 +312,14 @@
       <form id="payForm" novalidate>
         <label class="fld"><input name="name" required autocomplete="name" placeholder=" "><span>Ім’я</span></label>
         <label class="fld"><input name="phone" required type="tel" autocomplete="tel" placeholder=" "><span>Телефон</span></label>
-        <button class="btn btn--ac btn--full" type="submit">Оплатити <span id="payPrice">1 500 ₴</span></button>
+        <label class="chk" id="paySub" hidden><input type="checkbox" name="agree"><span>Погоджуюсь на щомісячне списання <b id="paySubPrice">1 500 ₴</b>. Скасувати можна будь-коли в боті.</span></label>
+        <button class="btn btn--ac btn--full" type="submit"><span id="payBtn">Оплатити</span> <span id="payPrice">1 500 ₴</span></button>
       </form>
       <p class="pay__safe"><svg><use href="#i-lock"/></svg>Картка, Apple Pay або Google Pay</p>
     </div>
     <div class="pay__step" id="pay2" hidden>
       <span class="pay__ok"><svg><use href="#i-check"/></svg></span>
-      <h3 class="pay__t">Оплачено</h3>
+      <h3 class="pay__t" id="payDone">Оплачено</h3>
       <p class="pay__meta" id="payAfter">Бот додасть тебе в закриту групу.</p>
       <a class="btn btn--ac btn--full" href="#" data-tg><svg><use href="#i-tg"/></svg>Отримати доступ у Telegram</a>
       <p class="pay__demo">Демо: справжня оплата підключається на останньому етапі</p>
@@ -323,6 +327,6 @@
   </div>
 </dialog>
 
-<script src="script.js?v=3"></script>
+<script src="script.js?v=5"></script>
 </body>
 </html>

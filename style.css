@@ -265,6 +265,8 @@ ul, ol { padding: 0; list-style: none; }
 .plans__dots button::before { content: ''; display: block; width: 22px; height: 3px; background: var(--line2); transition: width .35s var(--ease), background .35s; }
 .plans__dots button.is-on::before { width: 40px; background: var(--ac); }
 
+.plan__note { margin-top: 12px; text-align: center; color: var(--dim); font-size: 13px; }
+
 /* ---------- розклад ---------- */
 .rows { border-top: 1px solid var(--line); }
 .row {
@@ -358,6 +360,19 @@ ul, ol { padding: 0; list-style: none; }
 .pay__t { font: 500 clamp(28px, 7vw, 38px)/1.05 var(--fd); letter-spacing: -.02em; margin-top: 10px; padding-right: 48px; }
 .pay__meta { color: var(--mut); margin: 10px 0 28px; }
 .pay form { display: grid; gap: 12px; }
+.chk { display: flex; align-items: flex-start; gap: 12px; margin: 4px 0 2px; color: var(--mut); font-size: 14px; line-height: 1.45; cursor: pointer; }
+.chk[hidden] { display: none; }
+.chk b { color: var(--ink); font-weight: 600; }
+.chk input {
+  appearance: none; -webkit-appearance: none; flex: none; width: 22px; height: 22px; margin: 0; cursor: pointer;
+  border: 1px solid var(--line2); background: var(--bg) center / 16px no-repeat; transition: background-color .2s, border-color .2s;
+}
+.chk input:checked {
+  background-color: var(--ac); border-color: var(--ac);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m4.5 12.5 5 5 10-11' fill='none' stroke='%23fff' stroke-width='2.4'/%3E%3C/svg%3E");
+}
+.chk input:focus-visible { outline: 2px solid var(--ac-hi); outline-offset: 2px; }
+.chk.is-bad input { border-color: var(--pink); }
 .pay__safe { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; color: var(--dim); font-size: 14px; }
 .pay__safe svg { font-size: 16px; }
 .pay__ok { display: grid; place-items: center; width: 64px; height: 64px; background: var(--ac); box-shadow: 0 0 60px var(--glow); }

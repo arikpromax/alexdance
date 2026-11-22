@@ -112,8 +112,18 @@
     $('#payKind').textContent = b.dataset.kind;
     $('#payTitle').textContent = b.dataset.title;
     $('#payMeta').textContent = b.dataset.meta;
+    const sub = b.hasAttribute('data-sub');
+    const price = b.dataset.price.replace('/міс', '').replace(/ /g, '\u00a0');
+    $('#payBtn').textContent = sub ? 'Оформити підписку ·' : 'Оплатити';
     $('#payPrice').textContent = b.dataset.price;
     $('#payAfter').textContent = b.dataset.after;
+    $('#payDone').textContent = sub ? 'Підписку оформлено' : 'Оплачено';
+    const agree = $('#paySub');
+    agree.hidden = !sub;
+    agree.classList.remove('is-bad');
+    $('input', agree).required = sub;
+    $('input', agree).checked = false;
+    $('#paySubPrice').textContent = price;
     p1.hidden = false; p2.hidden = true;
     pay.showModal();
   }));
@@ -123,8 +133,8 @@
   const check = (form) => {
     let ok = true;
     $$('[required]', form).forEach(inp => {
-      const bad = !inp.value.trim();
-      inp.closest('.fld').classList.toggle('is-bad', bad);
+      const bad = inp.type === 'checkbox' ? !inp.checked : !inp.value.trim();
+      inp.closest('.fld, .chk').classList.toggle('is-bad', bad);
       if (bad && ok) { inp.focus(); ok = false; }
     });
     return ok;
