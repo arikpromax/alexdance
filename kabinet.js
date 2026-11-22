@@ -258,21 +258,28 @@
       <div class="sec">
         <h1 class="h">Чати груп</h1>
         <p class="sub">Бот видає кожній з абонементом особисте одноразове запрошення в чат її групи, а коли абонемент закінчується — сам прибирає з чату.</p>
-        <div class="card" style="margin-top:12px">
-          <b>Як підключити чат</b>
-          <p class="sub" style="margin-top:6px">Додайте @Alex_Dance_Bot у чат групи <b>адміністратором</b> з дозволами «Запрошувати за посиланням» і «Блокувати учасників». Чат з'явиться тут у списку — виберіть, до якої групи він належить.</p>
-        </div>
-        ${chats.list.map((g) => `
+        ${chats.chats.map((c) => {
+          const tag = !c.ready ? '<span class="tag tag--warn">немає прав</span>'
+            : c.group ? '<span class="tag">бот керує чатом</span>' : '<span class="tag tag--warn">виберіть групу</span>';
+          const need = !c.admin ? 'зробіть бота адміністратором'
+            : 'увімкніть боту ' + [!c.invite && '«Запрошувати за посиланням»', !c.restrict && '«Блокувати учасників»'].filter(Boolean).join(' і ');
+          return `
           <div class="card" style="margin-top:12px">
-            <b>${esc(g.title)}</b> ${g.chatId ? '<span class="tag">бот керує чатом</span>' : '<span class="tag tag--warn">немає чату</span>'}
-            ${chats.available.length ? `
-              <label class="field"><span>Чат групи</span>
-                <select class="select" data-chatfor="${g.id}">
-                  <option value="">— не вибрано —</option>
-                  ${chats.available.map((c) => `<option value="${c.id}" ${c.id === g.chatId ? 'selected' : ''} ${c.ready ? '' : 'disabled'}>${esc(c.title)}${c.ready ? '' : ' — немає прав'}</option>`).join('')}
+            <b>${esc(c.title)}</b> ${tag}
+            ${c.ready ? `
+              <label class="field"><span>Група</span>
+                <select class="select" data-chatgroup="${c.id}">
+                  <option value="">— виберіть групу —</option>
+                  ${chats.groups.map((g) => `<option value="${g.id}" ${g.id === c.group ? 'selected' : ''}>${esc(g.title)}</option>`).join('')}
                 </select></label>
-              <button class="btn btn--sm" data-savechatfor="${g.id}" style="margin-top:10px">Зберегти</button>` : '<p class="sub" style="margin-top:6px">Щойно бот стане адміністратором чату цієї групи, чат з\'явиться тут.</p>'}
-          </div>`).join('')}
+              <button class="btn btn--sm" data-savechat="${c.id}" style="margin-top:10px">Зберегти</button>`
+            : `<p class="sub" style="margin-top:6px">Щоб вибрати групу, ${need}.</p>`}
+          </div>`;
+        }).join('')}
+        <div class="card" style="margin-top:12px">
+          <b>${chats.chats.length ? 'Підключити ще чат' : 'Як підключити чат'}</b>
+          <p class="sub" style="margin-top:6px">Додайте @Alex_Dance_Bot у чат групи <b>адміністратором</b> з дозволами «Запрошувати за посиланням» і «Блокувати учасників». Чат з'явиться тут — виберіть, до якої групи він належить.</p>
+        </div>
       </div>
       <div class="sec">
         <h1 class="h">Записи</h1>
@@ -317,13 +324,13 @@
       const q = `Надіслати повідомлення ${n} ${n === 1 ? 'людині' : 'людям'}?`;
       if (TG?.showConfirm) TG.showConfirm(q, go); else go(confirm(q));
     });
-    $$('[data-savechatfor]', view).forEach((b) => b.addEventListener('click', async () => {
-      const chatId = $(`[data-chatfor="${b.dataset.savechatfor}"]`, view).value;
+    $$('[data-savechat]', view).forEach((b) => b.addEventListener('click', async () => {
+      const id = $(`[data-chatgroup="${b.dataset.savechat}"]`, view).value;
       b.disabled = true;
       try {
-        const r = await api('setChatFor', { id: b.dataset.savechatfor, chatId: chatId ? Number(chatId) : null });
+        const r = await api('setChatGroup', { chatId: Number(b.dataset.savechat), id });
         haptic();
-        toast(!chatId ? 'Чат відв’язано' : r.sent ? `Збережено. Особисті запрошення надіслано: ${r.sent}` : 'Збережено');
+        toast(!id ? 'Чат відв’язано від групи' : r.sent ? `Збережено. Особисті запрошення надіслано: ${r.sent}` : 'Збережено');
         load(showMore);
       } catch (e) {
         toast(e.code === 'rights' ? 'Боту бракує прав адміністратора в цьому чаті' : 'Не вдалося зберегти');
