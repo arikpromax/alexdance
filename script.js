@@ -137,9 +137,25 @@
     [$('.days') && $('.days').parentElement, $('.free'), $('#contact'), $('.ft')].forEach(el => el && endIo.observe(el));
   }
 
-  /* оплата (демо): та сама форма для підписки, заняття, консультації й запису */
+  /* оплата: та сама форма для підписки, заняття, консультації й запису.
+     Замовлення йде в бота (функція tg-alexdance), він відповідає посиланням t.me/<бот>?start=<код>. */
+  const API = document.body.dataset.api || '';
+  const post = async (what, body) => {
+    const r = await fetch(`${API}?api=${what}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || !j.ok) throw new Error(j.error || r.status);
+    return j;
+  };
+  const errBox = (form) => {
+    let el = $('.form__err', form);
+    if (!el) { el = document.createElement('p'); el.className = 'form__err'; el.hidden = true; form.append(el); }
+    return el;
+  };
   const pay = $('#pay'), p1 = $('#pay1'), p2 = $('#pay2');
+  let current = null;
   $$('[data-pay]').forEach(b => b.addEventListener('click', () => {
+    current = b;
+    errBox($('#payForm')).hidden = true;
     $('#payKind').textContent = b.dataset.kind;
     $('#payTitle').textContent = b.dataset.title;
     $('#payMeta').textContent = b.dataset.meta;
@@ -170,20 +186,45 @@
     });
     return ok;
   };
-  $('#payForm').addEventListener('submit', (e) => {
+  $('#payForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!check(e.target)) return;
-    p1.hidden = true; p2.hidden = false;
+    const form = e.target;
+    if (!check(form)) return;
+    const [kind, item, day] = (current?.dataset.order || '').split(':');
+    const btn = $('button[type=submit]', form), err = errBox(form);
+    btn.disabled = true; err.hidden = true;
+    try {
+      const j = await post('order', { kind, item, day, name: form.elements.name.value, phone: form.elements.phone.value, tg: form.elements.tg.value });
+      const go = $('#pay2 .btn');
+      go.href = j.bot; go.target = '_blank'; go.rel = 'noopener';
+      $('.pay__demo', p2).hidden = !j.test;
+      p1.hidden = true; p2.hidden = false;
+    } catch {
+      err.textContent = 'Не вдалося оформити. Спробуй ще раз або напиши нам у Telegram.';
+      err.hidden = false;
+    } finally {
+      btn.disabled = false;
+    }
   });
 
-  /* форма звʼязку (демо: поки нікуди не відправляє) */
+  /* форма звʼязку: заявка приходить студії в Telegram */
   const form = $('#form');
   if (form) {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!check(form)) return;
-      form.reset();
-      $('.form__ok', form).hidden = false;
+      const btn = $('button[type=submit]', form), err = errBox(form);
+      btn.disabled = true; err.hidden = true;
+      try {
+        await post('lead', { name: form.elements.name.value, contact: form.elements.contact.value, msg: form.elements.msg.value });
+        form.reset();
+        $('.form__ok', form).hidden = false;
+      } catch {
+        err.textContent = 'Не вдалося надіслати. Спробуй ще раз або напиши нам у Telegram.';
+        err.hidden = false;
+      } finally {
+        btn.disabled = false;
+      }
     });
   }
 

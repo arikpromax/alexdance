@@ -666,3 +666,8 @@ ul, ol { padding: 0; list-style: none; }
 .ph__play svg { font-size: 30px; margin-left: 3px; }
 .ph:has(> video) > .ph__play { display: none; }
 @media (max-width: 600px) { .ph__play { width: 60px; height: 60px; border-radius: 16px; } .ph__play svg { font-size: 26px; } }
+
+/* помилка відправки форми (оплата, заявка) */
+.form__err { margin: 4px 0 0; color: #ff8fb8; font-size: 14px; }
+.form__err[hidden] { display: none; }
+.btn:disabled { opacity: .6; cursor: progress; }
