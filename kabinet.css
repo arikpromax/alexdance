@@ -142,3 +142,12 @@ h1, h2, h3, p { margin: 0; }
   font-weight: 500; box-shadow: 0 12px 40px -12px rgba(0, 0, 0, .8);
 }
 .toast[hidden] { display: none; }
+
+/* вибір чату групи й «звичайне посилання» під спойлером */
+.select { width: 100%; min-height: 48px; padding: 0 14px; border: 1px solid var(--line2); border-radius: var(--rb); background: var(--card2); color: var(--ink); color-scheme: dark; }
+.select:focus { border-color: var(--ac); outline: none; }
+.more { margin-top: 12px; }
+.more summary { cursor: pointer; color: var(--mut); font-size: 14px; list-style: none; }
+.more summary::-webkit-details-marker { display: none; }
+.more summary::before { content: '+ '; color: var(--ac-hi); }
+.more[open] summary::before { content: '− '; }

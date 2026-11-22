@@ -257,12 +257,26 @@
       </div>
       <div class="sec">
         <h1 class="h">Чати груп</h1>
-        <p class="sub">Посилання на чат групи в Telegram. Бот надішле його після оформлення абонемента, а тим, у кого абонемент уже діє, — одразу.</p>
+        <p class="sub">Бот видає кожній з абонементом особисте одноразове запрошення в чат її групи, а коли абонемент закінчується — сам прибирає з чату.</p>
+        <div class="card" style="margin-top:12px">
+          <b>Як підключити чат</b>
+          <p class="sub" style="margin-top:6px">Додайте @Alex_Dance_Bot у чат групи <b>адміністратором</b> з дозволами «Запрошувати за посиланням» і «Блокувати учасників». Чат з'явиться тут у списку — виберіть, до якої групи він належить.</p>
+        </div>
         ${chats.list.map((g) => `
           <div class="card" style="margin-top:12px">
-            <b>${esc(g.title)}</b> ${g.url ? '<span class="tag">є посилання</span>' : '<span class="tag tag--warn">немає посилання</span>'}
-            <label class="field"><span>Посилання на чат</span><input type="url" inputmode="url" value="${esc(g.url)}" placeholder="https://t.me/+…" data-chat="${g.id}"></label>
-            <button class="btn btn--sm" data-savechat="${g.id}" style="margin-top:10px">Зберегти</button>
+            <b>${esc(g.title)}</b> ${g.chatId ? '<span class="tag">бот керує чатом</span>' : g.url ? '<span class="tag tag--mute">звичайне посилання</span>' : '<span class="tag tag--warn">немає чату</span>'}
+            ${chats.available.length ? `
+              <label class="field"><span>Чат групи</span>
+                <select class="select" data-chatfor="${g.id}">
+                  <option value="">— не вибрано —</option>
+                  ${chats.available.map((c) => `<option value="${c.id}" ${c.id === g.chatId ? 'selected' : ''} ${c.ready ? '' : 'disabled'}>${esc(c.title)}${c.ready ? '' : ' — немає прав'}</option>`).join('')}
+                </select></label>
+              <button class="btn btn--sm" data-savechatfor="${g.id}" style="margin-top:10px">Зберегти</button>` : ''}
+            <details class="more" ${chats.available.length ? '' : 'open'}>
+              <summary>${chats.available.length ? 'Або звичайне посилання' : 'Поки без бота — звичайне посилання'}</summary>
+              <label class="field"><span>Посилання на чат</span><input type="url" inputmode="url" value="${esc(g.url)}" placeholder="https://t.me/+…" data-chat="${g.id}"></label>
+              <button class="btn btn--sm" data-savechat="${g.id}" style="margin-top:10px">Зберегти посилання</button>
+            </details>
           </div>`).join('')}
       </div>
       <div class="sec">
@@ -308,6 +322,18 @@
       const q = `Надіслати повідомлення ${n} ${n === 1 ? 'людині' : 'людям'}?`;
       if (TG?.showConfirm) TG.showConfirm(q, go); else go(confirm(q));
     });
+    $$('[data-savechatfor]', view).forEach((b) => b.addEventListener('click', async () => {
+      const chatId = $(`[data-chatfor="${b.dataset.savechatfor}"]`, view).value;
+      b.disabled = true;
+      try {
+        const r = await api('setChatFor', { id: b.dataset.savechatfor, chatId: chatId ? Number(chatId) : null });
+        haptic();
+        toast(!chatId ? 'Чат відв’язано' : r.sent ? `Збережено. Особисті запрошення надіслано: ${r.sent}` : 'Збережено');
+        load(showMore);
+      } catch (e) {
+        toast(e.code === 'rights' ? 'Боту бракує прав адміністратора в цьому чаті' : 'Не вдалося зберегти');
+      } finally { b.disabled = false; }
+    }));
     $$('[data-savechat]', view).forEach((b) => b.addEventListener('click', async () => {
       const url = $(`[data-chat="${b.dataset.savechat}"]`, view).value.trim();
       if (!/^https?:\/\/\S+$/.test(url)) { toast('Посилання має починатися з https://'); return; }
