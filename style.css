@@ -82,8 +82,11 @@ ul, ol { padding: 0; list-style: none; }
 .hd.is-solid { background: rgba(7, 6, 10, .72); backdrop-filter: blur(18px) saturate(1.3); -webkit-backdrop-filter: blur(18px) saturate(1.3); border-color: var(--line); }
 .hd__in { display: flex; align-items: center; gap: 32px; height: var(--hd); }
 .logo { display: flex; align-items: center; gap: 10px; margin-right: auto; }
-.logo b { font: 700 24px/1 var(--fd); letter-spacing: .04em; }
-.logo span { font: 500 10px/1.15 var(--fb); letter-spacing: .14em; text-transform: uppercase; color: var(--mut); padding-left: 10px; border-left: 1px solid var(--line2); }
+/* лого з аватарки Instagram: неон на темному; screen прибирає темне тло, маска — краї квадрата */
+.logo img {
+  display: block; width: 64px; height: 64px; mix-blend-mode: screen;
+  -webkit-mask-image: radial-gradient(circle closest-side, #000 86%, transparent 100%); mask-image: radial-gradient(circle closest-side, #000 86%, transparent 100%);
+}
 .nav { display: flex; gap: 30px; font-size: 15px; color: var(--mut); }
 .nav a { position: relative; padding: 6px 0; transition: color .25s; }
 .nav a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--ac); transform: scaleX(0); transform-origin: left; transition: transform .35s var(--ease); }
@@ -332,12 +335,13 @@ ul, ol { padding: 0; list-style: none; }
 /* ---------- танцетерапія: слова підсвічуються по черзі ---------- */
 .therapy__in { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
 .therapy__words { display: flex; flex-direction: column; gap: .08em; font: 600 clamp(44px, 7vw, 108px)/1 var(--fd); letter-spacing: -.04em; overflow-wrap: anywhere; }
-.therapy__words span { color: transparent; -webkit-text-stroke: 1px rgba(196, 149, 255, .45); animation: lightup 6s ease-in-out infinite; }
+/* без контуру: у Unbounded контур показує внутрішні лінії літер («калякулі»), тож неактивні слова просто приглушені */
+.therapy__words span { color: #2c2638; animation: lightup 6s ease-in-out infinite; }
 .therapy__words span:nth-child(2) { animation-delay: 2s; }
 .therapy__words span:nth-child(3) { animation-delay: 4s; }
 @keyframes lightup {
-  0%, 40%, 100% { color: transparent; -webkit-text-stroke-color: rgba(196, 149, 255, .45); text-shadow: none; }
-  12%, 26% { color: #fff; -webkit-text-stroke-color: transparent; text-shadow: 0 0 30px rgba(196, 149, 255, .7), 0 0 90px rgba(164, 92, 255, .5); }
+  0%, 40%, 100% { color: #2c2638; text-shadow: none; }
+  12%, 26% { color: #fff; text-shadow: 0 0 30px rgba(196, 149, 255, .7), 0 0 90px rgba(164, 92, 255, .5); }
 }
 /* розмір слів від ширини колонки, щоб «Підсвідоме» й «Танцетерапія» не ламались посередині */
 .therapy__words { container-type: inline-size; }
@@ -495,7 +499,7 @@ ul, ol { padding: 0; list-style: none; }
 @media (max-width: 600px) {
   :root { --hd: 64px; }
   body { font-size: 16px; }
-  .logo b { font-size: 21px; }
+  .logo img { width: 50px; height: 50px; }
   .hd__act .tile:not(.tile--menu):first-child { display: none; }
   .hero { padding-bottom: 32px; }
   .hero__t { font-size: clamp(56px, 17.5vw, 96px); }
