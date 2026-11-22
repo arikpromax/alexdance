@@ -165,13 +165,18 @@
         <div class="cons__top">${who(c, esc(c.title)).replace('class="who"', 'class="who" style="padding:0;border:0;flex:1"')}</div>
         <p class="cons__when ${c.at ? '' : 'is-none'}">${c.at ? esc(c.label) : 'Час ще не призначено'}</p>
         <div class="cons__actions">
-          ${c.past ? '' : `<button class="btn btn--sm ${c.at ? '' : 'btn--ac'}" data-set="${c.code}">${c.at ? 'Змінити час' : 'Призначити час'}</button>`}
+          ${c.past ? '' : `<button class="btn btn--sm ${c.at || d.self ? '' : 'btn--ac'}" data-set="${c.code}">${c.at ? 'Змінити час' : 'Призначити час'}</button>`}
           ${c.zoom ? `<a class="btn btn--sm" href="${esc(c.zoom)}" target="_blank" rel="noopener">${icon('cam')} Zoom</a>` : ''}
         </div>
-        ${c.linked ? '' : '<p class="cons__note">Клієнтка ще не відкрила бота — отримає час, щойно відкриє.</p>'}
+        ${!c.linked ? '<p class="cons__note">Клієнтка ще не відкрила бота — отримає час, щойно відкриє.</p>'
+          : !c.at && d.self ? '<p class="cons__note">Клієнтка обирає час у боті — щойно вибере, прийде сповіщення.</p>' : ''}
       </article>`;
     }
-    view.innerHTML = `<h1 class="h">Консультації</h1>` + (consults.length
+    const hint = (d.self
+      ? 'Клієнтки самі вибирають час із вільних годин у боті й одразу отримують Zoom. Тут можна перевірити або змінити час.'
+      : 'Щоб клієнтки самі вибирали час, впишіть вільні години в адмінці (розділ «Консультація»).')
+      + (d.zoom ? '' : ' Постійне посилання Zoom — в адмінці, «Підключення».');
+    view.innerHTML = `<h1 class="h">Консультації</h1><p class="sub">${hint}</p>` + (consults.length
       ? block('Без часу', consults.filter((c) => !c.at)) + block('Заплановані', consults.filter((c) => c.at && !c.past)) + block('Минулі', consults.filter((c) => c.past))
       : '<div class="sec"><div class="empty">Оплачених консультацій поки немає</div></div>');
     $$('[data-set]', view).forEach((b) => b.addEventListener('click', () => openSheet(consults.find((c) => c.code === b.dataset.set))));
@@ -234,11 +239,11 @@
     }
   });
 
-  /* ---------- Ще: написати групі, записи ---------- */
+  /* ---------- Ще: написати групі, чати й канали, сайт ---------- */
   // Можна вибрати кілька груп; «Усім» — окремо (знімає інші)
   let sendGroups = new Set();
   async function showMore() {
-    const [subs, recs, chats] = await Promise.all([api('subs'), api('records'), api('chats')]);
+    const [subs, chats] = await Promise.all([api('subs'), api('chats')]);
     // Скільки різних людей отримає: людина з кількох вибраних груп — один раз
     const people = (set) => new Set(subs.list
       .filter((s) => set.has('all') || set.has(s.group))
@@ -256,40 +261,39 @@
         <button class="btn btn--ac" id="sgSend" style="margin-top:12px">Надіслати</button>
       </div>
       <div class="sec">
-        <h1 class="h">Чати груп</h1>
-        <p class="sub">Бот видає кожній з абонементом особисте одноразове запрошення в чат її групи, а коли абонемент закінчується — сам прибирає з чату.</p>
+        <h1 class="h">Чати й канали</h1>
+        <p class="sub">Бот сам видає особисте одноразове запрошення: з абонементом — у чат групи (а коли абонемент закінчився, прибирає), з оплаченим записом — у закритий канал запису.</p>
         ${chats.chats.map((c) => {
-          const tag = !c.ready ? '<span class="tag tag--warn">немає прав</span>'
-            : c.group ? '<span class="tag">бот керує чатом</span>' : '<span class="tag tag--warn">виберіть групу</span>';
-          const need = !c.admin ? 'зробіть бота адміністратором'
-            : 'увімкніть боту ' + [!c.invite && '«Запрошувати за посиланням»', !c.restrict && '«Блокувати учасників»'].filter(Boolean).join(' і ');
+          const ok = c.admin && c.invite;
+          const tag = !ok ? '<span class="tag tag--warn">немає прав</span>'
+            : c.to ? `<span class="tag">${c.to.startsWith('r:') ? 'канал запису' : 'чат групи'}</span>` : '<span class="tag tag--warn">виберіть, що це</span>';
+          const opt = (x) => `<option value="${x.id}" ${x.id === c.to ? 'selected' : ''}>${esc(x.title)}</option>`;
           return `
           <div class="card" style="margin-top:12px">
             <b>${esc(c.title)}</b> ${tag}
-            ${c.ready ? `
-              <label class="field"><span>Група</span>
-                <select class="select" data-chatgroup="${c.id}">
-                  <option value="">— виберіть групу —</option>
-                  ${chats.groups.map((g) => `<option value="${g.id}" ${g.id === c.group ? 'selected' : ''}>${esc(g.title)}</option>`).join('')}
+            ${ok ? `
+              <label class="field"><span>Що це</span>
+                <select class="select" data-chatto="${c.id}">
+                  <option value="">— виберіть —</option>
+                  ${chats.groups.length ? `<optgroup label="Чат групи">${chats.groups.map(opt).join('')}</optgroup>` : ''}
+                  ${chats.records.length ? `<optgroup label="Канал запису">${chats.records.map(opt).join('')}</optgroup>` : ''}
                 </select></label>
+              ${!c.channel && !c.restrict ? '<p class="sub" style="margin-top:6px">Для чату групи боту потрібен ще дозвіл «Блокувати учасників».</p>' : ''}
               <button class="btn btn--sm" data-savechat="${c.id}" style="margin-top:10px">Зберегти</button>`
-            : `<p class="sub" style="margin-top:6px">Щоб вибрати групу, ${need}.</p>`}
+            : `<p class="sub" style="margin-top:6px">Щоб вибрати, ${!c.admin ? 'зробіть бота адміністратором' : 'увімкніть боту дозвіл «Запрошувати за посиланням»'}.</p>`}
           </div>`;
         }).join('')}
         <div class="card" style="margin-top:12px">
-          <b>${chats.chats.length ? 'Підключити ще чат' : 'Як підключити чат'}</b>
-          <p class="sub" style="margin-top:6px">Додайте @Alex_Dance_Bot у чат групи <b>адміністратором</b> з дозволами «Запрошувати за посиланням» і «Блокувати учасників». Чат з'явиться тут — виберіть, до якої групи він належить.</p>
+          <b>${chats.chats.length ? 'Підключити ще' : 'Як підключити'}</b>
+          <p class="sub" style="margin-top:6px"><b>Чат групи</b> — додайте @Alex_Dance_Bot адміністратором з дозволами «Запрошувати за посиланням» і «Блокувати учасників».</p>
+          <p class="sub" style="margin-top:6px"><b>Запис</b> — створіть закритий канал із відео й додайте бота адміністратором з дозволом «Запрошувати за посиланням».</p>
+          <p class="sub" style="margin-top:6px">Чат чи канал з'явиться тут — виберіть, що це.</p>
         </div>
       </div>
       <div class="sec">
-        <h1 class="h">Записи</h1>
-        <p class="sub">Посилання, яке бот надсилає після оплати. Ті, хто вже оплатив і чекає, отримають його одразу.</p>
-        ${recs.list.map((r) => `
-          <div class="card" style="margin-top:12px">
-            <b>${esc(r.title)}</b> ${r.url ? '<span class="tag">є посилання</span>' : '<span class="tag tag--warn">немає посилання</span>'}
-            <label class="field"><span>Посилання</span><input type="url" inputmode="url" value="${esc(r.url)}" placeholder="https://t.me/+…" data-rec="${r.id}"></label>
-            <button class="btn btn--sm" data-save="${r.id}" style="margin-top:10px">Зберегти</button>
-          </div>`).join('')}
+        <h1 class="h">Сайт</h1>
+        <p class="sub">Групи, розклад, ціни, вільні години консультацій, тексти й фото — в адмінці. Сайт і бот одразу беруть нове.</p>
+        <button class="btn" id="openAdmin" style="margin-top:12px">Відкрити адмінку</button>
       </div>`;
     const mark = () => {
       $$('[data-sg]', view).forEach((x) => x.classList.toggle('is-on', sendGroups.has(x.dataset.sg)));
@@ -325,28 +329,22 @@
       if (TG?.showConfirm) TG.showConfirm(q, go); else go(confirm(q));
     });
     $$('[data-savechat]', view).forEach((b) => b.addEventListener('click', async () => {
-      const id = $(`[data-chatgroup="${b.dataset.savechat}"]`, view).value;
+      const to = $(`[data-chatto="${b.dataset.savechat}"]`, view).value;
       b.disabled = true;
       try {
-        const r = await api('setChatGroup', { chatId: Number(b.dataset.savechat), id });
+        const r = await api('bindChat', { chatId: Number(b.dataset.savechat), to });
         haptic();
-        toast(!id ? 'Чат відв’язано від групи' : r.sent ? `Збережено. Особисті запрошення надіслано: ${r.sent}` : 'Збережено');
+        toast(!to ? 'Відв’язано' : r.sent ? `Збережено. Особисті запрошення надіслано: ${r.sent}` : 'Збережено');
         load(showMore);
       } catch (e) {
-        toast(e.code === 'rights' ? 'Боту бракує прав адміністратора в цьому чаті' : 'Не вдалося зберегти');
+        toast(e.code === 'restrict' ? 'Для чату групи боту потрібен ще дозвіл «Блокувати учасників»'
+          : e.code === 'rights' ? 'Боту бракує прав адміністратора' : 'Не вдалося зберегти');
       } finally { b.disabled = false; }
     }));
-    $$('[data-save]', view).forEach((b) => b.addEventListener('click', async () => {
-      const url = $(`[data-rec="${b.dataset.save}"]`, view).value.trim();
-      if (!/^https?:\/\/\S+$/.test(url)) { toast('Посилання має починатися з https://'); return; }
-      b.disabled = true;
-      try {
-        const r = await api('setRecord', { id: b.dataset.save, url });
-        haptic();
-        toast(r.sent ? `Збережено. Надіслано тим, хто чекав: ${r.sent}` : 'Збережено');
-        load(showMore);
-      } catch { toast('Не вдалося зберегти'); } finally { b.disabled = false; }
-    }));
+    $('#openAdmin', view)?.addEventListener('click', () => {
+      const url = 'https://platform-one-bay.vercel.app';
+      if (TG?.openLink) TG.openLink(url); else window.open(url, '_blank', 'noopener');
+    });
   }
 
   /* ---------- вкладки ---------- */
@@ -364,5 +362,5 @@
     load(SCREENS[name]);
   }
   $$('.tab').forEach((b) => b.addEventListener('click', () => { try { TG?.HapticFeedback?.selectionChanged(); } catch { /* немає */ } show(b.dataset.tab); }));
-  show('day');
+  show(SCREENS[location.hash.slice(1)] ? location.hash.slice(1) : 'day');
 })();
