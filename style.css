@@ -760,10 +760,7 @@ ul, ol { padding: 0; list-style: none; }
 .ft__req { display: flex; justify-content: space-between; align-items: center; gap: 16px 32px; flex-wrap: wrap; padding-block: 24px; border-top: 1px solid var(--line); color: var(--mut); font-size: 14px; line-height: 1.6; }
 .ft__who a:hover { color: var(--ink); }
 .paylogos { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.pl { display: grid; place-items: center; height: 30px; min-width: 46px; padding: 0 8px; border: 1px solid #d9d9de; border-radius: 6px; background: #fff; }
-.pl svg { display: block; height: 18px; width: auto; }
-.pl--apay { padding: 0; border: 0; background: #fff; overflow: hidden; }
-.pl--apay svg { height: 30px; }
+.paylogos img { display: block; height: 30px; width: auto; }
 .pay .paylogos { justify-content: center; margin-top: 10px; }
 .chk a { color: var(--ac-hi); text-decoration: underline; text-underline-offset: 2px; }
 
