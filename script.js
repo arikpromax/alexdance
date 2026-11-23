@@ -135,16 +135,38 @@
   };
   openToday();
 
+  // «Або одне заняття» в картці групи: відкриваємо в розкладі найближчий день цієї групи й підсвічуємо рядок
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest && e.target.closest('[data-onegroup]');
+    if (!a) return;
+    const btns = $$('.rows [data-order^="single:' + a.dataset.onegroup + ':"]');
+    if (!btns.length) return;
+    const have = btns.map(b => Number(b.dataset.order.split(':')[2]));
+    const today = new Date().getDay();
+    let d = have[0];
+    for (let i = 0; i < 7; i++) { const x = (today + i) % 7; if (have.includes(x)) { d = x; break; } }
+    showDay(d);
+    const row = btns[have.indexOf(d)].closest('.row');
+    row.classList.toggle('is-flash', false);
+    void row.offsetWidth;
+    row.classList.add('is-flash');
+  });
+
   // platform.js перебудував картки з адмінки — оновлюємо смужки й відкриваємо сьогоднішній день
   window.ADS = Object.assign(window.ADS || {}, { refresh: () => { buildDots(); openToday(); } });
 
-  /* кнопка «Написати» в кутку: після першого екрана, ховається біля розкладу, контактів і підвалу */
-  const fab = $('#fab');
+  /* кнопка «Написати» в кутку (на телефоні — смужка «Записатися»): після першого екрана,
+     ховається біля розкладу, контактів і підвалу */
+  const fab = $('#fab'), mbar = $('#mbar');
   const top = hero || $('.phead');
   if (fab && top) {
     let topOn = true;
     const near = new Map();
-    const upd = () => fab.classList.toggle('is-on', !topOn && ![...near.values()].some(Boolean));
+    const upd = () => {
+      const on = !topOn && ![...near.values()].some(Boolean);
+      fab.classList.toggle('is-on', on);
+      if (mbar) mbar.classList.toggle('is-on', on);
+    };
     new IntersectionObserver(([e]) => { topOn = e.isIntersecting; upd(); }).observe(top);
     const endIo = new IntersectionObserver((ents) => { ents.forEach(e => near.set(e.target, e.isIntersecting)); upd(); });
     [$('.days') && $('.days').parentElement, $('.free'), $('#contact'), $('.ft')].forEach(el => el && endIo.observe(el));

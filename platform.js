@@ -88,7 +88,9 @@
         '<button class="btn btn--line btn--full" data-pay data-order="sub:' + esc(g.id) + '" data-sub data-kind="Підписка" data-title="' + esc(g.title) +
         '" data-meta="' + esc(slotsLabel(g, ' ') + ' · ' + lessons(n) + ' щомісяця') + '" data-price="' + money(g.price) + ' ₴/міс"' +
         ' data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>' +
-        '<p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p></article>';
+        '<p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>' +
+        (g.single ? '<a class="plan__one" href="#schedule" data-onegroup="' + esc(g.id) + '">Або одне заняття — ' + money(g.single) + ' ₴</a>' : '') +
+        '</article>';
     }).join('');
   }
 
@@ -126,9 +128,9 @@
     box.innerHTML = rows.map(function (r) {
       var p = money(num(r.price));
       return '<article class="con" data-spot><h3 class="con__t">' + esc(r.title) + '</h3><p class="con__d">' + esc(r.text) + '</p>' +
-        '<span class="con__m">' + icon('cam') + 'Zoom · час обираєте після оплати</span><b class="con__p">' + p + ' ₴</b>' +
+        '<span class="con__m">' + icon('cam') + 'Zoom · день і час обираєте при записі</span><b class="con__p">' + p + ' ₴</b>' +
         '<button class="btn btn--ac" data-pay data-order="consult:' + esc(r.extra.id) + '" data-kind="Особиста консультація" data-title="' + esc(r.title) +
-        '" data-meta="Олександра Шпіка · онлайн у Zoom" data-price="' + p + ' ₴" data-after="Бот одразу надішле посилання на Zoom і нагадає за годину до початку.">Записатися й оплатити</button></article>';
+        '" data-meta="Олександра Шпіка · онлайн у Zoom" data-price="' + p + ' ₴" data-after="Бот одразу надішле посилання на Zoom і нагадає за годину до початку.">Обрати день і час</button></article>';
     }).join('');
   }
   function paintRecords(rows) {
