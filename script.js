@@ -258,6 +258,9 @@
     $('input', agree).required = sub;
     $('input', agree).checked = false;
     $('#paySubPrice').textContent = price;
+    // згода з офертою — щоразу заново
+    const offer = $('#payAgree');
+    if (offer) { offer.classList.remove('is-bad'); $('input', offer).checked = false; }
     p1.hidden = false; p2.hidden = true;
     whenAt = null;
     if (isConsult()) whenLoad(); else when.hidden = true;

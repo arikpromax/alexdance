@@ -164,6 +164,7 @@
       var intl = d.length === 10 && d[0] === '0' ? '+38' + d : d.length === 12 ? '+' + d : '+' + d;
       each('a[href^="tel:"]', function (a) { a.setAttribute('href', 'tel:' + intl); });
     }
+    if (has('email')) each('a[data-mail]', function (a) { a.setAttribute('href', 'mailto:' + String(T.email).trim()); });
     each('[data-link]', function (a) {
       var k = a.getAttribute('data-link');
       if (has(k)) { a.setAttribute('href', String(T[k]).trim()); a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
