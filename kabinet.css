@@ -17,7 +17,7 @@ h1, h2, h3, p { margin: 0; }
 
 /* ---------- шапка й вкладки ---------- */
 .top { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 12px; padding: 12px var(--g); background: rgba(11, 10, 16, .88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
-.top img { width: 40px; height: 40px; border-radius: 50%; mix-blend-mode: screen; }
+.top img { width: 40px; height: 40px; border-radius: 8px; mix-blend-mode: screen; }
 .top__t { display: grid; line-height: 1.2; }
 .top__t b { font: 600 16px/1.2 var(--fd); letter-spacing: -.01em; }
 .top__t span { color: var(--mut); font-size: 13px; }
