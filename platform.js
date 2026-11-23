@@ -83,7 +83,7 @@
         (g.tag ? '<span class="plan__tag">' + esc(g.tag) + '</span>' : '') +
         '<h3 class="plan__t">' + esc(g.title) + '</h3>' +
         (g.level ? '<p class="plan__lvl">' + esc(g.level) + '</p>' : '') +
-        '<ul class="plan__list"><li>' + icon('clock') + esc(label) + '</li><li>' + icon('check') + lessons(n) + ' на місяць</li><li>' + icon('pin') + 'Студія в Полтаві</li></ul>' +
+        '<ul class="plan__list"><li>' + icon('clock') + esc(label) + '</li><li>' + icon('check') + lessons(n) + ' на місяць</li></ul>' +
         '<p class="plan__price"><b>' + money(g.price) + '</b> ₴ / місяць</p>' +
         '<button class="btn btn--line btn--full" data-pay data-order="sub:' + esc(g.id) + '" data-sub data-kind="Підписка" data-title="' + esc(g.title) +
         '" data-meta="' + esc(slotsLabel(g, ' ') + ' · ' + lessons(n) + ' щомісяця') + '" data-price="' + money(g.price) + ' ₴/міс"' +
