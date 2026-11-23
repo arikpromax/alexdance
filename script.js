@@ -166,6 +166,60 @@
   };
   const pay = $('#pay'), p1 = $('#pay1'), p2 = $('#pay2');
   let current = null;
+
+  /* консультація: день і час обирають тут, до оплати. Вільний час дає бот (лише мітки часу, без імен) */
+  const when = $('#payWhen');
+  let whenList = [], whenAt = null, whenDay = null;
+  const KYIV = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Kyiv', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short', hourCycle: 'h23' });
+  const WD = { Sun: 'Нд', Mon: 'Пн', Tue: 'Вт', Wed: 'Ср', Thu: 'Чт', Fri: 'Пт', Sat: 'Сб' };
+  const MON = ['січ', 'лют', 'бер', 'кві', 'тра', 'чер', 'лип', 'сер', 'вер', 'жов', 'лис', 'гру'];
+  const MONG = ['січня', 'лютого', 'березня', 'квітня', 'травня', 'червня', 'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'];
+  const kp = (ms) => { const p = {}; KYIV.formatToParts(new Date(ms)).forEach(x => { p[x.type] = x.value; }); return p; };
+  const dayKey = (ms) => { const p = kp(ms); return `${p.year}-${p.month}-${p.day}`; };
+  const whenLabel = (ms) => { const p = kp(ms); return `${WD[p.weekday].toLowerCase()}, ${+p.day} ${MONG[+p.month - 1]} о ${p.hour}:${p.minute}`; };
+  const isConsult = () => (current?.dataset.order || '').startsWith('consult:');
+  const whenMeta = () => { $('#payMeta').textContent = whenAt ? `${whenLabel(whenAt)} · онлайн у Zoom` : current.dataset.meta; };
+  function whenPaint(sel) {
+    const days = [...new Set(whenList.map(dayKey))];
+    whenDay = days.includes(sel) ? sel : days[0];
+    $('#whenDays').innerHTML = days.map(k => {
+      const p = kp(whenList.find(ms => dayKey(ms) === k));
+      return `<button type="button" class="when__d" data-wd="${k}" aria-selected="${k === whenDay}">${WD[p.weekday]}<b>${+p.day}</b>${MON[+p.month - 1]}</button>`;
+    }).join('');
+    $('#whenTimes').innerHTML = whenList.filter(ms => dayKey(ms) === whenDay).map(ms => {
+      const p = kp(ms);
+      return `<button type="button" class="when__t" data-wt="${ms}" aria-selected="${ms === whenAt}">${p.hour}:${p.minute}</button>`;
+    }).join('');
+  }
+  async function whenLoad(msg) {
+    whenList = []; whenAt = null;
+    when.classList.remove('is-bad');
+    when.hidden = false;
+    $('#whenDays').innerHTML = ''; $('#whenTimes').innerHTML = '';
+    const note = $('#whenNote');
+    note.textContent = 'Завантажую вільний час…'; note.hidden = false;
+    try {
+      const r = await fetch(`${API}?api=times`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
+      const j = await r.json();
+      whenList = (j.times || []).map(Number).filter(Boolean);
+    } catch { whenList = []; }
+    if (!isConsult()) return;
+    if (!whenList.length) {
+      // годин не вписано або все зайнято — оплата без часу, Олександра узгодить у боті
+      when.hidden = true;
+      $('#payAfter').textContent = 'Олександра напише тобі в боті, щоб узгодити час, і надішле посилання на Zoom.';
+      return;
+    }
+    note.textContent = msg || ''; note.hidden = !msg;
+    whenPaint();
+    whenMeta();
+  }
+  when.addEventListener('click', (e) => {
+    const d = e.target.closest('[data-wd]');
+    if (d) { whenPaint(d.dataset.wd); return; }
+    const t = e.target.closest('[data-wt]');
+    if (t) { whenAt = Number(t.dataset.wt); when.classList.remove('is-bad'); $('#whenNote').hidden = true; whenPaint(whenDay); whenMeta(); }
+  });
   document.addEventListener('click', (e) => {
     const b = e.target.closest && e.target.closest('[data-pay]');
     if (!b) return;
@@ -187,6 +241,8 @@
     $('input', agree).checked = false;
     $('#paySubPrice').textContent = price;
     p1.hidden = false; p2.hidden = true;
+    whenAt = null;
+    if (isConsult()) whenLoad(); else when.hidden = true;
     pay.showModal();
   });
   $$('[data-close]', pay).forEach(b => b.addEventListener('click', () => pay.close()));
@@ -207,16 +263,30 @@
     if (!check(form)) return;
     const [kind, item, day] = (current?.dataset.order || '').split(':');
     const btn = $('button[type=submit]', form), err = errBox(form);
+    if (isConsult() && !when.hidden && !whenAt) {
+      when.classList.add('is-bad');
+      err.textContent = 'Оберіть день і час консультації.';
+      err.hidden = false;
+      return;
+    }
     btn.disabled = true; err.hidden = true;
     try {
-      const j = await post('order', { kind, item, day, name: form.elements.name.value, phone: form.elements.phone.value, tg: form.elements.tg.value });
+      const j = await post('order', { kind, item, day, at: isConsult() && whenAt ? whenAt : undefined, name: form.elements.name.value, phone: form.elements.phone.value, tg: form.elements.tg.value });
+      if (isConsult() && whenAt) {
+        const w = whenLabel(whenAt);
+        $('#payAfter').textContent = `${w[0].toUpperCase() + w.slice(1)}. Бот одразу надішле посилання на Zoom і нагадає за годину до початку.`;
+      }
       const go = $('#pay2 .btn');
       go.href = j.bot; go.target = '_blank'; go.rel = 'noopener';
       $('.pay__demo', p2).hidden = !j.test;
       p1.hidden = true; p2.hidden = false;
-    } catch {
-      err.textContent = 'Не вдалося оформити. Спробуй ще раз або напиши нам у Telegram.';
-      err.hidden = false;
+    } catch (e) {
+      if (String(e.message) === 'time') {
+        await whenLoad('Цей час щойно зайняли — оберіть інший.');
+      } else {
+        err.textContent = 'Не вдалося оформити. Спробуй ще раз або напиши нам у Telegram.';
+        err.hidden = false;
+      }
     } finally {
       btn.disabled = false;
     }

@@ -128,7 +128,7 @@
       return '<article class="con" data-spot><h3 class="con__t">' + esc(r.title) + '</h3><p class="con__d">' + esc(r.text) + '</p>' +
         '<span class="con__m">' + icon('cam') + 'Zoom · час обираєте після оплати</span><b class="con__p">' + p + ' ₴</b>' +
         '<button class="btn btn--ac" data-pay data-order="consult:' + esc(r.extra.id) + '" data-kind="Особиста консультація" data-title="' + esc(r.title) +
-        '" data-meta="Олександра Шпіка · онлайн у Zoom" data-price="' + p + ' ₴" data-after="Бот напише тобі, щоб узгодити час, і надішле посилання на Zoom.">Записатися й оплатити</button></article>';
+        '" data-meta="Олександра Шпіка · онлайн у Zoom" data-price="' + p + ' ₴" data-after="Бот одразу надішле посилання на Zoom і нагадає за годину до початку.">Записатися й оплатити</button></article>';
     }).join('');
   }
   function paintRecords(rows) {

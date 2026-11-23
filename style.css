@@ -459,6 +459,31 @@ ul, ol { padding: 0; list-style: none; }
 .pay__demo { margin-top: 16px; text-align: center; color: var(--dim); font-size: 13px; }
 .pay__step[hidden] { display: none; }
 
+/* консультація: день і час обирають у вікні оплати */
+.when { display: grid; gap: 10px; margin-bottom: 10px; }
+.when[hidden] { display: none; }
+.when__l { color: var(--dim); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.when__days {
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x proximity;
+  margin: 0 calc(-1 * clamp(22px, 5vw, 40px)); padding: 2px clamp(22px, 5vw, 40px) 6px;
+}
+.when__days::-webkit-scrollbar { display: none; }
+.when__d, .when__t {
+  border: 1px solid var(--line2); background: var(--bg2); color: var(--mut); cursor: pointer;
+  transition: background .3s, border-color .3s, color .3s, box-shadow .3s;
+}
+.when__d { flex: none; width: 64px; padding: 10px 0 9px; text-align: center; scroll-snap-align: start; font: 500 12px/1.2 var(--fb); }
+.when__d b { display: block; margin: 4px 0 3px; color: var(--ink); font: 500 21px/1 var(--fd); }
+.when__t { min-width: 88px; height: 48px; padding: 0 16px; color: var(--ink); font: 500 16px/1 var(--fd); }
+.when__d:hover, .when__t:hover { border-color: var(--ac); }
+.when__d[aria-selected="true"], .when__t[aria-selected="true"] {
+  background: var(--ac); border-color: var(--ac); color: #fff; box-shadow: 0 10px 34px -12px var(--glow);
+}
+.when__d[aria-selected="true"] b { color: #fff; }
+.when__times { display: flex; flex-wrap: wrap; gap: 8px; min-height: 48px; }
+.when__note { color: var(--mut); font-size: 14px; }
+.when.is-bad .when__times .when__t { border-color: var(--pink); }
+
 /* ---------- поява при гортанні ---------- */
 .js .rv { opacity: 0; transform: translateY(28px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
 .js .rv.is-in { opacity: 1; transform: none; }

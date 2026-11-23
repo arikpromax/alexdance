@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="style.css?v=23">
+<link rel="stylesheet" href="style.css?v=24">
 </head>
 <body class="page-inner" data-api="https://ortiatyxntdikaldepbp.supabase.co/functions/v1/tg-alexdance">
 
@@ -146,6 +146,13 @@
       <h3 class="pay__t" id="payTitle">High Heels Class</h3>
       <p class="pay__meta" id="payMeta">Пн, Чт 19:00 · 8 занять щомісяця</p>
       <form id="payForm" novalidate>
+        <div class="when" id="payWhen" hidden>
+          <p class="when__l">День</p>
+          <div class="when__days" id="whenDays"></div>
+          <p class="when__l">Час</p>
+          <div class="when__times" id="whenTimes"></div>
+          <p class="when__note" id="whenNote" hidden></p>
+        </div>
         <label class="fld"><input name="name" required autocomplete="name" placeholder=" "><span>Ім’я</span></label>
         <label class="fld"><input name="phone" required type="tel" autocomplete="tel" placeholder=" "><span>Телефон</span></label>
         <label class="fld"><input name="tg" autocomplete="off" placeholder=" "><span>Telegram @нік (необовʼязково)</span></label>
@@ -164,7 +171,7 @@
   </div>
 </dialog>
 
-<script src="platform.js?v=13"></script>
-<script src="script.js?v=13"></script>
+<script src="platform.js?v=14"></script>
+<script src="script.js?v=14"></script>
 </body>
 </html>
