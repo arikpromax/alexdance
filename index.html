@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@400;500;600;700&display=swap">
 <link rel="icon" href="img/logo-180.jpg">
 <link rel="apple-touch-icon" href="img/logo-180.jpg">
-<link rel="stylesheet" href="style.css?v=31">
+<link rel="stylesheet" href="style.css?v=32">
 </head>
 <body class="page-home" data-api="https://ortiatyxntdikaldepbp.supabase.co/functions/v1/tg-alexdance">
 
@@ -89,7 +89,7 @@
       <i class="floor"></i>
     </div>
     <div class="wrap hero__in">
-      <p class="hero__kicker">Alex Dance Studio · Полтава</p>
+      <p class="hero__kicker" data-txt="hero_kicker">Alex Dance Studio · Полтава</p>
       <h1 class="hero__t" id="heroT" aria-label="Танцюй будь-де">
         <span class="t-base" aria-hidden="true">Танцюй<br>будь-де</span>
         <span class="t-lit" aria-hidden="true">Танцюй<br>будь-де</span>
@@ -100,7 +100,7 @@
           <a class="btn btn--ghost" href="#consult">Консультація онлайн</a>
         </div>
       </div>
-      <p class="hero__contact"><a href="tel:+380503430531" data-txt="phone">050 343 05 31</a><span>·</span>Студія в Полтаві</p>
+      <p class="hero__contact"><a href="tel:+380503430531" data-txt="phone">050 343 05 31</a><span>·</span><span data-txt="studio_address">Студія в Полтаві</span></p>
     </div>
     <p class="hero__side" aria-hidden="true" data-txt="hero_side">16 років студії · Полтава</p>
   </section>
@@ -108,7 +108,7 @@
   <section class="sec" id="groups">
     <div class="wrap">
       <div class="sec__hd">
-        <h2 class="h2 rv">Групи й ціни</h2>
+        <h2 class="h2 rv" data-txt="groups_title">Групи й ціни</h2>
         <p class="sec__note rv" data-txt="plans_note">Абонемент — щомісячна підписка, скасувати можна будь-коли. Або прийди на одне заняття.</p>
       </div>
       <div class="plans">
@@ -123,7 +123,7 @@
           </ul>
           <p class="plan__price"><b>1 200</b> ₴ / місяць</p>
           <button class="btn btn--line btn--full" data-pay data-order="sub:womens" data-sub data-kind="Підписка" data-title="Women’s Dance Class" data-meta="Пн, Чт 17:45 · 8 занять щомісяця" data-price="1 200 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
-          <p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>
+          <p class="plan__note" data-txt="plan_note">Автосписання щомісяця · скасувати можна будь-коли</p>
           <a class="plan__one" href="#schedule" data-onegroup="womens">Або одне заняття — 250 ₴</a>
         </article>
         <article class="plan" data-spot>
@@ -137,7 +137,7 @@
           </ul>
           <p class="plan__price"><b>1 200</b> ₴ / місяць</p>
           <button class="btn btn--line btn--full" data-pay data-order="sub:heels" data-sub data-kind="Підписка" data-title="High Heels Class" data-meta="Пн, Чт 19:00 · 8 занять щомісяця" data-price="1 200 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
-          <p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>
+          <p class="plan__note" data-txt="plan_note">Автосписання щомісяця · скасувати можна будь-коли</p>
           <a class="plan__one" href="#schedule" data-onegroup="heels">Або одне заняття — 250 ₴</a>
         </article>
         <article class="plan" data-spot>
@@ -151,7 +151,7 @@
           </ul>
           <p class="plan__price"><b>1 200</b> ₴ / місяць</p>
           <button class="btn btn--line btn--full" data-pay data-order="sub:lady" data-sub data-kind="Підписка" data-title="Lady Choreo Class" data-meta="Ср 18:00, Сб 12:30 · 8 занять щомісяця" data-price="1 200 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
-          <p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>
+          <p class="plan__note" data-txt="plan_note">Автосписання щомісяця · скасувати можна будь-коли</p>
           <a class="plan__one" href="#schedule" data-onegroup="lady">Або одне заняття — 250 ₴</a>
         </article>
         <article class="plan" data-spot>
@@ -165,7 +165,7 @@
           </ul>
           <p class="plan__price"><b>1 300</b> ₴ / місяць</p>
           <button class="btn btn--line btn--full" data-pay data-order="sub:body" data-sub data-kind="Підписка" data-title="Body Secret Class pro" data-meta="Вт 20:00, Сб 14:00 · 8 занять щомісяця" data-price="1 300 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
-          <p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>
+          <p class="plan__note" data-txt="plan_note">Автосписання щомісяця · скасувати можна будь-коли</p>
           <a class="plan__one" href="#schedule" data-onegroup="body">Або одне заняття — 250 ₴</a>
         </article>
         <article class="plan" data-spot>
@@ -179,7 +179,7 @@
           </ul>
           <p class="plan__price"><b>1 100</b> ₴ / місяць</p>
           <button class="btn btn--line btn--full" data-pay data-order="sub:functional" data-sub data-kind="Підписка" data-title="Functional + Stretching" data-meta="Вт 19:00, Пт 18:00 · 8 занять щомісяця" data-price="1 100 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
-          <p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>
+          <p class="plan__note" data-txt="plan_note">Автосписання щомісяця · скасувати можна будь-коли</p>
           <a class="plan__one" href="#schedule" data-onegroup="functional">Або одне заняття — 250 ₴</a>
         </article>
         <article class="plan" data-spot>
@@ -193,7 +193,7 @@
           </ul>
           <p class="plan__price"><b>1 500</b> ₴ / місяць</p>
           <button class="btn btn--line btn--full" data-pay data-order="sub:teens" data-sub data-kind="Підписка" data-title="Teens Class" data-meta="Пн, Ср, Пт 16:00–17:30 · 12 занять щомісяця" data-price="1 500 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
-          <p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>
+          <p class="plan__note" data-txt="plan_note">Автосписання щомісяця · скасувати можна будь-коли</p>
           <a class="plan__one" href="#schedule" data-onegroup="teens">Або одне заняття — 300 ₴</a>
         </article>
       </div>
@@ -203,7 +203,7 @@
   <section class="sec" id="schedule">
     <div class="wrap">
       <div class="sec__hd">
-        <h2 class="h2 rv">Розклад на тиждень</h2>
+        <h2 class="h2 rv" data-txt="schedule_title">Розклад на тиждень</h2>
         <p class="sec__note rv" data-txt="schedule_note">Натисни день — побачиш заняття. Одне заняття можна оплатити одразу тут.</p>
       </div>
       <div class="sched">
@@ -247,7 +247,7 @@
   <section class="sec" id="consult">
     <div class="wrap">
       <div class="sec__hd">
-        <h2 class="h2 rv">Консультація з&nbsp;Олександрою</h2>
+        <h2 class="h2 rv" data-txt="consult_title">Консультація з&nbsp;Олександрою</h2>
         <p class="sec__note rv" data-txt="consult_note">Особисто, онлайн у Zoom. Обираєш день і час, оплачуєш — бот одразу надсилає посилання.</p>
       </div>
     </div>
@@ -260,14 +260,14 @@
         <article class="con" data-spot>
           <h3 class="con__t">Філософія оптимальної ваги і&nbsp;не&nbsp;тільки</h3>
           <p class="con__d">Авторська методика Олександри Шпіки</p>
-          <span class="con__m"><svg><use href="#i-cam"/></svg>Zoom · день і час обираєте при записі</span>
+          <span class="con__m"><svg><use href="#i-cam"/></svg><span data-txt="consult_meta">Zoom · день і час обираєте при записі</span></span>
           <b class="con__p">1 500 ₴</b>
           <button class="btn btn--ac" data-pay data-order="consult:weight" data-kind="Особиста консультація" data-title="Філософія оптимальної ваги і не тільки" data-meta="Олександра Шпіка · онлайн у Zoom" data-price="1 500 ₴" data-after="Бот одразу надішле посилання на Zoom і нагадає за годину до початку.">Обрати день і час</button>
         </article>
         <article class="con" data-spot>
           <h3 class="con__t">Метод «4&nbsp;пазли»</h3>
           <p class="con__d">Авторський метод Олександри Шпіки</p>
-          <span class="con__m"><svg><use href="#i-cam"/></svg>Zoom · день і час обираєте при записі</span>
+          <span class="con__m"><svg><use href="#i-cam"/></svg><span data-txt="consult_meta">Zoom · день і час обираєте при записі</span></span>
           <b class="con__p">1 500 ₴</b>
           <button class="btn btn--ac" data-pay data-order="consult:puzzles" data-kind="Особиста консультація" data-title="Метод «4 пазли»" data-meta="Олександра Шпіка · онлайн у Zoom" data-price="1 500 ₴" data-after="Бот одразу надішле посилання на Zoom і нагадає за годину до початку.">Обрати день і час</button>
         </article>
@@ -278,7 +278,7 @@
   <section class="sec" id="records">
     <div class="wrap">
       <div class="sec__hd">
-        <h2 class="h2 rv">Відеозаписи</h2>
+        <h2 class="h2 rv" data-txt="records_title">Відеозаписи</h2>
         <p class="sec__note rv" data-txt="records_note">Дивишся в Telegram одразу після оплати — коли зручно.</p>
       </div>
       <div class="recs">
@@ -307,7 +307,7 @@
   <section class="sec therapy" id="therapy">
     <div class="wrap">
       <div class="therapy__txt">
-        <h2 class="h2 rv">Танцетерапія</h2>
+        <h2 class="h2 rv" data-txt="therapy_title">Танцетерапія</h2>
         <p class="sec__note rv" data-txt="therapy_note">Авторський тренінг для жінок у Полтаві</p>
         <p class="therapy__lead rv" data-txt="therapy_lead">Робота з тілом, емоціями та підсвідомим жінки — через рух і танець.</p>
         <div class="therapy__cta rv">
@@ -319,19 +319,19 @@
   </section>
   <section class="sec how" id="how">
     <div class="wrap how__in">
-      <h2 class="h2 how__h rv">Як це працює</h2>
+      <h2 class="h2 how__h rv" data-txt="how_title">Як це працює</h2>
       <ol class="steps how__steps">
           <li class="step rv">
             <span class="step__ic"><svg><use href="#i-card"/></svg></span>
-            <div><h3>Оплата на сайті</h3><p>Картка, Apple Pay або Google Pay</p></div>
+            <div><h3 data-txt="how_1_t">Оплата на сайті</h3><p data-txt="how_1_d">Картка, Apple Pay або Google Pay</p></div>
           </li>
           <li class="step rv">
             <span class="step__ic"><svg><use href="#i-tg"/></svg></span>
-            <div><h3>Бот у Telegram</h3><p>Підтвердження, нагадування й доступ до записів</p></div>
+            <div><h3 data-txt="how_2_t">Бот у Telegram</h3><p data-txt="how_2_d">Підтвердження, нагадування й доступ до записів</p></div>
           </li>
           <li class="step rv">
             <span class="step__ic"><svg><use href="#i-spark"/></svg></span>
-            <div><h3>Займаєшся</h3><p>У залі, в Zoom або в записі</p></div>
+            <div><h3 data-txt="how_3_t">Займаєшся</h3><p data-txt="how_3_d">У залі, в Zoom або в записі</p></div>
           </li>
       </ol>
 
@@ -371,7 +371,7 @@
   <section class="sec contact" id="contact">
     <div class="wrap">
       <div class="sec__hd">
-        <h2 class="h2 rv">Контакти</h2>
+        <h2 class="h2 rv" data-txt="contact_title">Контакти</h2>
         <p class="sec__note rv" data-txt="contact_note">Підкажемо, з чого почати — напиши або подзвони.</p>
       </div>
     </div>
@@ -381,7 +381,7 @@
         <a class="tel rv" href="tel:+380503430531"><svg><use href="#i-phone"/></svg><span data-txt="phone">050 343 05 31</span></a>
         <a class="tel rv" href="https://www.instagram.com/alexdancestudio/" target="_blank" rel="noopener" data-link="instagram"><svg><use href="#i-ig"/></svg>@alexdancestudio</a>
         <a class="tel rv" href="mailto:email@alexshpika.com.ua" data-txt="email" data-mail>email@alexshpika.com.ua</a>
-        <p class="contact__addr rv"><svg><use href="#i-pin"/></svg>Студія в Полтаві</p>
+        <p class="contact__addr rv"><svg><use href="#i-pin"/></svg><span data-txt="studio_address">Студія в Полтаві</span></p>
       </div>
       <form class="form rv" id="form" novalidate>
         <label class="fld"><input name="name" required autocomplete="name" placeholder=" "><span>Ім’я</span></label>
@@ -397,7 +397,7 @@
     <div class="wrap">
       <div class="free__in">
         <span class="free__ic"><svg><use href="#i-tg"/></svg></span>
-        <div class="free__txt"><h3>Безкоштовно в Telegram</h3><p>Анонси, корисні матеріали й новини студії</p></div>
+        <div class="free__txt"><h3 data-txt="free_title">Безкоштовно в Telegram</h3><p data-txt="free_text">Анонси, корисні матеріали й новини студії</p></div>
         <a class="btn btn--line" href="#" data-tg data-link="telegram_free">Увійти <svg><use href="#i-arrow"/></svg></a>
       </div>
     </div>
@@ -411,8 +411,8 @@
   </div>
   <div class="wrap ft__req">
     <div class="ft__who">
-      <p><span data-txt="fop_name">ФОП Прізвище Ім’я По батькові</span> · РНОКПП <span data-txt="fop_code">0000000000</span></p>
-      <p><span data-txt="fop_address">м. Полтава, вул. Назва, 1</span> · <a href="tel:+380503430531" data-txt="phone">050 343 05 31</a> · <a href="mailto:email@alexshpika.com.ua" data-txt="email" data-mail>email@alexshpika.com.ua</a></p>
+      <p><span data-txt="seller_name">ФОП Прізвище Ім’я По батькові</span> · РНОКПП <span data-txt="seller_code">0000000000</span></p>
+      <p><span data-txt="seller_address">м. Полтава, вул. Назва, 1</span> · <a href="tel:+380503430531" data-txt="phone">050 343 05 31</a> · <a href="mailto:email@alexshpika.com.ua" data-txt="email" data-mail>email@alexshpika.com.ua</a></p>
     </div>
     <span class="paylogos" aria-label="Приймаємо до оплати">
         <img src="img/pay/visa.svg" alt="Visa" width="40" height="24"><img src="img/pay/mastercard.svg" alt="Mastercard" width="40" height="24"><img src="img/pay/apple-pay.svg" alt="Apple Pay" width="40" height="24"><img src="img/pay/google-pay.svg" alt="Google Pay" width="40" height="24">
@@ -470,7 +470,7 @@
   </div>
 </dialog>
 
-<script src="platform.js?v=18"></script>
-<script src="script.js?v=18"></script>
+<script src="platform.js?v=19"></script>
+<script src="script.js?v=19"></script>
 </body>
 </html>

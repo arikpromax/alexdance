@@ -88,7 +88,7 @@
         '<button class="btn btn--line btn--full" data-pay data-order="sub:' + esc(g.id) + '" data-sub data-kind="Підписка" data-title="' + esc(g.title) +
         '" data-meta="' + esc(slotsLabel(g, ' ') + ' · ' + lessons(n) + ' щомісяця') + '" data-price="' + money(g.price) + ' ₴/міс"' +
         ' data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>' +
-        '<p class="plan__note">Автосписання щомісяця · скасувати можна будь-коли</p>' +
+        '<p class="plan__note" data-txt="plan_note">Автосписання щомісяця · скасувати можна будь-коли</p>' +
         (g.single ? '<a class="plan__one" href="#schedule" data-onegroup="' + esc(g.id) + '">Або одне заняття — ' + money(g.single) + ' ₴</a>' : '') +
         '</article>';
     }).join('');
@@ -128,7 +128,7 @@
     box.innerHTML = rows.map(function (r) {
       var p = money(num(r.price));
       return '<article class="con" data-spot><h3 class="con__t">' + esc(r.title) + '</h3><p class="con__d">' + esc(r.text) + '</p>' +
-        '<span class="con__m">' + icon('cam') + 'Zoom · день і час обираєте при записі</span><b class="con__p">' + p + ' ₴</b>' +
+        '<span class="con__m">' + icon('cam') + '<span data-txt="consult_meta">Zoom · день і час обираєте при записі</span></span><b class="con__p">' + p + ' ₴</b>' +
         '<button class="btn btn--ac" data-pay data-order="consult:' + esc(r.extra.id) + '" data-kind="Особиста консультація" data-title="' + esc(r.title) +
         '" data-meta="Олександра Шпіка · онлайн у Zoom" data-price="' + p + ' ₴" data-after="Бот одразу надішле посилання на Zoom і нагадає за годину до початку.">Обрати день і час</button></article>';
     }).join('');
@@ -170,6 +170,40 @@
       if (has(k)) { a.setAttribute('href', String(T[k]).trim()); a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
     });
   }
+  /* ---------- документи: оферта, повернення, політика — текстом з адмінки ----------
+     «## » — заголовок, «- » — пункт, порожній рядок — абзац, **жирний**, [текст](адреса),
+     {{sellerName}} {{sellerCode}} {{sellerAddress}} {{email}} {{phone}} — реквізити */
+  function paintDocs(T) {
+    var val = function (k, d) { var v = String(T[k] == null ? '' : T[k]).trim(); return v || d; };
+    var tok = {
+      sellerName: esc(val('seller_name', 'ФОП Прізвище Ім’я По батькові')),
+      sellerCode: esc(val('seller_code', '0000000000')),
+      sellerAddress: esc(val('seller_address', 'м. Полтава, вул. Назва, 1')),
+      email: (function (e) { return '<a href="mailto:' + esc(e) + '">' + esc(e) + '</a>'; })(val('email', 'email@alexshpika.com.ua')),
+      phone: esc(val('phone', '050 343 05 31')),
+    };
+    var inline = function (x) {
+      x = esc(x).replace(/\{\{(\w+)\}\}/g, function (m, k) { return tok[k] || m; });
+      x = x.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+      return x.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (m, t, u) {
+        return /^(https?:\/\/|mailto:|tel:|[\w-]+\.html)/.test(u) ? '<a href="' + u + '">' + t + '</a>' : t;
+      });
+    };
+    each('[data-doc]', function (box) {
+      var src = String(T[box.getAttribute('data-doc')] || '').replace(/\r/g, '').trim();
+      if (!src) return; // в адмінці порожньо — лишається текст сторінки
+      box.innerHTML = src.split(/\n\s*\n/).map(function (blk) {
+        var lines = blk.trim().split('\n'), out = '';
+        if (/^## /.test(lines[0])) { out += '<h2>' + inline(lines.shift().slice(3)) + '</h2>'; if (!lines.length) return out; }
+        if (lines.every(function (l) { return /^- /.test(l); })) {
+          return out + '<ul>' + lines.map(function (l) { return '<li>' + inline(l.slice(2)) + '</li>'; }).join('') + '</ul>';
+        }
+        var req = /^\{\{sellerName\}\}/.test(lines[0]) ? ' class="doc__req"' : '';
+        return out + '<p' + req + '>' + lines.map(inline).join('<br>') + '</p>';
+      }).join('');
+    });
+  }
+
   function paintPhotos(rows) {
     rows.forEach(function (r) {
       var slot = r.extra && r.extra.slot;
@@ -192,6 +226,7 @@
       paintConsults(by.consults || []);
       paintRecords(by.records || []);
       paintTexts(data.texts || {});
+      paintDocs(data.texts || {});
       paintPhotos(by.site_photos || []);
     } catch (e) { /* щось не так у даних — сторінка лишається як у HTML */ }
     if (window.ADS && window.ADS.refresh) window.ADS.refresh();
