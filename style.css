@@ -734,19 +734,9 @@ ul, ol { padding: 0; list-style: none; }
 .page-home .therapy__txt .sec__note { margin: 14px 0 22px; }
 .page-home .therapy__lead { max-width: 34ch; }
 
-/* телефон: «Записатися» внизу екрана замість кнопки в кутку */
-.mbar { display: none; }
+/* телефон: без плаваючих кнопок унизу екрана */
 @media (max-width: 900px) {
   .fab { display: none; }
-  .mbar {
-    position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 40;
-    display: grid; grid-template-columns: minmax(0, 1fr) 56px; gap: 8px;
-    opacity: 0; transform: translateY(24px); pointer-events: none; transition: opacity .35s, transform .35s var(--ease);
-  }
-  .mbar.is-on { opacity: 1; transform: none; pointer-events: auto; }
-  .mbar .btn { min-height: 56px; box-shadow: 0 14px 44px -12px var(--glow); }
-  .mbar .tile { width: 56px; height: 56px; background: rgba(15, 13, 20, .88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-  .page-home .ft { padding-bottom: 84px; }
 }
 @media (max-width: 600px) {
   .hero__lead { font-size: 16px; }
