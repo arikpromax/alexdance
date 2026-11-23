@@ -728,8 +728,11 @@ ul, ol { padding: 0; list-style: none; }
 .row.is-flash { animation: rowflash 2.2s var(--ease); }
 @keyframes rowflash { 0%, 35% { background: rgba(164, 92, 255, .2); } 100% { background: transparent; } }
 
-/* танцетерапія на головній: заголовок, підзаголовок, текст */
+/* танцетерапія на головній: заголовок, підзаголовок, текст — як інші блоки, без великих слів збоку */
+.page-home .therapy__txt { container-type: normal; max-width: 860px; }
+.page-home .therapy__txt .h2 { font-size: inherit; font: 500 clamp(32px, 5.4vw, 76px)/1.02 var(--fd); }
 .page-home .therapy__txt .sec__note { margin: 14px 0 22px; }
+.page-home .therapy__lead { max-width: 34ch; }
 
 /* телефон: «Записатися» внизу екрана замість кнопки в кутку */
 .mbar { display: none; }
