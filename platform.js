@@ -118,7 +118,9 @@
       left = 'З 1' + NB + MON_G[o.nm - 1] + ' — <b>' + money(g.price) + NB + '₴</b> за весь місяць (' + lessons(o.next) + ')';
       meta = lessons(o.lessons) + ' до кінця ' + MON_G[o.m - 1];
     }
-    return { o: o, price: price, left: left, meta: meta + ' · ' + slotsLabel(g, ' ') };
+    // перше автосписання — 1-го числа наступного оплаченого місяця
+    var rm = o.fromNext ? o.nm % 12 + 1 : o.nm;
+    return { o: o, price: price, left: left, meta: meta + ' · ' + slotsLabel(g, ' '), renew: '1' + NB + MON_G[rm - 1] };
   }
 
   /* ---------- абонементи ---------- */
@@ -138,7 +140,7 @@
         (g.level ? '<p class="plan__lvl">' + esc(g.level) + '</p>' : '') +
         '<ul class="plan__list"><li>' + icon('clock') + esc(label) + '</li></ul>' +
         '<p class="plan__price">' + of.price + '</p><p class="plan__left">' + of.left + '</p><p class="plan__spots" hidden></p>' +
-        '<button class="btn btn--line btn--full" data-pay data-order="sub:' + esc(g.id) + '" data-sub data-month="' + money(g.price) + ' ₴" data-kind="Абонемент" data-title="' + esc(g.title) +
+        '<button class="btn btn--line btn--full" data-pay data-order="sub:' + esc(g.id) + '" data-sub data-month="' + money(g.price) + ' ₴" data-renew="' + of.renew + '" data-kind="Абонемент" data-title="' + esc(g.title) +
         '" data-meta="' + esc(of.meta) + '" data-price="' + money(of.o.amount) + ' ₴"' +
         ' data-after="Бот підтвердить абонемент і нагадуватиме про заняття.">Оплатити абонемент</button>' +
         '<p class="plan__note" data-txt="plan_note">Автосписання — за бажанням, вимкнути можна будь-коли</p>' +

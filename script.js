@@ -270,6 +270,8 @@
     $('input', agree).required = false; // автосписання — за бажанням
     $('input', agree).checked = false;
     $('#paySubPrice').textContent = price;
+    const subDate = $('#paySubDate');
+    if (subDate) subDate.textContent = b.dataset.renew || '1-го числа';
     // згода з офертою — щоразу заново
     const offer = $('#payAgree');
     if (offer) { offer.classList.remove('is-bad'); $('input', offer).checked = false; }
