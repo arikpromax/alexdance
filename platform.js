@@ -25,7 +25,7 @@
     return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
   };
   var num = function (v) { return Number(String(v == null ? '' : v).replace(/[^\d]/g, '')) || 0; };
-  var money = function (n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); };
+  var money = function (n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0'); }; // нерозривний пробіл: «2 000» не рветься
   var icon = function (id) { return '<svg><use href="#i-' + id + '"/></svg>'; };
   // 1 заняття, 4 заняття, 8 занять
   var lessons = function (n) { var a = n % 10, b = n % 100; return n + ' ' + ((a >= 1 && a <= 4) && !(b >= 11 && b <= 14) ? 'заняття' : 'занять'); };
@@ -66,19 +66,66 @@
       var e = r.extra, slots = parseSlots(e.slots);
       return {
         id: String(e.id), title: r.title, tag: e.tag || '', level: e.level || '', slots: slots,
-        minutes: num(e.minutes) || 60, price: num(r.price), single: num(e.single), image: r.image_url || '',
+        minutes: num(e.minutes) || 60, price: num(r.price), single: num(e.single), image: r.image_url || '', classPrice: num(e.class_price),
         photos: [r.image_url].concat(Array.isArray(e.photos) ? e.photos : []).filter(Boolean),
       };
     }).filter(function (g) { return g.slots.length && g.price; });
   }
   var visible = function (rows) { return rows.filter(function (r) { return r.extra && r.extra.id && !r.extra.hidden && num(r.price); }); };
 
+  /* ---------- абонемент на місяць: рахуємо одразу тут, тим самим правилом, що й бот (subOffer) ----------
+     Посеред місяця — лишилось занять × ціна заняття (або місяць / кількість занять), не більше за місяць;
+     занять цього місяця вже немає — продаємо наступний повністю. Час — за Києвом. */
+  var MON_G = ['січня', 'лютого', 'березня', 'квітня', 'травня', 'червня', 'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'];
+  var MON_L = ['січні', 'лютому', 'березні', 'квітні', 'травні', 'червні', 'липні', 'серпні', 'вересні', 'жовтні', 'листопаді', 'грудні'];
+  var NB = '\u00a0';
+  var p2 = function (n) { return (n < 10 ? '0' : '') + n; };
+  function kyivNowStr() {
+    var p = {};
+    new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Kyiv', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
+      .formatToParts(new Date()).forEach(function (x) { p[x.type] = x.value; });
+    return p.year + '-' + p.month + '-' + p.day + 'T' + p.hour + ':' + p.minute;
+  }
+  function monthLessons(slots, y, m, after) {
+    var n = 0, days = new Date(Date.UTC(y, m, 0)).getUTCDate();
+    for (var d = 1; d <= days; d++) {
+      var dow = new Date(Date.UTC(y, m - 1, d)).getUTCDay(), day = y + '-' + p2(m) + '-' + p2(d) + 'T';
+      slots.forEach(function (s) { if (s[0] === dow && (!after || day + s[1] > after)) n++; });
+    }
+    return n;
+  }
+  function monthOffer(g) {
+    var now = kyivNowStr(), y = +now.slice(0, 4), m = +now.slice(5, 7);
+    var ny = m === 12 ? y + 1 : y, nm = m === 12 ? 1 : m + 1;
+    var total = monthLessons(g.slots, y, m, ''), left = monthLessons(g.slots, y, m, now), next = monthLessons(g.slots, ny, nm, '');
+    if (!left) return { amount: g.price, lessons: next, full: true, fromNext: true, m: nm, nm: nm, next: next };
+    var per = g.classPrice || Math.round(g.price / Math.max(total, 1)), full = left >= total;
+    return { amount: full ? g.price : Math.min(g.price, left * per), lessons: left, total: total, full: full, fromNext: false, m: m, nm: nm, next: next };
+  }
+  function offerHtml(g) {
+    var o = monthOffer(g), price, left, meta;
+    if (o.fromNext) {
+      price = '<b>' + money(g.price) + '</b>' + NB + '₴ <span>за весь місяць</span>';
+      left = 'Набір з 1' + NB + MON_G[o.nm - 1] + ' · ' + lessons(o.next) + ' у' + NB + MON_L[o.nm - 1];
+      meta = 'З 1 ' + MON_G[o.nm - 1] + ' · ' + lessons(o.next);
+    } else if (o.full) {
+      price = '<b>' + money(g.price) + '</b>' + NB + '₴ <span>за весь місяць</span>';
+      left = lessons(o.lessons) + ' у' + NB + MON_L[o.m - 1] + ' · далі ' + money(g.price) + NB + '₴ щомісяця';
+      meta = 'Увесь місяць · ' + lessons(o.lessons);
+    } else {
+      price = '<b>' + money(o.amount) + '</b>' + NB + '₴ <span>за ' + lessons(o.lessons) + ' до кінця ' + MON_G[o.m - 1] + '</span>';
+      left = 'З 1' + NB + MON_G[o.nm - 1] + ' — <b>' + money(g.price) + NB + '₴</b> за весь місяць (' + lessons(o.next) + ')';
+      meta = lessons(o.lessons) + ' до кінця ' + MON_G[o.m - 1];
+    }
+    return { o: o, price: price, left: left, meta: meta + ' · ' + slotsLabel(g, ' ') };
+  }
+
   /* ---------- абонементи ---------- */
   function paintPlans(groups) {
     var box = $('.plans');
     if (!box || !groups.length) return;
     box.innerHTML = groups.map(function (g) {
-      var n = g.slots.length * 4, label = slotsLabel(g);
+      var label = slotsLabel(g), of = offerHtml(g);
       var ph = g.photos.length > 1
         ? '<div class="plan__ph ph phs" data-photo="group-' + esc(g.id) + '" title="Наступне фото">' +
           g.photos.map(function (u, i) { return '<img src="' + esc(u) + '" alt="' + esc(g.title) + '" loading="lazy"' + (i ? '' : ' class="is-on"') + '>'; }).join('') +
@@ -89,9 +136,9 @@
         '<h3 class="plan__t">' + esc(g.title) + '</h3>' +
         (g.level ? '<p class="plan__lvl">' + esc(g.level) + '</p>' : '') +
         '<ul class="plan__list"><li>' + icon('clock') + esc(label) + '</li></ul>' +
-        '<p class="plan__price"><b>' + money(g.price) + '</b> ₴ / місяць</p><p class="plan__spots" hidden></p>' +
+        '<p class="plan__price">' + of.price + '</p><p class="plan__left">' + of.left + '</p><p class="plan__spots" hidden></p>' +
         '<button class="btn btn--line btn--full" data-pay data-order="sub:' + esc(g.id) + '" data-sub data-month="' + money(g.price) + ' ₴" data-kind="Абонемент" data-title="' + esc(g.title) +
-        '" data-meta="' + esc(slotsLabel(g, ' ') + ' · ' + lessons(n) + ' щомісяця') + '" data-price="' + money(g.price) + ' ₴/міс"' +
+        '" data-meta="' + esc(of.meta) + '" data-price="' + money(of.o.amount) + ' ₴"' +
         ' data-after="Бот підтвердить абонемент і нагадуватиме про заняття.">Оплатити абонемент</button>' +
         '<p class="plan__note" data-txt="plan_note">Автосписання — за бажанням, вимкнути можна будь-коли</p>' +
         (g.single ? '<a class="plan__one" href="#schedule" data-onegroup="' + esc(g.id) + '">Або одне заняття — ' + money(g.single) + ' ₴</a>' : '') +
@@ -249,28 +296,15 @@
     each('.plan[data-group]', function (card) {
       var o = offers[card.getAttribute('data-group')];
       if (!o) return;
-      var price = $('.plan__price', card), btn = $('[data-pay]', card), spots = $('.plan__spots', card);
+      // ціну рахує сама сторінка (offerHtml), від бота — лише місця
+      var btn = $('[data-pay]', card), spots = $('.plan__spots', card);
       var cap = o.cap > 0, full = cap && o.free === 0;
-      var label = lessons(o.lessons);
-      if (price) {
-        price.innerHTML = o.full
-          ? '<b>' + money(o.amount) + '</b> ₴ <span>за ' + esc(o.monthName) + '</span>'
-          : '<b>' + money(o.amount) + '</b> ₴ <span>до кінця місяця</span>';
-        var left = price.nextElementSibling && price.nextElementSibling.classList.contains('plan__left') ? price.nextElementSibling : null;
-        if (!left) { left = document.createElement('p'); left.className = 'plan__left'; price.after(left); }
-        left.textContent = o.fromNext ? 'Набір на ' + o.monthName + ' · ' + label
-          : o.full ? 'Увесь ' + o.monthName + ' · ' + label
-          : 'Лишилось ' + label + ' з ' + o.total + ' · з наступного місяця — ' + money(o.month) + ' ₴';
-      }
       if (spots) {
         spots.hidden = !cap;
         spots.className = 'plan__spots' + (cap && o.free <= 2 ? ' is-low' : '');
         spots.textContent = cap ? (full ? 'Місць немає · зайнято ' + o.taken + ' із ' + o.cap : 'Зайнято ' + o.taken + ' із ' + o.cap + ' · вільно ' + o.free) : '';
       }
       if (btn) {
-        btn.setAttribute('data-price', money(o.amount) + ' ₴');
-        btn.setAttribute('data-month', money(o.month) + ' ₴');
-        btn.setAttribute('data-meta', (o.full ? 'Абонемент на ' + o.monthName : 'До кінця місяця') + ' · ' + label);
         btn.disabled = full;
         btn.textContent = full ? 'Місць немає' : 'Оплатити абонемент';
       }

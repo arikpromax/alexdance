@@ -800,7 +800,9 @@ ul, ol { padding: 0; list-style: none; }
 .phs__dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255, 255, 255, .45); transition: background .3s, width .3s; }
 .phs__dots i.is-on { width: 16px; border-radius: 3px; background: #fff; }
 .plan__price span { color: var(--mut); font-size: 15px; }
-.plan__left { margin: -8px 0 14px; color: var(--mut); font-size: 14px; line-height: 1.4; }
+.plan__left { margin: -8px 0 14px; color: var(--mut); font-size: 14px; line-height: 1.45; }
+.plan__left b { color: var(--ink); font-weight: 600; }
+.plan__price span { white-space: normal; }
 .plan__spots { margin: -4px 0 12px; color: var(--ac-hi); font-size: 14px; font-weight: 500; }
 .plan__spots.is-low { color: #ff8fb8; }
 .plan .btn:disabled, .row .btn:disabled { opacity: .45; cursor: not-allowed; }
