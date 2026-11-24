@@ -105,15 +105,16 @@
   function offerHtml(g) {
     var o = monthOffer(g), price, left, meta;
     if (o.fromNext) {
-      price = '<b>' + money(g.price) + '</b>' + NB + '₴ <span>за весь місяць</span>';
+      price = '<b>' + money(g.price) + NB + '₴</b><span class="plan__for">за весь місяць</span>';
       left = 'Набір з 1' + NB + MON_G[o.nm - 1] + ' · ' + lessons(o.next) + ' у' + NB + MON_L[o.nm - 1];
       meta = 'З 1 ' + MON_G[o.nm - 1] + ' · ' + lessons(o.next);
     } else if (o.full) {
-      price = '<b>' + money(g.price) + '</b>' + NB + '₴ <span>за весь місяць</span>';
+      price = '<b>' + money(g.price) + NB + '₴</b><span class="plan__for">за весь місяць</span>';
       left = lessons(o.lessons) + ' у' + NB + MON_L[o.m - 1] + ' · далі ' + money(g.price) + NB + '₴ щомісяця';
       meta = 'Увесь місяць · ' + lessons(o.lessons);
     } else {
-      price = '<b>' + money(o.amount) + '</b>' + NB + '₴ <span>за ' + lessons(o.lessons) + ' до кінця ' + MON_G[o.m - 1] + '</span>';
+      price = '<b>' + money(o.amount) + NB + '₴</b><span class="plan__for">за ' + lessons(o.lessons) + ', що ' +
+        (o.lessons === 1 ? 'лишилось' : 'лишились') + ' у' + NB + MON_L[o.m - 1] + '</span>';
       left = 'З 1' + NB + MON_G[o.nm - 1] + ' — <b>' + money(g.price) + NB + '₴</b> за весь місяць (' + lessons(o.next) + ')';
       meta = lessons(o.lessons) + ' до кінця ' + MON_G[o.m - 1];
     }
