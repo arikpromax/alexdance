@@ -209,8 +209,41 @@
     });
   }
 
+  /* ---------- танцетерапія: заняття з датою з адмінки, оплата → закритий чат ---------- */
+  var MONTHS_G = ['січня', 'лютого', 'березня', 'квітня', 'травня', 'червня', 'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'];
+  var WD = ['нд', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
+  var kyivNow = function () {
+    var p = {};
+    new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Kyiv', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
+      .formatToParts(new Date()).forEach(function (x) { p[x.type] = x.value; });
+    return p.year + '-' + p.month + '-' + p.day + 'T' + p.hour + ':' + p.minute;
+  };
+  function paintEvents(rows) {
+    var box = $('[data-events]');
+    if (!box) return;
+    var now = kyivNow();
+    var list = rows.filter(function (r) {
+      var e = r.extra || {};
+      return e.id && !e.hidden && num(r.price) && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(e.at || '') && String(e.at).slice(0, 16) > now;
+    }).sort(function (a, b) { return String(a.extra.at).localeCompare(String(b.extra.at)); });
+    box.hidden = !list.length;
+    box.innerHTML = list.map(function (r) {
+      var e = r.extra, m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}:\d{2})/.exec(e.at);
+      var dow = WD[new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])).getUTCDay()];
+      var when = dow + ', ' + (+m[3]) + ' ' + MONTHS_G[+m[2] - 1] + ' о ' + m[4];
+      var p = money(num(r.price)), title = r.title || 'Танцетерапія';
+      return '<article class="ev" data-spot data-event="' + esc(e.id) + '">' +
+        '<div class="ev__d"><b>' + (+m[3]) + '</b><span>' + MONTHS_G[+m[2] - 1] + '</span></div>' +
+        '<div class="ev__m"><h3>' + esc(title) + '</h3><p>' + esc(dow + ' · ' + m[4] + (e.place ? ' · ' + e.place : '')) + '</p>' +
+        (r.text ? '<p class="ev__t">' + esc(r.text) + '</p>' : '') + '<p class="ev__spots" hidden></p></div>' +
+        '<div class="ev__buy"><b class="ev__p">' + p + ' ₴</b>' +
+        '<button class="btn btn--ac btn--sm" data-pay data-order="event:' + esc(e.id) + '" data-kind="Танцетерапія" data-title="' + esc(title) +
+        '" data-meta="' + esc(when + (e.place ? ' · ' + e.place : '')) + '" data-price="' + p + ' ₴" data-after="Після оплати бот одразу надішле посилання на закритий чат танцетерапії й нагадає напередодні.">Оплатити</button></div></article>';
+    }).join('');
+  }
+
   /* ---------- абонемент на місяць і вільні місця: рахує бот (?api=groups) ---------- */
-  var offers = null;
+  var offers = null, evSpots = null;
   function paintOffers() {
     if (!offers) return;
     each('.plan[data-group]', function (card) {
@@ -242,6 +275,13 @@
         btn.textContent = full ? 'Місць немає' : 'Оплатити абонемент';
       }
     });
+    // танцетерапія: «Вільно N із M», коли місць немає — без оплати
+    each('.ev[data-event]', function (card) {
+      var o = evSpots && evSpots[card.getAttribute('data-event')], tag = $('.ev__spots', card), btn = $('[data-pay]', card);
+      if (!o || !(o.cap > 0)) return;
+      if (tag) { tag.hidden = false; tag.textContent = o.free ? 'Вільно ' + o.free + ' із ' + o.cap : 'Місць немає'; tag.classList.toggle('is-low', o.free <= 2); }
+      if (btn) { btn.disabled = !o.free; btn.textContent = o.free ? 'Оплатити' : 'Місць немає'; }
+    });
     // розклад: разове заняття займає місце лише свого дня
     each('.rows [data-order^="single:"]', function (btn) {
       var p = btn.getAttribute('data-order').split(':'), o = offers[p[1]];
@@ -258,10 +298,10 @@
   window.ADS = window.ADS || {};
   window.ADS.loadOffers = function () {
     var api = document.body.getAttribute('data-api');
-    if (!api || !$('.plan[data-group], .rows')) return;
+    if (!api || !$('.plan[data-group], .rows, [data-events]')) return;
     fetch(api + '?api=groups', { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' })
       .then(function (r) { return r.json(); })
-      .then(function (j) { if (j && j.ok) { offers = j.groups; paintOffers(); } })
+      .then(function (j) { if (j && j.ok) { offers = j.groups; evSpots = j.events || {}; paintOffers(); } })
       .catch(function () { /* бота не чути — лишається місячна ціна з адмінки */ });
   };
 
@@ -298,6 +338,7 @@
       paintSchedule(groups);
       paintConsults(by.consults || []);
       paintRecords(by.records || []);
+      paintEvents(by.therapy_events || []);
       paintTexts(data.texts || {});
       paintDocs(data.texts || {});
       paintFacts(data.texts || {});
@@ -319,7 +360,7 @@
     return fetch(DB + path, { headers: { apikey: KEY } }).then(function (r) { return r.ok ? r.json() : Promise.reject(new Error('http ' + r.status)); });
   };
   Promise.all([
-    get('/items?site_id=eq.' + SITE + '&collection=in.(groups,consults,records,site_photos)&select=collection,title,text,price,image_url,extra&order=sort_order'),
+    get('/items?site_id=eq.' + SITE + '&collection=in.(groups,consults,records,site_photos,therapy_events)&select=collection,title,text,price,image_url,extra&order=sort_order'),
     get('/texts?site_id=eq.' + SITE + '&select=key,value'),
   ]).then(function (res) {
     var texts = {};
