@@ -151,3 +151,12 @@ h1, h2, h3, p { margin: 0; }
 .more summary::-webkit-details-marker { display: none; }
 .more summary::before { content: '+ '; color: var(--ac-hi); }
 .more[open] summary::before { content: '− '; }
+
+/* місця в групах: «Зайнято N із M» і плюс-мінус «поза сайтом» */
+.seat + .seat { margin-top: 8px; }
+.seat__top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.seat__row { display: flex; align-items: center; gap: 10px; margin-top: 10px; color: var(--mut); font-size: 14px; }
+.seat__row span { flex: 1; }
+.seat__row b { min-width: 2.2ch; text-align: center; color: var(--ink); font-size: 18px; }
+.seat__btn { width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 12px; background: transparent; color: var(--ink); font-size: 20px; line-height: 1; cursor: pointer; }
+.seat__btn:active { background: rgba(164, 92, 255, .2); }

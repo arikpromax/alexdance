@@ -99,6 +99,19 @@
     view.innerHTML = `
       <h1 class="h">Абонементи</h1><p class="sub">Діють зараз: ${total}</p>
       <div class="sec">
+        <h2 class="sec__t">Місця в групах</h2>
+        <p class="sub" style="margin:-4px 0 10px">«Поза сайтом» — хто ходить, заплативши не через сайт (готівкою тощо). Оплати на сайті бот рахує сам.</p>
+        ${d.groups.map((g) => `
+          <div class="card seat">
+            <div class="seat__top"><b>${esc(g.title)}</b><span class="tag" data-seat="${g.id}"></span></div>
+            <div class="seat__row"><span>Поза сайтом</span>
+              <button class="seat__btn" data-off="${g.id}" data-d="-1" aria-label="Мінус один">−</button>
+              <b data-off-n="${g.id}">${g.offline}</b>
+              <button class="seat__btn" data-off="${g.id}" data-d="1" aria-label="Плюс один">+</button>
+            </div>
+          </div>`).join('')}
+      </div>
+      <div class="sec">
         <label class="search">${icon('search')}<input type="search" placeholder="Ім'я або телефон" value="${esc(subsQuery)}" id="q"></label>
         <div class="chips">
           <button class="chip ${subsGroup === 'all' ? 'is-on' : ''}" data-g="all">Усі · ${total}</button>
@@ -118,6 +131,32 @@
         </div>`).join('') : '<div class="empty">Нікого не знайдено</div>';
     };
     render();
+    // «Зайнято N із M» і плюс-мінус «поза сайтом»: число одразу в адмінці, сайт показує нове «Зайнято»
+    const seat = (g) => {
+      const tag = $(`[data-seat="${g.id}"]`, view);
+      tag.textContent = g.cap ? `Зайнято ${g.taken} із ${g.cap}` : `Зайнято ${g.taken} · без ліміту`;
+      tag.className = 'tag' + (g.cap && g.taken >= g.cap ? ' tag--warn' : '');
+      $(`[data-off-n="${g.id}"]`, view).textContent = g.offline;
+    };
+    d.groups.forEach(seat);
+    $$('[data-off]', view).forEach((b) => b.addEventListener('click', async () => {
+      const g = d.groups.find((x) => x.id === b.dataset.off);
+      const n = Math.max(0, g.offline + Number(b.dataset.d));
+      if (n === g.offline) return;
+      const was = { ...g };
+      Object.assign(g, { offline: n, taken: g.taken + (n - g.offline) });
+      seat(g);
+      try {
+        const r = await api('setOffline', { group: g.id, n });
+        Object.assign(g, { offline: r.offline, cap: r.cap, taken: r.taken });
+        seat(g);
+        haptic();
+      } catch {
+        Object.assign(g, was);
+        seat(g);
+        toast('Не вдалося зберегти');
+      }
+    }));
     $('#q').addEventListener('input', (e) => { subsQuery = e.target.value; render(); });
     $$('[data-g]', view).forEach((b) => b.addEventListener('click', () => {
       subsGroup = b.dataset.g;
@@ -128,7 +167,7 @@
 
   /* ---------- Оплати ---------- */
   let ordersKind = 'all';
-  const KINDS = [['all', 'Усі'], ['sub', 'Підписки'], ['single', 'Разові'], ['consult', 'Консультації'], ['record', 'Записи']];
+  const KINDS = [['all', 'Усі'], ['sub', 'Абонементи'], ['single', 'Разові'], ['consult', 'Консультації'], ['record', 'Записи'], ['event', 'Танцетерапія']];
   async function showOrders() {
     const d = await api('orders');
     view.innerHTML = `
