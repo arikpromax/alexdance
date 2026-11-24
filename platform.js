@@ -66,7 +66,7 @@
       var e = r.extra, slots = parseSlots(e.slots);
       return {
         id: String(e.id), title: r.title, tag: e.tag || '', level: e.level || '', slots: slots,
-        minutes: num(e.minutes) || 60, price: num(r.price), single: num(e.single), image: r.image_url || '', classPrice: num(e.class_price),
+        minutes: num(e.minutes) || 60, price: num(r.price), single: num(e.single), image: r.image_url || '', classPrice: num(e.class_price), cap: num(e.capacity), offline: num(e.offline),
         photos: [r.image_url].concat(Array.isArray(e.photos) ? e.photos : []).filter(Boolean),
       };
     }).filter(function (g) { return g.slots.length && g.price; });
@@ -102,6 +102,15 @@
     var per = g.classPrice || Math.round(g.price / Math.max(total, 1)), full = left >= total;
     return { amount: full ? g.price : Math.min(g.price, left * per), lessons: left, total: total, full: full, fromNext: false, m: m, nm: nm, next: next };
   }
+  // «Вільних місць у листопаді: 11 із 13» (cap 0 — без обмеження, рядка немає)
+  function spotsText(cap, taken, mon) {
+    var free = Math.max(cap - taken, 0);
+    return '<span>' + (free ? 'Вільних місць у' + NB + mon + ': <b>' + free + '</b> із ' + cap : 'У' + NB + mon + ' місць немає') + '</span>';
+  }
+  function spotsHtml(cap, taken, mon) {
+    if (!(cap > 0)) return '<p class="plan__spots" hidden></p>';
+    return '<p class="plan__spots' + (cap - taken <= 2 ? ' is-low' : '') + '">' + spotsText(cap, taken, mon) + '</p>';
+  }
   function offerHtml(g) {
     var o = monthOffer(g), price, left, meta;
     if (o.fromNext) {
@@ -120,7 +129,7 @@
     }
     // перше автосписання — 1-го числа наступного оплаченого місяця
     var rm = o.fromNext ? o.nm % 12 + 1 : o.nm;
-    return { o: o, price: price, left: left, meta: meta + ' · ' + slotsLabel(g, ' '), renew: '1' + NB + MON_G[rm - 1] };
+    return { o: o, price: price, left: left, meta: meta + ' · ' + slotsLabel(g, ' '), renew: '1' + NB + MON_G[rm - 1], mon: MON_L[(o.fromNext ? o.nm : o.m) - 1] };
   }
 
   /* ---------- абонементи ---------- */
@@ -134,12 +143,12 @@
           g.photos.map(function (u, i) { return '<img src="' + esc(u) + '" alt="' + esc(g.title) + '" loading="lazy"' + (i ? '' : ' class="is-on"') + '>'; }).join('') +
           '<span class="phs__dots">' + g.photos.map(function (u, i) { return '<i' + (i ? '' : ' class="is-on"') + '></i>'; }).join('') + '</span></div>'
         : '<div class="plan__ph ph" data-photo="group-' + esc(g.id) + '">' + (g.image ? '<img src="' + esc(g.image) + '" alt="' + esc(g.title) + '" loading="lazy">' : icon('photo')) + '</div>';
-      return '<article class="plan" data-spot data-group="' + esc(g.id) + '">' + ph +
+      return '<article class="plan" data-spot data-group="' + esc(g.id) + '" data-mon="' + of.mon + '" data-cap="' + (g.cap || 0) + '" data-off="' + (g.offline || 0) + '">' + ph +
         (g.tag ? '<span class="plan__tag">' + esc(g.tag) + '</span>' : '') +
         '<h3 class="plan__t">' + esc(g.title) + '</h3>' +
         (g.level ? '<p class="plan__lvl">' + esc(g.level) + '</p>' : '') +
         '<ul class="plan__list"><li>' + icon('clock') + esc(label) + '</li></ul>' +
-        '<p class="plan__price">' + of.price + '</p><p class="plan__left">' + of.left + '</p><p class="plan__spots" hidden></p>' +
+        '<p class="plan__price">' + of.price + '</p><p class="plan__left">' + of.left + '</p>' + spotsHtml(g.cap, g.offline, of.mon) +
         '<button class="btn btn--line btn--full" data-pay data-order="sub:' + esc(g.id) + '" data-sub data-month="' + money(g.price) + ' ₴" data-renew="' + of.renew + '" data-kind="Абонемент" data-title="' + esc(g.title) +
         '" data-meta="' + esc(of.meta) + '" data-price="' + money(of.o.amount) + ' ₴"' +
         ' data-after="Бот підтвердить абонемент і нагадуватиме про заняття.">Оплатити абонемент</button>' +
@@ -293,7 +302,8 @@
   }
 
   /* ---------- абонемент на місяць і вільні місця: рахує бот (?api=groups) ---------- */
-  var offers = null, evSpots = null;
+  var offers = null, evSpots = null, SPOTS = 'alexdance_spots_' + SITE;
+  try { var sc = JSON.parse(localStorage.getItem(SPOTS) || 'null'); if (sc) { offers = sc.g; evSpots = sc.e; } } catch (e) { /* немає сховища */ }
   function paintOffers() {
     if (!offers) return;
     each('.plan[data-group]', function (card) {
@@ -301,11 +311,14 @@
       if (!o) return;
       // ціну рахує сама сторінка (offerHtml), від бота — лише місця
       var btn = $('[data-pay]', card), spots = $('.plan__spots', card);
-      var cap = o.cap > 0, full = cap && o.free === 0;
+      var capN = +card.getAttribute('data-cap') || o.cap || 0;
+      var online = o.online != null ? o.online : Math.max((o.taken || 0) - (o.offline || 0), 0);
+      var takenN = (+card.getAttribute('data-off') || 0) + online;
+      var cap = capN > 0, full = cap && takenN >= capN;
       if (spots) {
         spots.hidden = !cap;
-        spots.className = 'plan__spots' + (cap && o.free <= 2 ? ' is-low' : '');
-        spots.textContent = cap ? (full ? 'Місць немає · зайнято ' + o.taken + ' із ' + o.cap : 'Зайнято ' + o.taken + ' із ' + o.cap + ' · вільно ' + o.free) : '';
+        spots.className = 'plan__spots' + (cap && capN - takenN <= 2 ? ' is-low' : '');
+        spots.innerHTML = cap ? spotsText(capN, takenN, card.getAttribute('data-mon') || 'цьому місяці') : '';
       }
       if (btn) {
         btn.disabled = full;
@@ -338,7 +351,12 @@
     if (!api || !$('.plan[data-group], .rows, [data-events]')) return;
     fetch(api + '?api=groups', { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' })
       .then(function (r) { return r.json(); })
-      .then(function (j) { if (j && j.ok) { offers = j.groups; evSpots = j.events || {}; paintOffers(); } })
+      .then(function (j) {
+        if (!j || !j.ok) return;
+        offers = j.groups; evSpots = j.events || {};
+        try { localStorage.setItem(SPOTS, JSON.stringify({ g: offers, e: evSpots })); } catch (e) { /* немає сховища */ }
+        paintOffers();
+      })
       .catch(function () { /* бота не чути — лишається місячна ціна з адмінки */ });
   };
 

@@ -806,8 +806,12 @@ ul, ol { padding: 0; list-style: none; }
 /* сума з ₴ — великим рядком, під нею за що саме */
 .plan__price b { display: block; }
 .plan__for { display: block; margin-top: 8px; color: var(--mut); font-size: 15px; line-height: 1.4; }
-.plan__spots { margin: -4px 0 12px; color: var(--ac-hi); font-size: 14px; font-weight: 500; }
+.plan__spots { display: flex; align-items: center; gap: 8px; margin: -4px 0 14px; color: var(--mut); font-size: 14px; }
+.plan__spots::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 10px rgba(74, 222, 128, .6); flex: none; }
+.plan__spots b { color: var(--ink); }
+.plan__spots[hidden] { display: none; }
 .plan__spots.is-low { color: #ff8fb8; }
+.plan__spots.is-low::before { background: #ff8fb8; box-shadow: 0 0 10px rgba(255, 143, 184, .6); }
 .plan .btn:disabled, .row .btn:disabled { opacity: .45; cursor: not-allowed; }
 .row__free { display: inline-block; margin-top: 6px; color: var(--ac-hi); font-size: 13px; font-weight: 500; }
 .row__free.is-low { color: #ff8fb8; }
