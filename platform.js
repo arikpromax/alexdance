@@ -103,10 +103,11 @@
     var per = left <= (g.fewUpto || 4) ? g.classPriceFew || g.classPrice || base : g.classPrice || base;
     return { amount: full ? g.price : Math.min(g.price, left * per), lessons: left, total: total, full: full, fromNext: false, m: m, nm: nm, next: next };
   }
-  // «Вільних місць у листопаді: 11 із 13» (cap 0 — без обмеження, рядка немає)
+  // «Зайнято 2 із 13 місць у листопаді» (cap 0 — без обмеження, рядка немає)
   function spotsText(cap, taken, mon) {
     var free = Math.max(cap - taken, 0);
-    return '<span>' + (free ? 'Вільних місць у' + NB + mon + ': <b>' + free + '</b> із ' + cap : 'У' + NB + mon + ' місць немає') + '</span>';
+    var t = Math.min(taken, cap);
+    return '<span>' + (free ? 'Зайнято <b>' + t + '</b> із ' + cap + ' місць у' + NB + mon : 'У' + NB + mon + ' місць немає — ' + cap + ' із ' + cap) + '</span>';
   }
   function spotsHtml(cap, taken, mon) {
     if (!(cap > 0)) return '<p class="plan__spots" hidden></p>';
