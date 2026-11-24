@@ -836,3 +836,7 @@ ul, ol { padding: 0; list-style: none; }
   .ev__d { height: 60px; }
   .ev__buy { grid-column: 1 / -1; grid-template-columns: auto 1fr; align-items: center; justify-items: stretch; }
 }
+
+/* танцетерапія: одна кнопка — канал тренінгу, трохи більша */
+.btn--big { min-height: 64px; padding: 0 36px; font-size: 17px; gap: 14px; }
+.btn--big svg { font-size: 22px; }
