@@ -414,7 +414,7 @@ ul, ol { padding: 0; list-style: none; }
 .ft { border-top: 1px solid var(--line); overflow: hidden; }
 .ft__brand { width: fit-content; max-width: 100%; margin: 0 auto; padding: clamp(40px, 6vw, 80px) var(--g) clamp(32px, 4.5vw, 64px); }
 .ft__big {
-  font: 700 clamp(88px, 25vw, 400px)/.8 var(--fd); letter-spacing: -.02em; text-align: center; padding: .04em 0 .03em;
+  font: 700 clamp(88px, 25vw, 400px)/.8 var(--fd); letter-spacing: .03em; text-align: center; padding: .04em 0 .03em;
   background: linear-gradient(180deg, rgba(164, 92, 255, .6), rgba(164, 92, 255, .04) 92%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
@@ -777,3 +777,32 @@ ul, ol { padding: 0; list-style: none; }
 .doc a { color: var(--ac-hi); text-decoration: underline; text-underline-offset: 2px; }
 .doc__upd { color: var(--dim); font-size: 14px; }
 .doc__req { margin-top: 32px !important; padding: 18px 20px; border: 1px solid var(--line2); border-radius: var(--r); background: var(--bg2); color: var(--ink); }
+
+/* ---------- біографія ---------- */
+.bio__in { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(28px, 5vw, 80px); align-items: center; }
+.bio__ph { margin: 0; aspect-ratio: 4 / 5; border-radius: var(--r); }
+.bio__lead { margin-top: 18px; max-width: 46ch; color: var(--mut); font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; }
+.bio__facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 28px; }
+.bio__facts li { padding: 16px; border: 1px solid var(--line2); border-radius: var(--r); background: var(--bg2); }
+.bio__facts b { display: block; font: 500 clamp(22px, 2.2vw, 30px)/1.1 var(--fd); letter-spacing: -.02em; }
+.bio__facts span { display: block; margin-top: 6px; color: var(--mut); font-size: 14px; line-height: 1.35; }
+@media (max-width: 900px) {
+  .bio__in { grid-template-columns: minmax(0, 1fr); }
+  .bio__ph { max-width: 420px; }
+}
+@media (max-width: 600px) { .bio__facts { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- картка групи: кілька фото, ціна на місяць, місця ---------- */
+.phs { cursor: pointer; }
+.phs > img { opacity: 0; transition: opacity .45s var(--ease); }
+.phs > img.is-on { opacity: 1; }
+.phs__dots { position: absolute; left: 0; right: 0; bottom: 10px; display: flex; justify-content: center; gap: 5px; z-index: 1; pointer-events: none; }
+.phs__dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255, 255, 255, .45); transition: background .3s, width .3s; }
+.phs__dots i.is-on { width: 16px; border-radius: 3px; background: #fff; }
+.plan__price span { color: var(--mut); font-size: 15px; }
+.plan__left { margin: -8px 0 14px; color: var(--mut); font-size: 14px; line-height: 1.4; }
+.plan__spots { margin: -4px 0 12px; color: var(--ac-hi); font-size: 14px; font-weight: 500; }
+.plan__spots.is-low { color: #ff8fb8; }
+.plan .btn:disabled, .row .btn:disabled { opacity: .45; cursor: not-allowed; }
+.row__free { display: inline-block; margin-top: 6px; color: var(--ac-hi); font-size: 13px; font-weight: 500; }
+.row__free.is-low { color: #ff8fb8; }

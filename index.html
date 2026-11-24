@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@400;500;600;700&display=swap">
 <link rel="icon" href="img/logo-180.jpg">
 <link rel="apple-touch-icon" href="img/logo-180.jpg">
-<link rel="stylesheet" href="style.css?v=33">
+<link rel="stylesheet" href="style.css?v=34">
 </head>
 <body class="page-home" data-api="https://ortiatyxntdikaldepbp.supabase.co/functions/v1/tg-alexdance">
 
@@ -54,6 +54,7 @@
       <img src="img/logo.jpg" alt="Alex Dance Studio" width="64" height="64">
     </a>
     <nav class="nav" aria-label="Розділи">
+      <a href="#bio">Біографія</a>
       <a href="#groups">Групи</a>
       <a href="#schedule">Розклад</a>
       <a href="#consult">Консультація</a>
@@ -69,6 +70,7 @@
   </div>
   <div class="mnav" id="mnav" hidden>
     <nav class="mnav__links" aria-label="Меню">
+      <a href="#bio">Біографія</a>
       <a href="#groups">Групи</a>
       <a href="#schedule">Розклад</a>
       <a href="#consult">Консультація</a>
@@ -105,6 +107,21 @@
     <p class="hero__side" aria-hidden="true" data-txt="hero_side">16 років студії · Полтава</p>
   </section>
 
+  <section class="sec bio" id="bio">
+    <div class="wrap bio__in">
+      <figure class="bio__ph ph" data-photo="bio"><svg><use href="#i-photo"/></svg></figure>
+      <div class="bio__txt">
+        <h2 class="h2 rv" data-txt="bio_title">Олександра Шпіка</h2>
+        <p class="bio__lead rv" data-txt="bio_text">Засновниця Alex Dance Studio в Полтаві. Понад 16 років навчає жінок і дітей танцю та веде особисті консультації за власними методиками.</p>
+        <ul class="bio__facts rv" data-facts="bio_facts">
+          <li><b>16 років</b><span>студії в Полтаві</span></li>
+          <li><b>6 груп</b><span>для жінок і дітей</span></li>
+          <li><b>2 методики</b><span>авторські консультації</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <section class="sec" id="groups">
     <div class="wrap">
       <div class="sec__hd">
@@ -112,88 +129,88 @@
         <p class="sec__note rv" data-txt="plans_note">Абонемент — щомісячна підписка, скасувати можна будь-коли. Або прийди на одне заняття.</p>
       </div>
       <div class="plans">
-        <article class="plan" data-spot>
+        <article class="plan" data-spot data-group="womens">
           <div class="plan__ph ph" data-photo="group-womens-dance-class"><svg><use href="#i-photo"/></svg></div>
           <span class="plan__tag">18+ · 35+</span>
           <h3 class="plan__t">Women’s Dance Class</h3>
           <p class="plan__lvl">Для жінок з нуля</p>
           <ul class="plan__list">
             <li><svg><use href="#i-clock"/></svg>Пн, Чт · 17:45</li>
-            <li><svg><use href="#i-check"/></svg>8 занять на місяць</li>
           </ul>
           <p class="plan__price"><b>1 200</b> ₴ / місяць</p>
-          <button class="btn btn--line btn--full" data-pay data-order="sub:womens" data-sub data-kind="Підписка" data-title="Women’s Dance Class" data-meta="Пн, Чт 17:45 · 8 занять щомісяця" data-price="1 200 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
-          <p class="plan__note" data-txt="plan_note">Автосписання щомісяця · скасувати можна будь-коли</p>
+          <p class="plan__spots" hidden></p>
+          <button class="btn btn--line btn--full" data-pay data-order="sub:womens" data-sub data-month="1 200 ₴" data-kind="Абонемент" data-title="Women’s Dance Class" data-meta="Пн, Чт 17:45 · 8 занять щомісяця" data-price="1 200 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття.">Оплатити абонемент</button>
+          <p class="plan__note" data-txt="plan_note">Автосписання — за бажанням, вимкнути можна будь-коли</p>
           <a class="plan__one" href="#schedule" data-onegroup="womens">Або одне заняття — 250 ₴</a>
         </article>
-        <article class="plan" data-spot>
+        <article class="plan" data-spot data-group="heels">
           <div class="plan__ph ph" data-photo="group-high-heels-class"><svg><use href="#i-photo"/></svg></div>
           <span class="plan__tag">18+</span>
           <h3 class="plan__t">High Heels Class</h3>
           <p class="plan__lvl">Новачки й середній рівень</p>
           <ul class="plan__list">
             <li><svg><use href="#i-clock"/></svg>Пн, Чт · 19:00</li>
-            <li><svg><use href="#i-check"/></svg>8 занять на місяць</li>
           </ul>
           <p class="plan__price"><b>1 200</b> ₴ / місяць</p>
-          <button class="btn btn--line btn--full" data-pay data-order="sub:heels" data-sub data-kind="Підписка" data-title="High Heels Class" data-meta="Пн, Чт 19:00 · 8 занять щомісяця" data-price="1 200 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
-          <p class="plan__note" data-txt="plan_note">Автосписання щомісяця · скасувати можна будь-коли</p>
+          <p class="plan__spots" hidden></p>
+          <button class="btn btn--line btn--full" data-pay data-order="sub:heels" data-sub data-month="1 200 ₴" data-kind="Абонемент" data-title="High Heels Class" data-meta="Пн, Чт 19:00 · 8 занять щомісяця" data-price="1 200 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття.">Оплатити абонемент</button>
+          <p class="plan__note" data-txt="plan_note">Автосписання — за бажанням, вимкнути можна будь-коли</p>
           <a class="plan__one" href="#schedule" data-onegroup="heels">Або одне заняття — 250 ₴</a>
         </article>
-        <article class="plan" data-spot>
+        <article class="plan" data-spot data-group="lady">
           <div class="plan__ph ph" data-photo="group-lady-choreo-class"><svg><use href="#i-photo"/></svg></div>
           <span class="plan__tag">18+ · 35+</span>
           <h3 class="plan__t">Lady Choreo Class</h3>
           <p class="plan__lvl">Новачки й середній рівень</p>
           <ul class="plan__list">
             <li><svg><use href="#i-clock"/></svg>Ср 18:00 · Сб 12:30</li>
-            <li><svg><use href="#i-check"/></svg>8 занять на місяць</li>
           </ul>
           <p class="plan__price"><b>1 200</b> ₴ / місяць</p>
-          <button class="btn btn--line btn--full" data-pay data-order="sub:lady" data-sub data-kind="Підписка" data-title="Lady Choreo Class" data-meta="Ср 18:00, Сб 12:30 · 8 занять щомісяця" data-price="1 200 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
-          <p class="plan__note" data-txt="plan_note">Автосписання щомісяця · скасувати можна будь-коли</p>
+          <p class="plan__spots" hidden></p>
+          <button class="btn btn--line btn--full" data-pay data-order="sub:lady" data-sub data-month="1 200 ₴" data-kind="Абонемент" data-title="Lady Choreo Class" data-meta="Ср 18:00, Сб 12:30 · 8 занять щомісяця" data-price="1 200 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття.">Оплатити абонемент</button>
+          <p class="plan__note" data-txt="plan_note">Автосписання — за бажанням, вимкнути можна будь-коли</p>
           <a class="plan__one" href="#schedule" data-onegroup="lady">Або одне заняття — 250 ₴</a>
         </article>
-        <article class="plan" data-spot>
+        <article class="plan" data-spot data-group="body">
           <div class="plan__ph ph" data-photo="group-body-secret-class"><svg><use href="#i-photo"/></svg></div>
           <span class="plan__tag">16+ · pro</span>
           <h3 class="plan__t">Body Secret Class</h3>
           <p class="plan__lvl">Середній і високий рівень</p>
           <ul class="plan__list">
             <li><svg><use href="#i-clock"/></svg>Вт 20:00 · Сб 14:00</li>
-            <li><svg><use href="#i-check"/></svg>8 занять на місяць</li>
           </ul>
           <p class="plan__price"><b>1 300</b> ₴ / місяць</p>
-          <button class="btn btn--line btn--full" data-pay data-order="sub:body" data-sub data-kind="Підписка" data-title="Body Secret Class pro" data-meta="Вт 20:00, Сб 14:00 · 8 занять щомісяця" data-price="1 300 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
-          <p class="plan__note" data-txt="plan_note">Автосписання щомісяця · скасувати можна будь-коли</p>
+          <p class="plan__spots" hidden></p>
+          <button class="btn btn--line btn--full" data-pay data-order="sub:body" data-sub data-month="1 300 ₴" data-kind="Абонемент" data-title="Body Secret Class pro" data-meta="Вт 20:00, Сб 14:00 · 8 занять щомісяця" data-price="1 300 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття.">Оплатити абонемент</button>
+          <p class="plan__note" data-txt="plan_note">Автосписання — за бажанням, вимкнути можна будь-коли</p>
           <a class="plan__one" href="#schedule" data-onegroup="body">Або одне заняття — 250 ₴</a>
         </article>
-        <article class="plan" data-spot>
+        <article class="plan" data-spot data-group="functional">
           <div class="plan__ph ph" data-photo="group-functional-and-stretching"><svg><use href="#i-photo"/></svg></div>
           <span class="plan__tag">16+</span>
           <h3 class="plan__t">Functional + Stretching</h3>
           <p class="plan__lvl">Сила, гнучкість, витривалість</p>
           <ul class="plan__list">
             <li><svg><use href="#i-clock"/></svg>Вт 19:00 · Пт 18:00</li>
-            <li><svg><use href="#i-check"/></svg>8 занять на місяць</li>
           </ul>
           <p class="plan__price"><b>1 100</b> ₴ / місяць</p>
-          <button class="btn btn--line btn--full" data-pay data-order="sub:functional" data-sub data-kind="Підписка" data-title="Functional + Stretching" data-meta="Вт 19:00, Пт 18:00 · 8 занять щомісяця" data-price="1 100 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
-          <p class="plan__note" data-txt="plan_note">Автосписання щомісяця · скасувати можна будь-коли</p>
+          <p class="plan__spots" hidden></p>
+          <button class="btn btn--line btn--full" data-pay data-order="sub:functional" data-sub data-month="1 100 ₴" data-kind="Абонемент" data-title="Functional + Stretching" data-meta="Вт 19:00, Пт 18:00 · 8 занять щомісяця" data-price="1 100 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття.">Оплатити абонемент</button>
+          <p class="plan__note" data-txt="plan_note">Автосписання — за бажанням, вимкнути можна будь-коли</p>
           <a class="plan__one" href="#schedule" data-onegroup="functional">Або одне заняття — 250 ₴</a>
         </article>
-        <article class="plan" data-spot>
+        <article class="plan" data-spot data-group="teens">
           <div class="plan__ph ph" data-photo="group-teens-class"><svg><use href="#i-photo"/></svg></div>
           <span class="plan__tag">Діти 11+</span>
           <h3 class="plan__t">Teens Class</h3>
           <p class="plan__lvl">Професійна дитяча група</p>
           <ul class="plan__list">
             <li><svg><use href="#i-clock"/></svg>Пн, Ср, Пт · 16:00–17:30</li>
-            <li><svg><use href="#i-check"/></svg>12 занять на місяць</li>
           </ul>
           <p class="plan__price"><b>1 500</b> ₴ / місяць</p>
-          <button class="btn btn--line btn--full" data-pay data-order="sub:teens" data-sub data-kind="Підписка" data-title="Teens Class" data-meta="Пн, Ср, Пт 16:00–17:30 · 12 занять щомісяця" data-price="1 500 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>
-          <p class="plan__note" data-txt="plan_note">Автосписання щомісяця · скасувати можна будь-коли</p>
+          <p class="plan__spots" hidden></p>
+          <button class="btn btn--line btn--full" data-pay data-order="sub:teens" data-sub data-month="1 500 ₴" data-kind="Абонемент" data-title="Teens Class" data-meta="Пн, Ср, Пт 16:00–17:30 · 12 занять щомісяця" data-price="1 500 ₴/міс" data-after="Бот підтвердить абонемент і нагадуватиме про заняття.">Оплатити абонемент</button>
+          <p class="plan__note" data-txt="plan_note">Автосписання — за бажанням, вимкнути можна будь-коли</p>
           <a class="plan__one" href="#schedule" data-onegroup="teens">Або одне заняття — 300 ₴</a>
         </article>
       </div>
@@ -451,7 +468,7 @@
         <label class="fld"><input name="name" required autocomplete="name" placeholder=" "><span>Ім’я</span></label>
         <label class="fld"><input name="phone" required type="tel" autocomplete="tel" placeholder=" "><span>Телефон</span></label>
         <label class="fld"><input name="tg" autocomplete="off" placeholder=" "><span>Telegram @нік (необовʼязково)</span></label>
-        <label class="chk" id="paySub" hidden><input type="checkbox" name="agree"><span>Погоджуюсь на щомісячне списання <b id="paySubPrice">1 200 ₴</b>. Скасувати можна будь-коли в боті.</span></label>
+        <label class="chk" id="paySub" hidden><input type="checkbox" name="auto"><span>Списувати щомісяця автоматично — <b id="paySubPrice">1 200 ₴</b> 1-го числа. Вимкнути можна будь-коли в боті.</span></label>
         <label class="chk" id="payAgree"><input type="checkbox" name="offer" required><span>Погоджуюсь з <a href="oferta.html" target="_blank" rel="noopener">публічною офертою</a>, <a href="povernennya.html" target="_blank" rel="noopener">умовами повернення</a> та <a href="polityka.html" target="_blank" rel="noopener">політикою конфіденційності</a></span></label>
         <button class="btn btn--ac btn--full" type="submit"><span id="payBtn">Оплатити</span> <span id="payPrice">1 200 ₴</span></button>
       </form>
@@ -470,7 +487,7 @@
   </div>
 </dialog>
 
-<script src="platform.js?v=19"></script>
-<script src="script.js?v=19"></script>
+<script src="platform.js?v=21"></script>
+<script src="script.js?v=21"></script>
 </body>
 </html>

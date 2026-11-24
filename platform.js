@@ -67,6 +67,7 @@
       return {
         id: String(e.id), title: r.title, tag: e.tag || '', level: e.level || '', slots: slots,
         minutes: num(e.minutes) || 60, price: num(r.price), single: num(e.single), image: r.image_url || '',
+        photos: [r.image_url].concat(Array.isArray(e.photos) ? e.photos : []).filter(Boolean),
       };
     }).filter(function (g) { return g.slots.length && g.price; });
   }
@@ -78,17 +79,21 @@
     if (!box || !groups.length) return;
     box.innerHTML = groups.map(function (g) {
       var n = g.slots.length * 4, label = slotsLabel(g);
-      return '<article class="plan" data-spot>' +
-        '<div class="plan__ph ph" data-photo="group-' + esc(g.id) + '">' + (g.image ? '<img src="' + esc(g.image) + '" alt="' + esc(g.title) + '" loading="lazy">' : icon('photo')) + '</div>' +
+      var ph = g.photos.length > 1
+        ? '<div class="plan__ph ph phs" data-photo="group-' + esc(g.id) + '" title="Наступне фото">' +
+          g.photos.map(function (u, i) { return '<img src="' + esc(u) + '" alt="' + esc(g.title) + '" loading="lazy"' + (i ? '' : ' class="is-on"') + '>'; }).join('') +
+          '<span class="phs__dots">' + g.photos.map(function (u, i) { return '<i' + (i ? '' : ' class="is-on"') + '></i>'; }).join('') + '</span></div>'
+        : '<div class="plan__ph ph" data-photo="group-' + esc(g.id) + '">' + (g.image ? '<img src="' + esc(g.image) + '" alt="' + esc(g.title) + '" loading="lazy">' : icon('photo')) + '</div>';
+      return '<article class="plan" data-spot data-group="' + esc(g.id) + '">' + ph +
         (g.tag ? '<span class="plan__tag">' + esc(g.tag) + '</span>' : '') +
         '<h3 class="plan__t">' + esc(g.title) + '</h3>' +
         (g.level ? '<p class="plan__lvl">' + esc(g.level) + '</p>' : '') +
-        '<ul class="plan__list"><li>' + icon('clock') + esc(label) + '</li><li>' + icon('check') + lessons(n) + ' на місяць</li></ul>' +
-        '<p class="plan__price"><b>' + money(g.price) + '</b> ₴ / місяць</p>' +
-        '<button class="btn btn--line btn--full" data-pay data-order="sub:' + esc(g.id) + '" data-sub data-kind="Підписка" data-title="' + esc(g.title) +
+        '<ul class="plan__list"><li>' + icon('clock') + esc(label) + '</li></ul>' +
+        '<p class="plan__price"><b>' + money(g.price) + '</b> ₴ / місяць</p><p class="plan__spots" hidden></p>' +
+        '<button class="btn btn--line btn--full" data-pay data-order="sub:' + esc(g.id) + '" data-sub data-month="' + money(g.price) + ' ₴" data-kind="Абонемент" data-title="' + esc(g.title) +
         '" data-meta="' + esc(slotsLabel(g, ' ') + ' · ' + lessons(n) + ' щомісяця') + '" data-price="' + money(g.price) + ' ₴/міс"' +
-        ' data-after="Бот підтвердить абонемент і нагадуватиме про заняття. Наступне списання — через місяць, скасувати можна в боті.">Оформити підписку</button>' +
-        '<p class="plan__note" data-txt="plan_note">Автосписання щомісяця · скасувати можна будь-коли</p>' +
+        ' data-after="Бот підтвердить абонемент і нагадуватиме про заняття.">Оплатити абонемент</button>' +
+        '<p class="plan__note" data-txt="plan_note">Автосписання — за бажанням, вимкнути можна будь-коли</p>' +
         (g.single ? '<a class="plan__one" href="#schedule" data-onegroup="' + esc(g.id) + '">Або одне заняття — ' + money(g.single) + ' ₴</a>' : '') +
         '</article>';
     }).join('');
@@ -204,6 +209,74 @@
     });
   }
 
+  /* ---------- абонемент на місяць і вільні місця: рахує бот (?api=groups) ---------- */
+  var offers = null;
+  function paintOffers() {
+    if (!offers) return;
+    each('.plan[data-group]', function (card) {
+      var o = offers[card.getAttribute('data-group')];
+      if (!o) return;
+      var price = $('.plan__price', card), btn = $('[data-pay]', card), spots = $('.plan__spots', card);
+      var cap = o.cap > 0, full = cap && o.free === 0;
+      var label = lessons(o.lessons);
+      if (price) {
+        price.innerHTML = o.full
+          ? '<b>' + money(o.amount) + '</b> ₴ <span>за ' + esc(o.monthName) + '</span>'
+          : '<b>' + money(o.amount) + '</b> ₴ <span>до кінця місяця</span>';
+        var left = price.nextElementSibling && price.nextElementSibling.classList.contains('plan__left') ? price.nextElementSibling : null;
+        if (!left) { left = document.createElement('p'); left.className = 'plan__left'; price.after(left); }
+        left.textContent = o.fromNext ? 'Набір на ' + o.monthName + ' · ' + label
+          : o.full ? 'Увесь ' + o.monthName + ' · ' + label
+          : 'Лишилось ' + label + ' з ' + o.total + ' · з наступного місяця — ' + money(o.month) + ' ₴';
+      }
+      if (spots) {
+        spots.hidden = !cap;
+        spots.className = 'plan__spots' + (cap && o.free <= 2 ? ' is-low' : '');
+        spots.textContent = cap ? (full ? 'Місць немає · зайнято ' + o.taken + ' із ' + o.cap : 'Зайнято ' + o.taken + ' із ' + o.cap + ' · вільно ' + o.free) : '';
+      }
+      if (btn) {
+        btn.setAttribute('data-price', money(o.amount) + ' ₴');
+        btn.setAttribute('data-month', money(o.month) + ' ₴');
+        btn.setAttribute('data-meta', (o.full ? 'Абонемент на ' + o.monthName : 'До кінця місяця') + ' · ' + label);
+        btn.disabled = full;
+        btn.textContent = full ? 'Місць немає' : 'Оплатити абонемент';
+      }
+    });
+    // розклад: разове заняття займає місце лише свого дня
+    each('.rows [data-order^="single:"]', function (btn) {
+      var p = btn.getAttribute('data-order').split(':'), o = offers[p[1]];
+      if (!o || !(o.cap > 0)) return;
+      var free = o.single && o.single[p[2]];
+      if (free == null || free < 0) return;
+      var row = btn.closest('.row'), tag = row && $('.row__free', row);
+      if (row && !tag) { tag = document.createElement('span'); tag.className = 'row__free'; ($('.row__m', row) || row).append(tag); }
+      if (tag) { tag.textContent = free ? 'Вільно ' + free : 'Місць немає'; tag.classList.toggle('is-low', free <= 2); }
+      btn.disabled = !free;
+      btn.textContent = free ? 'Оплатити' : 'Місць немає';
+    });
+  }
+  window.ADS = window.ADS || {};
+  window.ADS.loadOffers = function () {
+    var api = document.body.getAttribute('data-api');
+    if (!api || !$('.plan[data-group], .rows')) return;
+    fetch(api + '?api=groups', { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (j && j.ok) { offers = j.groups; paintOffers(); } })
+      .catch(function () { /* бота не чути — лишається місячна ціна з адмінки */ });
+  };
+
+  /* біографія: «16 років — студії в Полтаві», кожен рядок — окремий факт */
+  function paintFacts(T) {
+    each('[data-facts]', function (ul) {
+      var src = String(T[ul.getAttribute('data-facts')] || '').trim();
+      if (!src) return;
+      ul.innerHTML = src.split('\n').map(function (l) { return l.trim(); }).filter(Boolean).map(function (l) {
+        var m = l.split(/\s*[—|–-]\s+|\s*\|\s*/);
+        return '<li><b>' + esc(m[0]) + '</b>' + (m.length > 1 ? '<span>' + esc(m.slice(1).join(' ')) + '</span>' : '') + '</li>';
+      }).join('');
+    });
+  }
+
   function paintPhotos(rows) {
     rows.forEach(function (r) {
       var slot = r.extra && r.extra.slot;
@@ -227,7 +300,9 @@
       paintRecords(by.records || []);
       paintTexts(data.texts || {});
       paintDocs(data.texts || {});
+      paintFacts(data.texts || {});
       paintPhotos(by.site_photos || []);
+      paintOffers();
     } catch (e) { /* щось не так у даних — сторінка лишається як у HTML */ }
     if (window.ADS && window.ADS.refresh) window.ADS.refresh();
   }

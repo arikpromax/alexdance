@@ -135,6 +135,17 @@
   };
   openToday();
 
+  // Кілька фото в картці групи: натиснула — наступне
+  document.addEventListener('click', (e) => {
+    const box = e.target.closest && e.target.closest('.phs');
+    if (!box) return;
+    const imgs = $$('img', box), dots = $$('.phs__dots i', box);
+    const i = imgs.findIndex(x => x.classList.contains('is-on'));
+    const n = (i + 1) % imgs.length;
+    imgs.forEach((x, k) => x.classList.toggle('is-on', k === n));
+    dots.forEach((x, k) => x.classList.toggle('is-on', k === n));
+  });
+
   // «Або одне заняття» в картці групи: відкриваємо в розкладі найближчий день цієї групи й підсвічуємо рядок
   document.addEventListener('click', (e) => {
     const a = e.target.closest && e.target.closest('[data-onegroup]');
@@ -154,6 +165,7 @@
 
   // platform.js перебудував картки з адмінки — оновлюємо смужки й відкриваємо сьогоднішній день
   window.ADS = Object.assign(window.ADS || {}, { refresh: () => { buildDots(); openToday(); } });
+  if (window.ADS.loadOffers) window.ADS.loadOffers(); // ціна абонемента на сьогодні й вільні місця
 
   /* кнопка «Написати» в кутку (лише на комп'ютері): після першого екрана,
      ховається біля розкладу, контактів і підвалу */
@@ -247,15 +259,15 @@
     $('#payTitle').textContent = b.dataset.title;
     $('#payMeta').textContent = b.dataset.meta;
     const sub = b.hasAttribute('data-sub');
-    const price = b.dataset.price.replace('/міс', '').replace(/ /g, ' ');
-    $('#payBtn').textContent = sub ? 'Оформити підписку ·' : 'Оплатити';
+    const price = (b.dataset.month || b.dataset.price).replace('/міс', '').replace(/ /g, ' ');
+    $('#payBtn').textContent = 'Оплатити';
     $('#payPrice').textContent = b.dataset.price;
     $('#payAfter').textContent = b.dataset.after;
-    $('#payDone').textContent = sub ? 'Підписку оформлено' : 'Оплачено';
+    $('#payDone').textContent = sub ? 'Абонемент оплачено' : 'Оплачено';
     const agree = $('#paySub');
     agree.hidden = !sub;
     agree.classList.remove('is-bad');
-    $('input', agree).required = sub;
+    $('input', agree).required = false; // автосписання — за бажанням
     $('input', agree).checked = false;
     $('#paySubPrice').textContent = price;
     // згода з офертою — щоразу заново
@@ -292,7 +304,13 @@
     }
     btn.disabled = true; err.hidden = true;
     try {
-      const j = await post('order', { kind, item, day, at: isConsult() && whenAt ? whenAt : undefined, name: form.elements.name.value, phone: form.elements.phone.value, tg: form.elements.tg.value });
+      const auto = kind === 'sub' ? form.elements.auto.checked : undefined;
+      const j = await post('order', { kind, item, day, auto, at: isConsult() && whenAt ? whenAt : undefined, name: form.elements.name.value, phone: form.elements.phone.value, tg: form.elements.tg.value });
+      if (kind === 'sub') {
+        $('#payAfter').textContent = auto
+          ? 'Бот підтвердить абонемент і нагадуватиме про заняття. Далі списання 1-го числа, вимкнути можна в боті.'
+          : 'Бот підтвердить абонемент і нагадуватиме про заняття. Наприкінці місяця нагадає оплатити наступний.';
+      }
       if (isConsult() && whenAt) {
         const w = whenLabel(whenAt);
         $('#payAfter').textContent = `${w[0].toUpperCase() + w.slice(1)}. Бот одразу надішле посилання на Zoom і нагадає за годину до початку.`;
@@ -304,6 +322,10 @@
     } catch (e) {
       if (String(e.message) === 'time') {
         await whenLoad('Цей час щойно зайняли — оберіть інший.');
+      } else if (String(e.message) === 'full') {
+        err.textContent = 'Місць уже немає — їх щойно зайняли. Напиши нам у Telegram, підкажемо інший час.';
+        err.hidden = false;
+        if (window.ADS && ADS.loadOffers) ADS.loadOffers();
       } else {
         err.textContent = 'Не вдалося оформити. Спробуй ще раз або напиши нам у Telegram.';
         err.hidden = false;
