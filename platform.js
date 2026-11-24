@@ -66,7 +66,7 @@
       var e = r.extra, slots = parseSlots(e.slots);
       return {
         id: String(e.id), title: r.title, tag: e.tag || '', level: e.level || '', slots: slots,
-        minutes: num(e.minutes) || 60, price: num(r.price), single: num(e.single), image: r.image_url || '', classPrice: num(e.class_price), cap: num(e.capacity), offline: num(e.offline),
+        minutes: num(e.minutes) || 60, price: num(r.price), single: num(e.single), image: r.image_url || '', classPrice: num(e.class_price), classPriceFew: num(e.class_price_few), fewUpto: num(e.few_upto) || 4, cap: num(e.capacity), offline: num(e.offline),
         photos: [r.image_url].concat(Array.isArray(e.photos) ? e.photos : []).filter(Boolean),
       };
     }).filter(function (g) { return g.slots.length && g.price; });
@@ -74,7 +74,7 @@
   var visible = function (rows) { return rows.filter(function (r) { return r.extra && r.extra.id && !r.extra.hidden && num(r.price); }); };
 
   /* ---------- абонемент на місяць: рахуємо одразу тут, тим самим правилом, що й бот (subOffer) ----------
-     Посеред місяця — лишилось занять × ціна заняття (або місяць / кількість занять), не більше за місяць;
+     Посеред місяця — лишилось занять × ціна заняття (мало лишилось — одна ціна, більше — інша; порожньо — місяць / кількість занять), не більше за місяць;
      занять цього місяця вже немає — продаємо наступний повністю. Час — за Києвом. */
   var MON_G = ['січня', 'лютого', 'березня', 'квітня', 'травня', 'червня', 'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'];
   var MON_L = ['січні', 'лютому', 'березні', 'квітні', 'травні', 'червні', 'липні', 'серпні', 'вересні', 'жовтні', 'листопаді', 'грудні'];
@@ -99,7 +99,8 @@
     var ny = m === 12 ? y + 1 : y, nm = m === 12 ? 1 : m + 1;
     var total = monthLessons(g.slots, y, m, ''), left = monthLessons(g.slots, y, m, now), next = monthLessons(g.slots, ny, nm, '');
     if (!left) return { amount: g.price, lessons: next, full: true, fromNext: true, m: nm, nm: nm, next: next };
-    var per = g.classPrice || Math.round(g.price / Math.max(total, 1)), full = left >= total;
+    var base = Math.round(g.price / Math.max(total, 1)), full = left >= total;
+    var per = left <= (g.fewUpto || 4) ? g.classPriceFew || g.classPrice || base : g.classPrice || base;
     return { amount: full ? g.price : Math.min(g.price, left * per), lessons: left, total: total, full: full, fromNext: false, m: m, nm: nm, next: next };
   }
   // «Вільних місць у листопаді: 11 із 13» (cap 0 — без обмеження, рядка немає)
