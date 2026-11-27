@@ -362,4 +362,15 @@
   $$('[data-tg]').forEach(a => a.addEventListener('click', (e) => {
     if (a.getAttribute('href') === '#') e.preventDefault();
   }));
+
+  /* «Як нас знайти»: відео вантажиться лише після натискання, далі — звичайні кнопки плеєра */
+  $$('[data-vid]').forEach(box => {
+    const v = $('video', box), b = $('.find__play', box);
+    if (!v || !b) return;
+    b.addEventListener('click', () => {
+      box.classList.add('is-on');
+      v.controls = true;
+      v.play().catch(() => {});
+    });
+  });
 })();

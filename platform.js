@@ -213,6 +213,16 @@
   }
 
   /* ---------- тексти, посилання, телефон, фото ---------- */
+  // «Маршрут у Google Maps» — лише коли в адмінці вписана справжня адреса (з номером будинку)
+  function paintMap(T) {
+    var a = String(T.studio_address || '').trim();
+    each('[data-map]', function (el) {
+      var ok = /\d/.test(a);
+      el.hidden = !ok;
+      if (ok) el.setAttribute('href', 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(a));
+    });
+  }
+
   function paintTexts(T) {
     var has = function (k) { return Object.prototype.hasOwnProperty.call(T, k) && String(T[k]).trim() !== ''; };
     if (has('hero_title')) {
@@ -279,27 +289,31 @@
       .formatToParts(new Date()).forEach(function (x) { p[x.type] = x.value; });
     return p.year + '-' + p.month + '-' + p.day + 'T' + p.hour + ':' + p.minute;
   };
-  function paintEvents(rows) {
-    var box = $('[data-events]');
+  var AFTER_EV = 'Після оплати Telegram-бот надішле вам запрошення в закритий канал учасниць';
+  function paintEvents(rows, T) {
+    var box = $('[data-events]'), list_el = box && ($('.evs', box) || box);
     if (!box) return;
+    var after = String((T && T.therapy_after) || '').trim() || AFTER_EV;
     var now = kyivNow();
     var list = rows.filter(function (r) {
       var e = r.extra || {};
       return e.id && !e.hidden && num(r.price) && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(e.at || '') && String(e.at).slice(0, 16) > now;
     }).sort(function (a, b) { return String(a.extra.at).localeCompare(String(b.extra.at)); });
     box.hidden = !list.length;
-    box.innerHTML = list.map(function (r) {
+    list_el.innerHTML = list.map(function (r) {
       var e = r.extra, m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}:\d{2})/.exec(e.at);
       var dow = WD[new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])).getUTCDay()];
       var when = dow + ', ' + (+m[3]) + ' ' + MONTHS_G[+m[2] - 1] + ' о ' + m[4];
       var p = money(num(r.price)), title = r.title || 'Танцетерапія';
+      // картка: дата, назва, коли й де, опис, ціна й місця, оплата; унизу — що буде після оплати (текст з адмінки)
       return '<article class="ev" data-spot data-event="' + esc(e.id) + '">' +
-        '<div class="ev__d"><b>' + (+m[3]) + '</b><span>' + MONTHS_G[+m[2] - 1] + '</span></div>' +
-        '<div class="ev__m"><h3>' + esc(title) + '</h3><p>' + esc(dow + ' · ' + m[4] + (e.place ? ' · ' + e.place : '')) + '</p>' +
-        (r.text ? '<p class="ev__t">' + esc(r.text) + '</p>' : '') + '<p class="ev__spots" hidden></p></div>' +
-        '<div class="ev__buy"><b class="ev__p">' + p + ' ₴</b>' +
-        '<button class="btn btn--ac btn--sm" data-pay data-order="event:' + esc(e.id) + '" data-kind="Танцетерапія" data-title="' + esc(title) +
-        '" data-meta="' + esc(when + (e.place ? ' · ' + e.place : '')) + '" data-price="' + p + ' ₴" data-after="Після оплати бот одразу надішле посилання на закритий чат танцетерапії й нагадає напередодні.">Оплатити</button></div></article>';
+        '<div class="ev__hd"><div class="ev__d"><b>' + (+m[3]) + '</b><span>' + MONTHS_G[+m[2] - 1] + '</span></div>' +
+        '<div class="ev__m"><h3>' + esc(title) + '</h3><p class="ev__w">' + icon('clock') + '<span>' + esc(dow + ' · ' + m[4] + (e.place ? ' · ' + e.place : '')) + '</span></p></div></div>' +
+        (r.text ? '<p class="ev__t">' + esc(r.text) + '</p>' : '') +
+        '<div class="ev__buy"><div class="ev__pr"><b class="ev__p">' + p + ' ₴</b><p class="ev__spots" hidden></p></div>' +
+        '<button class="btn btn--ac" data-pay data-order="event:' + esc(e.id) + '" data-kind="Танцетерапія" data-title="' + esc(title) +
+        '" data-meta="' + esc(when + (e.place ? ' · ' + e.place : '')) + '" data-price="' + p + ' ₴" data-after="' + esc(after) + '">Оплатити участь</button></div>' +
+        '<p class="ev__after">' + icon('lock') + '<span>' + esc(after) + '</span></p></article>';
     }).join('');
   }
 
@@ -332,7 +346,7 @@
       var o = evSpots && evSpots[card.getAttribute('data-event')], tag = $('.ev__spots', card), btn = $('[data-pay]', card);
       if (!o || !(o.cap > 0)) return;
       if (tag) { tag.hidden = false; tag.textContent = o.free ? 'Вільно ' + o.free + ' із ' + o.cap : 'Місць немає'; tag.classList.toggle('is-low', o.free <= 2); }
-      if (btn) { btn.disabled = !o.free; btn.textContent = o.free ? 'Оплатити' : 'Місць немає'; }
+      if (btn) { btn.disabled = !o.free; btn.textContent = o.free ? 'Оплатити участь' : 'Місць немає'; }
     });
     // розклад: разове заняття займає місце лише свого дня
     each('.rows [data-order^="single:"]', function (btn) {
@@ -395,8 +409,9 @@
       paintSchedule(groups);
       paintConsults(by.consults || []);
       paintRecords(by.records || []);
-      paintEvents(by.therapy_events || []);
+      paintEvents(by.therapy_events || [], data.texts || {});
       paintTexts(data.texts || {});
+      paintMap(data.texts || {});
       paintDocs(data.texts || {});
       paintFacts(data.texts || {});
       paintPhotos(by.site_photos || []);
