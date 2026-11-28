@@ -874,7 +874,7 @@ ul, ol { padding: 0; list-style: none; }
 /* ---------- як нас знайти: вертикальне відео й адреса ---------- */
 .find {
   display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: clamp(24px, 4vw, 64px); align-items: center;
-  margin-top: clamp(48px, 6vw, 88px); padding: clamp(16px, 2vw, 24px); border: 1px solid var(--line2); border-radius: var(--r);
+  padding: clamp(16px, 2vw, 24px); border: 1px solid var(--line2); border-radius: var(--r);
   background: radial-gradient(80% 90% at 100% 100%, rgba(164, 92, 255, .12), transparent 60%), var(--bg2);
 }
 .find__vid { position: relative; aspect-ratio: 9 / 16; border-radius: 14px; overflow: hidden; background: #000; }

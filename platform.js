@@ -213,13 +213,15 @@
   }
 
   /* ---------- тексти, посилання, телефон, фото ---------- */
-  // «Маршрут у Google Maps» — лише коли в адмінці вписана справжня адреса (з номером будинку)
+  // «Маршрут у Google Maps»: посилання з адмінки (Поділитися → Копіювати посилання в Google Maps);
+  // немає — пошук за адресою «Де студія», якщо в ній є номер будинку; немає й того — кнопки не видно
   function paintMap(T) {
-    var a = String(T.studio_address || '').trim();
+    var link = String(T.find_map || '').trim(), a = String(T.studio_address || '').trim();
+    var href = /^https?:\/\//i.test(link) ? link
+      : /\d/.test(a) ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(a) : '';
     each('[data-map]', function (el) {
-      var ok = /\d/.test(a);
-      el.hidden = !ok;
-      if (ok) el.setAttribute('href', 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(a));
+      el.hidden = !href;
+      if (href) el.setAttribute('href', href);
     });
   }
 
